@@ -6,6 +6,7 @@ import android.view.View;
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.base.BaseActivity;
 import com.shtoone.shtw.ui.PageStateLayout;
+import com.shtoone.shtw.utils.NetworkUtils;
 
 
 public class TestActivity extends BaseActivity {
@@ -36,6 +37,7 @@ public class TestActivity extends BaseActivity {
                 loadingLayout.showEmpty();
             }
         });
+
         findViewById(R.id.btn_show_loading).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,10 +45,24 @@ public class TestActivity extends BaseActivity {
             }
         });
 
+        findViewById(R.id.btn_show_net_error).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadingLayout.showNetError();
+            }
+        });
+
         loadingLayout.setOnRetryClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 loadingLayout.showLoading();
+            }
+        });
+
+        loadingLayout.setOnNetErrorClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NetworkUtils.openSetting(TestActivity.this);
             }
         });
 

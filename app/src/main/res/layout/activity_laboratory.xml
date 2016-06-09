@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.LaboratoryActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--后期这种地方考虑用merge和include标签来优化，暂且不动-->
+        <FrameLayout
+            android:id="@+id/fl_container_laboratory_activity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
+            android:id="@+id/bottom_navigation_laboratory_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom" />
+    </FrameLayout>
+
+</android.support.design.widget.CoordinatorLayout>
+
+
+

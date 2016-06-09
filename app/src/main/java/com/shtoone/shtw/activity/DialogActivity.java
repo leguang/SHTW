@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.dd.CircularProgressButton;
 import com.shtoone.shtw.BaseApplication;
 import com.shtoone.shtw.R;
+import com.shtoone.shtw.bean.ParametersData;
 import com.shtoone.shtw.utils.ToastUtils;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
@@ -37,6 +38,7 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
     private boolean isStartDateTime;
     private String startDateTime;
     private String endDateTime;
+    private ParametersData parametersData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,17 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initData() {
+        parametersData = BaseApplication.parametersData;
         start_date_time.getEditText().setInputType(InputType.TYPE_NULL);
+
+        //设置显示上一次查询条件的数据
+        if (!parametersData.isFirst) {
+            start_date_time.getEditText().setText(parametersData.startDateTime);
+            end_date_time.getEditText().setText(parametersData.endDateTime);
+            select_equipment.setSelection(3);
+            select_test_type.setSelection(2);
+        }
+
         end_date_time.getEditText().setInputType(InputType.TYPE_NULL);
         iv_cancel.setOnClickListener(this);
         bt_search.setOnClickListener(this);
@@ -103,12 +115,12 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()) {
             case R.id.iv_cancel_dialog:
                 ToastUtils.showToast(this, "取消");
-                BaseApplication.bus.post(BaseApplication.parametersData);
                 finish();
                 break;
 
             case R.id.bt_search_dialog:
                 ToastUtils.showToast(this, "查询");
+                parametersData.isFirst = false;
                 BaseApplication.bus.post(BaseApplication.parametersData);
                 finish();
                 break;
@@ -164,11 +176,11 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
         if (isStartDateTime) {
             startDateTime = startDateTime + timeString;
             start_date_time.getEditText().setText(startDateTime);
-            BaseApplication.parametersData.startDateTime = startDateTime;
+            parametersData.startDateTime = startDateTime;
         } else {
             endDateTime = endDateTime + timeString;
             end_date_time.getEditText().setText(endDateTime);
-            BaseApplication.parametersData.endDateTime = endDateTime;
+            parametersData.endDateTime = endDateTime;
         }
     }
 
@@ -188,6 +200,5 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        BaseApplication.bus.post(BaseApplication.parametersData);
     }
 }

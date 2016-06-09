@@ -119,4 +119,9 @@ public class SplashActivity extends BaseActivity {
     protected int setContainerId() {
         return 0;
     }
+
+    @Override
+    public void onBackPressed() {
+        //解决闪屏页按返回键还进入主界面，干脆禁止在闪屏页按返回
+    }
 }

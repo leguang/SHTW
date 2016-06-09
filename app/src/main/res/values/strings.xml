@@ -17,13 +17,19 @@
 
     <!--主页MainActivity模块-->
     <string name="laboratory">试验室</string>
-    <string name="hunningtu_banhezhan">混凝土</string>
-    <string name="liqing_banhezhan">沥青</string>
+    <string name="concrete">混凝土</string>
+    <string name="asphalt">沥青</string>
 
     <!--选择查询对话框模块-->
     <string name="select_start_time">开始时间</string>
     <string name="select_end_time">结束时间</string>
     <string name="select_equipment">选择设备</string>
     <string name="select_test_type">选择类型</string>
+
+    <!--主页LaboratoryActivity模块-->
+    <string name="yaliji">压力机</string>
+    <string name="wannengji">万能机</string>
+    <string name="statistic">统计分析</string>
+    <string name="disqualification">不合格</string>
 
 </resources>

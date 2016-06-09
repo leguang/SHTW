@@ -3,6 +3,8 @@ package com.shtoone.shtw;
 import android.app.Application;
 import android.content.Context;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.shtoone.shtw.bean.ParametersData;
 import com.squareup.otto.Bus;
 
@@ -16,6 +18,7 @@ public class BaseApplication extends Application {
     public static Context context;
     public static final Bus bus = new Bus();
     public static ParametersData parametersData = new ParametersData();
+    public static RequestQueue requestQueue;
 
     @Override
     public void onCreate() {
@@ -24,7 +27,7 @@ public class BaseApplication extends Application {
         context = getApplicationContext();
         // 添加功能：程序异常关闭1s之后重新启动
 
-
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
     }
 
 

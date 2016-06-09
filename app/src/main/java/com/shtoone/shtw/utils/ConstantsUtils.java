@@ -11,5 +11,9 @@ public class ConstantsUtils {
 
     public static final String DOMAIN_1 = "shtoone.com";
     public static final String DOMAIN_2 = "sh-toone";
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
+    public static final String LOGINCHECK = "logincheck";
+
 
 }

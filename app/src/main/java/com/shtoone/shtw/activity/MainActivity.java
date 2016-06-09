@@ -1,7 +1,6 @@
 package com.shtoone.shtw.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,9 +14,11 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.base.BaseActivity;
-import com.shtoone.shtw.fragment.HunNingTuBHZFragment;
-import com.shtoone.shtw.fragment.LaboratoryFragment;
-import com.shtoone.shtw.fragment.LiQingBHZFragment;
+import com.shtoone.shtw.fragment.mainactivity.AsphaltFragment;
+import com.shtoone.shtw.fragment.mainactivity.ConcreteFragment;
+import com.shtoone.shtw.fragment.mainactivity.LaboratoryFragment;
+import com.shtoone.shtw.utils.ConstantsUtils;
+import com.shtoone.shtw.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
 
@@ -55,16 +56,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     public void initData() {
         AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.laboratory, R.drawable.ic_favorites, R.color.base_color);
-        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.hunningtu_banhezhan, R.drawable.ic_nearby, R.color.base_color);
-        AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.liqing_banhezhan, R.drawable.ic_friends, R.color.base_color);
+        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.concrete, R.drawable.ic_nearby, R.color.base_color);
+        AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.asphalt, R.drawable.ic_friends, R.color.base_color);
         bottomNavigationItems.add(item1);
         bottomNavigationItems.add(item2);
         bottomNavigationItems.add(item3);
         bottomNavigation.addItems(bottomNavigationItems);
-        bottomNavigation.setDefaultBackgroundColor(Color.parseColor("#3F51B5"));
+        bottomNavigation.setDefaultBackgroundColor(getResources().getColor(R.color.white));
 //        bottomNavigation.setBehaviorTranslationEnabled(false);
-        bottomNavigation.setAccentColor(Color.parseColor("#ffffff"));
-        bottomNavigation.setInactiveColor(Color.parseColor("#808080"));
+        bottomNavigation.setAccentColor(getResources().getColor(R.color.base_color));
+        bottomNavigation.setInactiveColor(getResources().getColor(R.color.gray));
 //        bottomNavigation.setColored(true);
 //        bottomNavigation.setForceTint(true);
 //        bottomNavigation.setForceTitlesDisplay(true);
@@ -90,12 +91,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
                     case 1:
 
-                        HunNingTuBHZFragment fragment1 = findFragment(HunNingTuBHZFragment.class);
+                        ConcreteFragment fragment1 = findFragment(ConcreteFragment.class);
                         if (fragment1 == null) {
                             popTo(LaboratoryFragment.class, false, new Runnable() {
                                 @Override
                                 public void run() {
-                                    start(HunNingTuBHZFragment.newInstance());
+                                    start(ConcreteFragment.newInstance());
                                 }
                             });
                         } else {
@@ -107,12 +108,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
                     case 2:
 
-                        LiQingBHZFragment fragment2 = findFragment(LiQingBHZFragment.class);
+                        AsphaltFragment fragment2 = findFragment(AsphaltFragment.class);
                         if (fragment2 == null) {
                             popTo(LaboratoryFragment.class, false, new Runnable() {
                                 @Override
                                 public void run() {
-                                    start(LiQingBHZFragment.newInstance());
+                                    start(AsphaltFragment.newInstance());
                                 }
                             });
                         } else {
@@ -137,14 +138,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-
-//            Fragment topFragment = getTopFragment();
-//            // 主页的Fragment
-//            if (!(topFragment instanceof LaboratoryFragment)) {
-//                bottomNavigation.setCurrentItem(0);
-//                return;
-//            }
-//            super.onBackPressed();
             finish();
         }
     }
@@ -174,22 +167,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-            JumpToTest();
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.message_drawer_main_activity) {
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.logout_drawer_main_activity) {
+            JumpToLoginActivity();
+        } else if (id == R.id.about_drawer_main_activity) {
+            JumpToAboutActivity();
+        } else if (id == R.id.version_drawer_main_activity) {
+            JumpToVersionActivity();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -197,8 +184,28 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
-    private void JumpToTest() {
+    private void JumpTo() {
         Intent intent = new Intent(this, TestActivity.class);
+        startActivity(intent);
+    }
+
+    private void JumpToLoginActivity() {
+        //清除已存的用户信息
+        SharedPreferencesUtils.put(this, ConstantsUtils.USERNAME, "");
+        SharedPreferencesUtils.put(this, ConstantsUtils.PASSWORD, "");
+        SharedPreferencesUtils.put(this, ConstantsUtils.LOGINCHECK, "");
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void JumpToAboutActivity() {
+        Intent intent = new Intent(this, AboutActivity.class);
+        startActivity(intent);
+    }
+
+    private void JumpToVersionActivity() {
+        Intent intent = new Intent(this, VersionActivity.class);
         startActivity(intent);
     }
 

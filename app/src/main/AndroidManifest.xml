@@ -59,6 +59,9 @@
             android:theme="@style/AppTheme.Transparent" />
 
         <activity android:name=".activity.TestActivity" />
+        <activity android:name=".activity.AboutActivity" />
+        <activity android:name=".activity.VersionActivity" />
+        <activity android:name=".activity.LaboratoryActivity" />
     </application>
 
 </manifest>

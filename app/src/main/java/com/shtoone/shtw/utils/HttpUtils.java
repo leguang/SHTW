@@ -15,10 +15,10 @@ import org.json.JSONObject;
 import java.util.Map;
 
 /**
- * Created by cxh on 2015/8/9.
+ * Created by leguang on 2015/5/29.
  */
 public class HttpUtils {
-    private static RequestQueue queue = Volley.newRequestQueue(BaseApplication.application);
+    public static RequestQueue queue = Volley.newRequestQueue(BaseApplication.application);
 
 
     private HttpUtils() {

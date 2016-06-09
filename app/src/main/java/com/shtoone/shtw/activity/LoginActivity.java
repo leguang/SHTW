@@ -16,6 +16,7 @@ import com.shtoone.shtw.BaseApplication;
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.base.BaseActivity;
 import com.shtoone.shtw.bean.UserInfoData;
+import com.shtoone.shtw.utils.ConstantsUtils;
 import com.shtoone.shtw.utils.HttpUtils;
 import com.shtoone.shtw.utils.KeyBoardUtils;
 import com.shtoone.shtw.utils.SharedPreferencesUtils;
@@ -125,12 +126,17 @@ public class LoginActivity extends BaseActivity {
                                 userInfoData = new Gson().fromJson(response, UserInfoData.class);
                                 if (null != userInfoData) {
                                     if (userInfoData.isSuccess()) {
-                                        SharedPreferencesUtils.put(LoginActivity.this, "username", username);
-                                        SharedPreferencesUtils.put(LoginActivity.this, "password", password);
-                                        SharedPreferencesUtils.put(LoginActivity.this, "loginCheck", response);
+                                        SharedPreferencesUtils.put(LoginActivity.this, ConstantsUtils.USERNAME, username);
+                                        SharedPreferencesUtils.put(LoginActivity.this, ConstantsUtils.PASSWORD, password);
+                                        SharedPreferencesUtils.put(LoginActivity.this, ConstantsUtils.LOGINCHECK, response);
                                         initParametersData();
                                         login_button.setProgress(100);
-                                        jumpTo();
+                                        login_button.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                jumpTo();
+                                            }
+                                        }, 500);
                                     } else {
                                         //提示用户名或密码错误
                                         login_button.setErrorText("用户名或密码错误");

@@ -14,8 +14,8 @@ import com.shtoone.shtw.R;
  */
 public class PageStateLayout extends FrameLayout {
 
-    private int emptyView, errorView, loadingView;
-    private OnClickListener onRetryClickListener;
+    private int emptyView, errorView, netErrorView, loadingView;
+    private OnClickListener onRetryClickListener, onNetErrorClickListener;
 
     public PageStateLayout(Context context) {
         this(context, null);
@@ -28,15 +28,17 @@ public class PageStateLayout extends FrameLayout {
     public PageStateLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.LoadingLayout, 0, 0);
+        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.PageStateLayout, 0, 0);
         try {
-            emptyView = a.getResourceId(R.styleable.LoadingLayout_emptyView, R.layout.page_state_empty_view);
-            errorView = a.getResourceId(R.styleable.LoadingLayout_errorView, R.layout.page_state_error_view);
-            loadingView = a.getResourceId(R.styleable.LoadingLayout_loadingView, R.layout.page_state_loading_view);
+            emptyView = a.getResourceId(R.styleable.PageStateLayout_emptyView, R.layout.page_state_empty_view);
+            errorView = a.getResourceId(R.styleable.PageStateLayout_errorView, R.layout.page_state_error_view);
+            netErrorView = a.getResourceId(R.styleable.PageStateLayout_netErrorView, R.layout.page_state_net_error_view);
+            loadingView = a.getResourceId(R.styleable.PageStateLayout_loadingView, R.layout.page_state_loading_view);
 
             LayoutInflater inflater = LayoutInflater.from(getContext());
             inflater.inflate(emptyView, this, true);
             inflater.inflate(errorView, this, true);
+            inflater.inflate(netErrorView, this, true);
             inflater.inflate(loadingView, this, true);
         } finally {
             a.recycle();
@@ -68,10 +70,23 @@ public class PageStateLayout extends FrameLayout {
                 }
             }
         });
+
+        findViewById(R.id.btn_net_error_retry).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (null != onNetErrorClickListener) {
+                    onNetErrorClickListener.onClick(view);
+                }
+            }
+        });
     }
 
     public void setOnRetryClickListener(OnClickListener onRetryClickListener) {
         this.onRetryClickListener = onRetryClickListener;
+    }
+
+    public void setOnNetErrorClickListener(OnClickListener onNetErrorClickListener) {
+        this.onNetErrorClickListener = onNetErrorClickListener;
     }
 
     public void showEmpty() {
@@ -96,7 +111,7 @@ public class PageStateLayout extends FrameLayout {
         }
     }
 
-    public void showLoading() {
+    public void showNetError() {
         for (int i = 0; i < this.getChildCount(); i++) {
             View child = this.getChildAt(i);
             if (i == 2) {
@@ -107,10 +122,21 @@ public class PageStateLayout extends FrameLayout {
         }
     }
 
-    public void showContent() {
+    public void showLoading() {
         for (int i = 0; i < this.getChildCount(); i++) {
             View child = this.getChildAt(i);
             if (i == 3) {
+                child.setVisibility(VISIBLE);
+            } else {
+                child.setVisibility(GONE);
+            }
+        }
+    }
+
+    public void showContent() {
+        for (int i = 0; i < this.getChildCount(); i++) {
+            View child = this.getChildAt(i);
+            if (i == 4) {
                 child.setVisibility(VISIBLE);
             } else {
                 child.setVisibility(GONE);

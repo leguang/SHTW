@@ -19,6 +19,7 @@ public class ParametersData {
     public String disposition = "";
     public String level = "";
     public String qualified = "";
+    public boolean isFirst = true;
 
     public ParametersData() {
         initParametersData();
