@@ -14,9 +14,9 @@ import com.shtoone.shtw.bean.LaboratoryFragmentRecyclerViewItemData;
 import com.shtoone.shtw.ui.ItemInItemView;
 
 public class LaboratoryFragmentRecyclerViewAdapter extends RecyclerView.Adapter<LaboratoryFragmentRecyclerViewAdapter.MyViewHolder> {
-    private static final String TAG = "LabAdapter";
+    private static final String TAG = "LaboratoryFragmentRecyclerViewAdapter";
     private Context context;
-    private OnItemClickLitener mOnItemClickLitener;
+    private OnItemClickListener mOnItemClickListener;
     private LaboratoryFragmentRecyclerViewItemData itemData;
 
     public LaboratoryFragmentRecyclerViewAdapter(Context context, LaboratoryFragmentRecyclerViewItemData itemData) {
@@ -25,8 +25,8 @@ public class LaboratoryFragmentRecyclerViewAdapter extends RecyclerView.Adapter<
         this.itemData = itemData;
     }
 
-    public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener) {
-        this.mOnItemClickLitener = mOnItemClickLitener;
+    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
+        this.mOnItemClickListener = mOnItemClickListener;
     }
 
     @Override
@@ -43,6 +43,8 @@ public class LaboratoryFragmentRecyclerViewAdapter extends RecyclerView.Adapter<
 
         if (itemData != null && itemData.isSuccess() && itemData.getData().size() > 0) {
 
+
+            //此处该优化，相同的部位应提取出来
             holder.tv_organization.setText(itemData.getData().get(position).get(0).getDepartName());
             holder.tv_laboratory_count.setText(itemData.getData().get(position).get(0).getSysCount());     //拌合站总数
             holder.tv_machine_countll.setText(itemData.getData().get(position).get(0).getSyjCount());     //拌合机总数xx
@@ -62,12 +64,12 @@ public class LaboratoryFragmentRecyclerViewAdapter extends RecyclerView.Adapter<
             }
         }
 
-        if (mOnItemClickLitener != null) {
+        if (mOnItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getLayoutPosition();
-                    mOnItemClickLitener.onItemClick(holder.itemView, position);
+                    mOnItemClickListener.onItemClick(holder.itemView, position);
                 }
             });
         }

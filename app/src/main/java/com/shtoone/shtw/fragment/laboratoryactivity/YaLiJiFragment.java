@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shtoone.shtw.R;
-import com.shtoone.shtw.adapter.FragmentViewPagerAdapter;
+import com.shtoone.shtw.adapter.YaLijIFragmentViewPagerAdapter;
 import com.shtoone.shtw.fragment.base.BaseFragment;
 
 /**
@@ -33,9 +33,11 @@ public class YaLiJiFragment extends BaseFragment {
     private void initView(View view) {
         Toolbar mToolbar = (Toolbar) view.findViewById(R.id.toolbar_yaliji_fragment);
         mToolbar.setTitle("XX高速 > 试验室 > 压力机");
+        initToolbarBackNavigation(mToolbar);
+        initToolbarMenu(mToolbar);
         TabLayout mTabLayout = (TabLayout) view.findViewById(R.id.tab_layout_yaliji_fragment);
         ViewPager mViewPager = (ViewPager) view.findViewById(R.id.vp_yaliji_fragment);
-        mViewPager.setAdapter(new FragmentViewPagerAdapter(getChildFragmentManager()));
+        mViewPager.setAdapter(new YaLijIFragmentViewPagerAdapter(getChildFragmentManager()));
         mTabLayout.setupWithViewPager(mViewPager);
     }
 }

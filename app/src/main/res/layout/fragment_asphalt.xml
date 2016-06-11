@@ -23,12 +23,14 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_asphalt_fragment"
+        android:id="@+id/fab_laboratory_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="66dp"
+        android:layout_marginBottom="70dp"
         android:layout_marginRight="16dp"
-        android:src="@drawable/ic_search_white_18dp" />
+        android:src="@drawable/ic_search_white_18dp"
+        app:backgroundTint="@color/green1"
+        app:rippleColor="@color/white" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -32,5 +32,6 @@ public class AsphaltFragment extends BaseFragment {
         Toolbar mToolbar = (Toolbar) view.findViewById(R.id.toolbar_asphalt_fragment);
         mToolbar.setTitle("XX高速 > 沥青拌合站");
         ((MainActivity) _mActivity).initToolBar(mToolbar);
+        initToolbarMenu(mToolbar);
     }
 }

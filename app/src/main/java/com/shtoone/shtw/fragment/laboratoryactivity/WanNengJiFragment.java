@@ -30,5 +30,7 @@ public class WanNengJiFragment extends BaseFragment {
     private void initView(View view) {
         Toolbar mToolbar = (Toolbar) view.findViewById(R.id.toolbar_wannengji_fragment);
         mToolbar.setTitle("XX高速 > 试验室 > 万能机");
+        initToolbarBackNavigation(mToolbar);
+        initToolbarMenu(mToolbar);
     }
 }

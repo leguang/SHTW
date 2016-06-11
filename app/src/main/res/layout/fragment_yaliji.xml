@@ -16,14 +16,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
-            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:titleTextAppearance="@style/ToolbarTextAppearance" />
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_layout_yaliji_fragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:tabIndicatorColor="@color/green1"
+            app:tabSelectedTextColor="@color/green1"
+            app:tabTextColor="@color/white" />
 
     </android.support.design.widget.AppBarLayout>
 

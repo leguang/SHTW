@@ -32,6 +32,7 @@ public class ConcreteFragment extends BaseFragment {
         Toolbar mToolbar = (Toolbar) view.findViewById(R.id.toolbar_concrete_fragment);
         mToolbar.setTitle("XX高速 > 混凝土拌合站");
         ((MainActivity) _mActivity).initToolBar(mToolbar);
+        initToolbarMenu(mToolbar);
     }
 
 }

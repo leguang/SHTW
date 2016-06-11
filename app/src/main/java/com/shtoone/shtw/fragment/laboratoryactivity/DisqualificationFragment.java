@@ -30,5 +30,7 @@ public class DisqualificationFragment extends BaseFragment {
     private void initView(View view) {
         Toolbar mToolbar = (Toolbar) view.findViewById(R.id.toolbar_disqualification_fragment);
         mToolbar.setTitle("XX高速 > 试验室 > 不合格");
+        initToolbarBackNavigation(mToolbar);
+        initToolbarMenu(mToolbar);
     }
 }

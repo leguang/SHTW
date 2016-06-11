@@ -45,7 +45,7 @@ public class LaboratoryActivity extends BaseActivity {
         bottomNavigationItems.add(item4);
         bottomNavigation.addItems(bottomNavigationItems);
         bottomNavigation.setDefaultBackgroundColor(getResources().getColor(R.color.white));
-        bottomNavigation.setBehaviorTranslationEnabled(true);
+//        bottomNavigation.setBehaviorTranslationEnabled(true);
         bottomNavigation.setAccentColor(getResources().getColor(R.color.base_color));
         bottomNavigation.setInactiveColor(getResources().getColor(R.color.gray));
 //        bottomNavigation.setColored(true);

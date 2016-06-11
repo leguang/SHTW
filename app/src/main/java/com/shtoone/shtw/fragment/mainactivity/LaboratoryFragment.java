@@ -23,7 +23,7 @@ import com.shtoone.shtw.activity.DialogActivity;
 import com.shtoone.shtw.activity.LaboratoryActivity;
 import com.shtoone.shtw.activity.MainActivity;
 import com.shtoone.shtw.adapter.LaboratoryFragmentRecyclerViewAdapter;
-import com.shtoone.shtw.adapter.OnItemClickLitener;
+import com.shtoone.shtw.adapter.OnItemClickListener;
 import com.shtoone.shtw.bean.LaboratoryFragmentRecyclerViewItemData;
 import com.shtoone.shtw.bean.ParametersData;
 import com.shtoone.shtw.fragment.base.BaseFragment;
@@ -50,7 +50,7 @@ public class LaboratoryFragment extends BaseFragment {
     private static final String TAG = "LaboratoryFragment";
     private Toolbar mToolbar;
     private PtrFrameLayout ptrframe;
-    private RecyclerView recyclerView;
+    private RecyclerView mRecyclerView;
     private StoreHouseHeader header;
     private LaboratoryFragmentRecyclerViewAdapter mAdapter;
     private LaboratoryFragmentRecyclerViewItemData itemData;
@@ -76,13 +76,14 @@ public class LaboratoryFragment extends BaseFragment {
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar_laboratory_fragment);
         fab = (FloatingActionButton) view.findViewById(R.id.fab_laboratory_fragment);
         ptrframe = (PtrFrameLayout) view.findViewById(R.id.ptr_framelayout_laboratory_fragment);
-        recyclerView = (RecyclerView) view.findViewById(R.id.rv_laboratory_fragment);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_laboratory_fragment);
         pageStateLayout = (PageStateLayout) view.findViewById(R.id.psl_laboratory_fragment);
     }
 
     private void initData() {
         mToolbar.setTitle("XX高速 > 试验室");
         ((MainActivity) _mActivity).initToolBar(mToolbar);
+        initToolbarMenu(mToolbar);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -216,14 +217,15 @@ public class LaboratoryFragment extends BaseFragment {
         setAdapter();
     }
 
+    //还是不能这样搞，可能会内存泄漏，重复创建Adapyer对象。后面解决
     private void setAdapter() {
         // 设置显示形式
-        recyclerView.setLayoutManager(new LinearLayoutManager(_mActivity));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(_mActivity));
         // 设置适配器
-        recyclerView.setAdapter(mAdapter = new LaboratoryFragmentRecyclerViewAdapter(_mActivity, itemData));
+        mRecyclerView.setAdapter(mAdapter = new LaboratoryFragmentRecyclerViewAdapter(_mActivity, itemData));
         // 设置item动画
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter.setOnItemClickLitener(new OnItemClickLitener() {
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(View view, int position) {

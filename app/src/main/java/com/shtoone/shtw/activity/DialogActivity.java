@@ -3,7 +3,6 @@ package com.shtoone.shtw.activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,6 +12,7 @@ import android.widget.ImageView;
 import com.dd.CircularProgressButton;
 import com.shtoone.shtw.BaseApplication;
 import com.shtoone.shtw.R;
+import com.shtoone.shtw.activity.base.BaseActivity;
 import com.shtoone.shtw.bean.ParametersData;
 import com.shtoone.shtw.utils.ToastUtils;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -27,7 +27,7 @@ import fr.ganfra.materialspinner.MaterialSpinner;
  * Created by leguang on 2016/6/01 0031.
  */
 
-public class DialogActivity extends AppCompatActivity implements View.OnClickListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
+public class DialogActivity extends BaseActivity implements View.OnClickListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     private static final String TAG = "DialogActivity";
     private TextInputLayout start_date_time;
     private TextInputLayout end_date_time;
@@ -46,6 +46,11 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_dialog);
         initView();
         initData();
+    }
+
+    @Override
+    protected int setContainerId() {
+        return 0;
     }
 
     private void initView() {
