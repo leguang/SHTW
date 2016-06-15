@@ -24,8 +24,8 @@
             android:id="@+id/tab_layout_yaliji_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabIndicatorColor="@color/green1"
-            app:tabSelectedTextColor="@color/green1"
+            app:tabIndicatorColor="@color/red"
+            app:tabSelectedTextColor="@color/red"
             app:tabTextColor="@color/white" />
 
     </android.support.design.widget.AppBarLayout>

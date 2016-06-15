@@ -7,7 +7,6 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.base.BaseActivity;
-import com.shtoone.shtw.fragment.laboratoryactivity.DisqualificationFragment;
 import com.shtoone.shtw.fragment.laboratoryactivity.LaboratoryStatisticFragment;
 import com.shtoone.shtw.fragment.laboratoryactivity.WanNengJiFragment;
 import com.shtoone.shtw.fragment.laboratoryactivity.YaLiJiFragment;
@@ -37,11 +36,9 @@ public class LaboratoryActivity extends BaseActivity {
     public void initData() {
         AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.yaliji, R.drawable.ic_favorites, R.color.base_color);
         AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.wannengji, R.drawable.ic_nearby, R.color.base_color);
-        AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.disqualification, R.drawable.ic_friends, R.color.base_color);
         AHBottomNavigationItem item4 = new AHBottomNavigationItem(R.string.statistic, R.drawable.ic_friends, R.color.base_color);
         bottomNavigationItems.add(item1);
         bottomNavigationItems.add(item2);
-        bottomNavigationItems.add(item3);
         bottomNavigationItems.add(item4);
         bottomNavigation.addItems(bottomNavigationItems);
         bottomNavigation.setDefaultBackgroundColor(getResources().getColor(R.color.white));
@@ -89,22 +86,6 @@ public class LaboratoryActivity extends BaseActivity {
                         break;
 
                     case 2:
-
-                        DisqualificationFragment fragment2 = findFragment(DisqualificationFragment.class);
-                        if (fragment2 == null) {
-                            popTo(YaLiJiFragment.class, false, new Runnable() {
-                                @Override
-                                public void run() {
-                                    start(DisqualificationFragment.newInstance());
-                                }
-                            });
-                        } else {
-                            // 如果已经在栈内,则以SingleTask模式start
-                            start(fragment2, SupportFragment.SINGLETASK);
-                        }
-                        break;
-
-                    case 3:
 
                         LaboratoryStatisticFragment fragment3 = findFragment(LaboratoryStatisticFragment.class);
                         if (fragment3 == null) {

@@ -62,6 +62,7 @@
         <activity android:name=".activity.AboutActivity" />
         <activity android:name=".activity.VersionActivity" />
         <activity android:name=".activity.LaboratoryActivity" />
+        <activity android:name=".activity.YaLiJiDetailActivity" />
     </application>
 
 </manifest>

@@ -15,6 +15,7 @@ import com.shtoone.shtw.fragment.base.BaseFragment;
  */
 public class WanNengJiFragment extends BaseFragment {
 
+    private static final String TAG = "WanNengJiFragment";
     public static WanNengJiFragment newInstance() {
         return new WanNengJiFragment();
     }

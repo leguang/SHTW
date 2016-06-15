@@ -15,6 +15,7 @@ import com.shtoone.shtw.fragment.base.BaseFragment;
  */
 public class DisqualificationFragment extends BaseFragment {
 
+    private static final String TAG = "DisqualificationFragment";
     public static DisqualificationFragment newInstance() {
         return new DisqualificationFragment();
     }

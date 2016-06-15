@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textview3"
+            style="@style/RecyclerViewItemTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textview2"
+            android:text="强度代表：" />
+
+        <TextView
+            android:id="@+id/tv_identifier_item_recyclerview_yaliji_fragment_viewpager_fragment"
+            style="@style/RecyclerViewItemTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/textview3"
+            android:layout_toRightOf="@+id/textview3"
+            android:text="650" />
+
+    </RelativeLayout>
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/lineChart_fragment_chart_yaliji_detail_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

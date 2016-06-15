@@ -15,6 +15,7 @@ import com.shtoone.shtw.fragment.base.BaseFragment;
  */
 public class LaboratoryStatisticFragment extends BaseFragment {
 
+    private static final String TAG = "LaboratoryStatisticFragment";
     public static LaboratoryStatisticFragment newInstance() {
         return new LaboratoryStatisticFragment();
     }
