@@ -1,7 +1,6 @@
 package com.shtoone.shtw.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -16,7 +15,6 @@ public class YaLiJiDetailActivity extends BaseActivity {
     private Toolbar mToolbar;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
-    private CollapsingToolbarLayout collapsingToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +33,7 @@ public class YaLiJiDetailActivity extends BaseActivity {
     private void initView() {
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_yaliji_detail_activity);
-        mToolbar.setTitle("XX高速 > 试验室 > 压力机 > 压力机详情页");
+        mToolbar.setTitle("XX高速 > 试验室 > 压力机 > 压力机详情");
         initToolbarBackNavigation(mToolbar);
         setSupportActionBar(mToolbar);
 

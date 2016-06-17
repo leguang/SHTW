@@ -10,7 +10,7 @@
 
         <TextView
             android:id="@+id/textview3"
-            style="@style/RecyclerViewItemTheme"
+            style="@style/YalijiDetailTextTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textview2"
@@ -18,7 +18,7 @@
 
         <TextView
             android:id="@+id/tv_identifier_item_recyclerview_yaliji_fragment_viewpager_fragment"
-            style="@style/RecyclerViewItemTheme"
+            style="@style/YalijiDetailTextTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/textview3"

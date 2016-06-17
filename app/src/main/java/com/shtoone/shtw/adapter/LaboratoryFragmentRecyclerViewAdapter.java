@@ -1,6 +1,8 @@
 package com.shtoone.shtw.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -42,8 +44,7 @@ public class LaboratoryFragmentRecyclerViewAdapter extends RecyclerView.Adapter<
 
 
         if (itemData != null && itemData.isSuccess() && itemData.getData().size() > 0) {
-
-
+            holder.cv.setCardBackgroundColor(position % 2 == 0 ? Color.argb(250, 78, 100, 132) : Color.argb(255, 66, 90, 126));
             //此处该优化，相同的部位应提取出来
             holder.tv_organization.setText(itemData.getData().get(position).get(0).getDepartName());
             holder.tv_laboratory_count.setText(itemData.getData().get(position).get(0).getSysCount());     //拌合站总数
@@ -86,6 +87,7 @@ public class LaboratoryFragmentRecyclerViewAdapter extends RecyclerView.Adapter<
         TextView tv_laboratory_count;
         TextView tv_machine_countll;
         LinearLayout ll_content;
+        CardView cv;
 
         public MyViewHolder(View view) {
             super(view);
@@ -93,6 +95,7 @@ public class LaboratoryFragmentRecyclerViewAdapter extends RecyclerView.Adapter<
             tv_laboratory_count = (TextView) view.findViewById(R.id.tv_laboratory_count_item_recyclerview_laboratory_fragment);
             tv_machine_countll = (TextView) view.findViewById(R.id.tv_machine_countll_content_item_recyclerview_laboratory_fragment);
             ll_content = (LinearLayout) view.findViewById(R.id.ll_content_item_recyclerview_laboratory_fragment);
+            cv = (CardView) view.findViewById(R.id.cv_item_recyclerview_laboratory_fragment);
         }
     }
 }

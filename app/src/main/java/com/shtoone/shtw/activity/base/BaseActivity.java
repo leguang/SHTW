@@ -62,4 +62,9 @@ public abstract class BaseActivity extends SupportActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

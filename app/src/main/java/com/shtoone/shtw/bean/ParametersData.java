@@ -18,7 +18,10 @@ public class ParametersData {
     public String testType = "";
     public String disposition = "";
     public String level = "";
-    public String qualified = "";
+    public String isQualified = "";
+    public String equipmentNumber = "";
+    public String currentPage = "";
+    public String isReal = "";
     public boolean isFirst = true;
 
     public ParametersData() {

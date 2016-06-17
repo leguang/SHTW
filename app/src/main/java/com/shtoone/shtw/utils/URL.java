@@ -110,6 +110,35 @@ public class URL {
      */
     public static final String HNT_URL = BaseURL + "sysController.do?hntkangya&userGroupId=%1&isQualified=%2&startTime=%3&endTime=%4&pageNo=%5&shebeibianhao=%6&isReal=%7&maxPageItems=15";
 
+
+    /**
+     * 得到混泥土强度列表数据
+     *
+     * @param userGroupID    组织结构ID
+     * @param isQualified    是否合格
+     * @param startTime      开始时间
+     * @param endTime        结束时间
+     * @param current_PageNo 当前页码
+     * @param deviceNo       设备编号
+     * @param isReal
+     * @param testType       试验类型
+     * @return url
+     */
+    public static String getYalijiTestList(String userGroupID, String isQualified, String startTime, String endTime, String current_PageNo, String deviceNo, String isReal, String testType) {
+        startTime = DateUtils.ChangeTimeToLong(startTime);
+        endTime = DateUtils.ChangeTimeToLong(endTime);
+        //如果开始时间大于结束时间，返回null
+        if (Integer.valueOf(startTime) <= Integer.valueOf(endTime)) {
+            String url = HNT_URL.replace("%1", userGroupID).replace("%2", isQualified).replace("%3", startTime).replace("%4", endTime).replace("%5", current_PageNo).replace("%6", deviceNo).replace("%7", isReal).replace("%8", testType);
+            Log.d(TAG, "混泥土强度列表 :" + url);
+            if (TextUtils.isEmpty(url)) {
+                return null;
+            }
+            return url;
+        }
+        return null;
+    }
+
     /**
      * 混泥土强度详情地址
      */
@@ -194,6 +223,22 @@ public class URL {
      * 试验室设备列表
      */
     public static final String SYS_SHEBEI_LIST = BaseURL + "sysController.do?getSysShebeiList&userGroupId=%1";
+
+    /**
+     * 登录验证
+     *
+     * @param userGroupID 用户组ID
+     * @return 返回拼凑后的url
+     */
+    public static String getEquipment(String userGroupID) {
+        String url = SYS_SHEBEI_LIST.replace("%1", userGroupID);
+        Log.e(TAG, "获取设备的URL:" + url);
+        if (TextUtils.isEmpty(url)) {
+            return null;
+        }
+        return url;
+    }
+
     /**
      * 试验室试验类型列表
      */

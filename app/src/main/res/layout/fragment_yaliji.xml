@@ -30,11 +30,23 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vp_yaliji_fragment"
+
+    <com.shtoone.shtw.ui.PageStateLayout
+        android:id="@+id/psl_yaliji_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:emptyView="@layout/page_state_empty_view"
+        app:errorView="@layout/page_state_error_view"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:loadingView="@layout/page_state_loading_view"
+        app:netErrorView="@layout/page_state_net_error_view">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_yaliji_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="50dp" />
+    </com.shtoone.shtw.ui.PageStateLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_yaliji_fragment"

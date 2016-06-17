@@ -91,8 +91,14 @@
     </style>
 
     <!--压力机模块-->
-    <style name="RecyclerViewItemTheme">
-        <item name="android:textColor">@color/black</item>
+    <style name="RecyclerViewItemTextTheme">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:padding">0.5dp</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="YalijiDetailTextTheme">
+        <item name="android:textColor">@color/green1</item>
         <item name="android:padding">1dp</item>
         <item name="android:textSize">14sp</item>
     </style>

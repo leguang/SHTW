@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
@@ -36,25 +37,26 @@ import com.shtoone.shtw.utils.ToastUtils;
 import com.shtoone.shtw.utils.URL;
 import com.squareup.otto.Subscribe;
 
-import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.PtrUIHandler;
 import in.srain.cube.views.ptr.header.StoreHouseHeader;
 import in.srain.cube.views.ptr.indicator.PtrIndicator;
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
+import jp.wasabeef.recyclerview.adapters.SlideInLeftAnimationAdapter;
+
 
 /**
  * Created by leguang on 2016/5/31 0031.
  */
 public class LaboratoryFragment extends BaseFragment {
-    private static final String TAG = "LaboratoryFragment";
+    private static final String TAG = LaboratoryFragment.class.getSimpleName();
     private Toolbar mToolbar;
     private PtrFrameLayout ptrframe;
     private RecyclerView mRecyclerView;
     private StoreHouseHeader header;
     private LaboratoryFragmentRecyclerViewAdapter mAdapter;
     private LaboratoryFragmentRecyclerViewItemData itemData;
-    private String url;
     private FloatingActionButton fab;
     private PageStateLayout pageStateLayout;
 
@@ -65,10 +67,10 @@ public class LaboratoryFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        BaseApplication.bus.register(this);
         View view = inflater.inflate(R.layout.fragment_laboratory, container, false);
         initView(view);
         initData();
-        BaseApplication.bus.register(this);
         return view;
     }
 
@@ -161,7 +163,16 @@ public class LaboratoryFragment extends BaseFragment {
         ptrframe.setPtrHandler(new PtrHandler() {
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+                if (null != mRecyclerView) {
+                    if (mRecyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+                        LinearLayoutManager lm = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+                        if (lm.findViewByPosition(lm.findFirstVisibleItemPosition()).getTop() == 0 && lm.findFirstVisibleItemPosition() == 0) {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
             }
 
             @Override
@@ -172,6 +183,7 @@ public class LaboratoryFragment extends BaseFragment {
         });
     }
 
+
     private void getDataFromNetwork() {
 
         //从全局参数类中取出参数，避免太长了，看起来不方便
@@ -180,7 +192,7 @@ public class LaboratoryFragment extends BaseFragment {
         String endDateTime = BaseApplication.parametersData.endDateTime;
 
         //联网获取数据
-        HttpUtils.getRequest(url = URL.getSYSLingdaoData(userGroupID, startDateTime, endDateTime), new HttpUtils.HttpListener() {
+        HttpUtils.getRequest(URL.getSYSLingdaoData(userGroupID, startDateTime, endDateTime), new HttpUtils.HttpListener() {
             @Override
             public void onSuccess(String response) {
                 Log.e(TAG, response);
@@ -189,8 +201,14 @@ public class LaboratoryFragment extends BaseFragment {
 
             @Override
             public void onFailed(VolleyError error) {
-                //提示网络数据异常，展示网络错误页面
-                pageStateLayout.showNetError();
+                //提示网络数据异常，展示网络错误页面。此时：1.可能是本机网络有问题，2.可能是服务器问题
+                if (!NetworkUtils.isConnected(_mActivity)) {
+                    //提示网络异常,让用户点击设置网络
+                    pageStateLayout.showNetError();
+                } else {
+                    //服务器异常，展示错误页面，点击刷新
+                    pageStateLayout.showError();
+                }
             }
         });
     }
@@ -201,7 +219,7 @@ public class LaboratoryFragment extends BaseFragment {
             if (null != itemData) {
                 if (itemData.isSuccess()) {
                     pageStateLayout.showContent();
-
+                    setAdapter();
                 } else {
                     //提示数据为空，展示空状态
                     pageStateLayout.showEmpty();
@@ -214,15 +232,21 @@ public class LaboratoryFragment extends BaseFragment {
             //提示返回数据异常，展示错误页面
             pageStateLayout.showError();
         }
-        setAdapter();
+
     }
 
     //还是不能这样搞，可能会内存泄漏，重复创建Adapyer对象。后面解决
     private void setAdapter() {
         // 设置显示形式
         mRecyclerView.setLayoutManager(new LinearLayoutManager(_mActivity));
-        // 设置适配器
-        mRecyclerView.setAdapter(mAdapter = new LaboratoryFragmentRecyclerViewAdapter(_mActivity, itemData));
+
+        //设置动画
+        SlideInLeftAnimationAdapter mSlideInLeftAnimationAdapter = new SlideInLeftAnimationAdapter(mAdapter = new LaboratoryFragmentRecyclerViewAdapter(_mActivity, itemData));
+        mSlideInLeftAnimationAdapter.setDuration(500);
+        mSlideInLeftAnimationAdapter.setInterpolator(new OvershootInterpolator(.5f));
+        ScaleInAnimationAdapter mScaleInAnimationAdapter = new ScaleInAnimationAdapter(mSlideInLeftAnimationAdapter);
+        mRecyclerView.setAdapter(mScaleInAnimationAdapter);
+
         // 设置item动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter.setOnItemClickListener(new OnItemClickListener() {

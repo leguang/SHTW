@@ -19,6 +19,7 @@ import com.shtoone.shtw.bean.UserInfoData;
 import com.shtoone.shtw.utils.ConstantsUtils;
 import com.shtoone.shtw.utils.HttpUtils;
 import com.shtoone.shtw.utils.KeyBoardUtils;
+import com.shtoone.shtw.utils.NetworkUtils;
 import com.shtoone.shtw.utils.SharedPreferencesUtils;
 import com.shtoone.shtw.utils.URL;
 
@@ -156,9 +157,17 @@ public class LoginActivity extends BaseActivity {
 
                         @Override
                         public void onFailed(VolleyError error) {
-                            //提示网络数据异常
-                            login_button.setErrorText("网络异常");
-                            login_button.setProgress(-1);
+                            //提示网络数据异常。1.可能是本机网络机场。2.可能是服务器异常。
+                            if (!NetworkUtils.isConnected(LoginActivity.this)) {
+                                //提示网络异常
+                                login_button.setErrorText("网络异常");
+                                login_button.setProgress(-1);
+                            } else {
+
+                                //服务器异常
+                                login_button.setErrorText("服务器异常");
+                                login_button.setProgress(-1);
+                            }
                         }
                     });
 
