@@ -145,6 +145,22 @@ public class URL {
     public static final String HNTXQ_URL = BaseURL + "sysController.do?hntkangyaDetail&SYJID=%1";
 
     /**
+     * 压力机详情页
+     *
+     * @param detailID 详情ID
+     * @return 返回拼凑后的url
+     */
+    public static String getYalijiDetailData(String detailID) {
+        String url = HNTXQ_URL.replace("%1", detailID);
+        Log.d(TAG, "压力机详情页 :" + url);
+        if (TextUtils.isEmpty(url)) {
+            return null;
+        }
+        return url;
+    }
+
+
+    /**
      * 钢筋拉力列表地址
      */
     public static final String GJLL_URL = BaseURL + "sysController.do?gangjin&userGroupId=%1&isQualified=%2&startTime=%3&endTime=%4&pageNo=%5&shebeibianhao=%6&isReal=%7&maxPageItems=15";

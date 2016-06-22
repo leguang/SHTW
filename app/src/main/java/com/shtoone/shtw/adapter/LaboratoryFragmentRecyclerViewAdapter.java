@@ -21,6 +21,10 @@ public class LaboratoryFragmentRecyclerViewAdapter extends RecyclerView.Adapter<
     private OnItemClickListener mOnItemClickListener;
     private LaboratoryFragmentRecyclerViewItemData itemData;
 
+    public enum ITEM_TYPE {
+        TONGKANGYAQIANGDU, GANGJINLALI, GANGJINJIXIELIANJIE
+    }
+
     public LaboratoryFragmentRecyclerViewAdapter(Context context, LaboratoryFragmentRecyclerViewItemData itemData) {
         super();
         this.context = context;
@@ -39,6 +43,7 @@ public class LaboratoryFragmentRecyclerViewAdapter extends RecyclerView.Adapter<
         return 0;
     }
 
+
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
 
@@ -52,6 +57,24 @@ public class LaboratoryFragmentRecyclerViewAdapter extends RecyclerView.Adapter<
             for (int i = 0; i < itemData.getData().get(position).size(); i++) {
 
                 ItemInItemView itemInItem = new ItemInItemView(context);
+
+                switch (itemData.getData().get(position).get(i).getTesttype()) {
+                    case "100014":
+                        itemInItem.setBackgroundColor(Color.parseColor("#"));
+                        break;
+                    case "100047":
+
+                        break;
+                    case "100048":
+
+                        break;
+                    case "100049":
+
+                        break;
+
+                }
+
+
                 itemInItem.setTestType(itemData.getData().get(position).get(i).getTestName());
                 itemInItem.setTestCount(itemData.getData().get(position).get(i).getTestCount());
                 itemInItem.setDisqualificationCount(itemData.getData().get(position).get(i).getNotQualifiedCount());

@@ -37,6 +37,7 @@ import com.shtoone.shtw.utils.ToastUtils;
 import com.shtoone.shtw.utils.URL;
 import com.squareup.otto.Subscribe;
 
+import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.PtrUIHandler;
@@ -59,6 +60,8 @@ public class LaboratoryFragment extends BaseFragment {
     private LaboratoryFragmentRecyclerViewItemData itemData;
     private FloatingActionButton fab;
     private PageStateLayout pageStateLayout;
+    private boolean isRegistered;
+    private ParametersData mParametersData;
 
     public static LaboratoryFragment newInstance() {
         return new LaboratoryFragment();
@@ -74,6 +77,13 @@ public class LaboratoryFragment extends BaseFragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        //返回到看见此fragment时，fab显示
+        fab.show();
+    }
+
     private void initView(View view) {
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar_laboratory_fragment);
         fab = (FloatingActionButton) view.findViewById(R.id.fab_laboratory_fragment);
@@ -83,6 +93,8 @@ public class LaboratoryFragment extends BaseFragment {
     }
 
     private void initData() {
+        mParametersData = BaseApplication.parametersData;
+        isRegistered = false;
         mToolbar.setTitle("XX高速 > 试验室");
         ((MainActivity) _mActivity).initToolBar(mToolbar);
         initToolbarMenu(mToolbar);
@@ -92,6 +104,7 @@ public class LaboratoryFragment extends BaseFragment {
             public void onClick(View view) {
                 fab.hide();
                 Intent intent = new Intent(_mActivity, DialogActivity.class);
+                intent.putExtra(ConstantsUtils.FROMTO, "LaboratoryFragment");
                 startActivity(intent);
             }
         });
@@ -100,7 +113,7 @@ public class LaboratoryFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 pageStateLayout.showContent();
-                getDataFromNetwork();
+                getDataFromNetwork(mParametersData);
             }
         });
 
@@ -170,29 +183,25 @@ public class LaboratoryFragment extends BaseFragment {
                             return true;
                         }
                     }
+                } else {
+                    return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
                 }
-
                 return false;
             }
 
             @Override
             public void onRefreshBegin(final PtrFrameLayout frame) {
-                getDataFromNetwork();
+                getDataFromNetwork(mParametersData);
                 frame.refreshComplete();
             }
         });
     }
 
 
-    private void getDataFromNetwork() {
-
-        //从全局参数类中取出参数，避免太长了，看起来不方便
-        String userGroupID = BaseApplication.parametersData.userGroupID;
-        String startDateTime = BaseApplication.parametersData.startDateTime;
-        String endDateTime = BaseApplication.parametersData.endDateTime;
+    private void getDataFromNetwork(ParametersData mParametersData) {
 
         //联网获取数据
-        HttpUtils.getRequest(URL.getSYSLingdaoData(userGroupID, startDateTime, endDateTime), new HttpUtils.HttpListener() {
+        HttpUtils.getRequest(URL.getSYSLingdaoData(mParametersData.userGroupID, mParametersData.startDateTime, mParametersData.endDateTime), new HttpUtils.HttpListener() {
             @Override
             public void onSuccess(String response) {
                 Log.e(TAG, response);
@@ -273,23 +282,23 @@ public class LaboratoryFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void updateSearch(ParametersData parametersData) {
-        if (parametersData != null) {
-            fab.show();
-            ptrframe.autoRefresh(true);
-        }
-    }
+    public void updateSearch(ParametersData mParametersData) {
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //返回到看见此fragment时，fab显示
-        fab.show();
+        if (mParametersData != null) {
+            if (mParametersData.fromTo.equals("LaboratoryFragment")) {
+                fab.show();
+                ToastUtils.showToast(_mActivity, "刷新");
+                this.mParametersData = mParametersData;
+                getDataFromNetwork(mParametersData);
+                Log.e(TAG, "fromto:" + mParametersData.fromTo);
+            }
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
+
         //防止屏幕旋转后重画时fab显示
         fab.hide();
     }

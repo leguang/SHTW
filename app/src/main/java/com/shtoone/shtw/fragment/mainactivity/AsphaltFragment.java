@@ -15,6 +15,7 @@ import com.shtoone.shtw.fragment.base.BaseFragment;
  * Created by leguang on 2016/5/31 0031.
  */
 public class AsphaltFragment extends BaseFragment {
+    private static final String TAG = AsphaltFragment.class.getSimpleName();
 
     public static AsphaltFragment newInstance() {
         return new AsphaltFragment();

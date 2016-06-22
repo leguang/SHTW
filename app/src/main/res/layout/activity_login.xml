@@ -12,8 +12,6 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:paddingBottom="10dp"
-        android:paddingLeft="60dp"
-        android:paddingRight="60dp"
         android:paddingTop="60dp">
 
 
@@ -42,6 +40,8 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="60dp"
                 android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ"
                 android:hint="@string/input_username"
                 android:singleLine="true"
@@ -59,6 +59,8 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="60dp"
                 android:hint="@string/input_password"
                 android:inputType="textPassword"
                 android:textSize="@dimen/login_register_editview_text_size" />

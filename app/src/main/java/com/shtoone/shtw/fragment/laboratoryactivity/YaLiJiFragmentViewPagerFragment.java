@@ -24,7 +24,6 @@ import com.shtoone.shtw.adapter.YaLiJiFragmentViewPagerFragmentRecyclerViewAdapt
 import com.shtoone.shtw.bean.ParametersData;
 import com.shtoone.shtw.bean.YalijiFragmentViewPagerFragmentRecyclerViewItemData;
 import com.shtoone.shtw.fragment.base.BaseFragment;
-import com.shtoone.shtw.fragment.mainactivity.LaboratoryFragment;
 import com.shtoone.shtw.ui.PageStateLayout;
 import com.shtoone.shtw.utils.ConstantsUtils;
 import com.shtoone.shtw.utils.DisplayUtils;
@@ -34,6 +33,7 @@ import com.shtoone.shtw.utils.ToastUtils;
 import com.shtoone.shtw.utils.URL;
 import com.squareup.otto.Subscribe;
 
+import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.PtrUIHandler;
@@ -49,33 +49,60 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
  */
 public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
 
-    private static final String TAG = LaboratoryFragment.class.getSimpleName();
+    private static final String TAG = YaLiJiFragmentViewPagerFragment.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter mAdapter;
     private PageStateLayout pageStateLayout;
     private PtrFrameLayout ptrframe;
     private StoreHouseHeader header;
+    private boolean isRegistered = false;
     private YalijiFragmentViewPagerFragmentRecyclerViewItemData itemsData;
+    private ParametersData mParametersData;
+    private String yalijiID;
 
-    public static YaLiJiFragmentViewPagerFragment newInstance() {
-        return new YaLiJiFragmentViewPagerFragment();
+    public static YaLiJiFragmentViewPagerFragment newInstance(String yalijiID) {
+//        YaLiJiFragmentViewPagerFragment.mParametersData = BaseApplication.parametersData;
+//        YaLiJiFragmentViewPagerFragment.mParametersData.equipmentID = yalijiID;
+
+
+        Bundle args = new Bundle();
+        args.putString("yalijiID", yalijiID);
+
+        YaLiJiFragmentViewPagerFragment fragment = new YaLiJiFragmentViewPagerFragment();
+        fragment.setArguments(args);
+        return fragment;
+
+
+    }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle args = getArguments();
+        if (args != null) {
+            yalijiID = args.getString("yalijiID");
+        }
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        if (!isRegistered) {
+            BaseApplication.bus.register(this);
+            isRegistered = true;
+        }
         View view = inflater.inflate(R.layout.fragment_view_pager_yaliji_fragment, container, false);
         initView(view);
         initData();
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        BaseApplication.bus.register(this);
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//    }
 
     private void initView(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_fragment_view_pager_yaliji_fragment);
@@ -85,11 +112,15 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
     }
 
     private void initData() {
+
+        mParametersData = BaseApplication.parametersData;
+        mParametersData.equipmentID = yalijiID;
+
         pageStateLayout.setOnRetryClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 pageStateLayout.showContent();
-                getDataFromNetwork();
+                getDataFromNetwork(mParametersData);
             }
         });
 
@@ -152,35 +183,44 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
         ptrframe.setPtrHandler(new PtrHandler() {
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                LinearLayoutManager lm = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-                if (lm.findViewByPosition(lm.findFirstVisibleItemPosition()).getTop() == 0 && lm.findFirstVisibleItemPosition() == 0) {
-                    return true;
+                //判断RecyclerView是否在在顶部，在顶部则允许滑动下拉刷新
+                if (null != mRecyclerView) {
+                    if (mRecyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+                        LinearLayoutManager lm = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+                        if (null != lm) {
+                            if (lm.findViewByPosition(lm.findFirstVisibleItemPosition()).getTop() == 0 && lm.findFirstVisibleItemPosition() == 0) {
+                                return true;
+                            }
+                        }
+                    }
+                } else {
+                    return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
                 }
                 return false;
             }
 
             @Override
             public void onRefreshBegin(final PtrFrameLayout frame) {
-                getDataFromNetwork();
+                getDataFromNetwork(mParametersData);
                 frame.refreshComplete();
             }
         });
 
     }
 
-    private void getDataFromNetwork() {
+    private void getDataFromNetwork(ParametersData mParametersData) {
         //从全局参数类中取出参数，避免太长了，看起来不方便
-        String userGroupID = BaseApplication.parametersData.userGroupID;
-        String startDateTime = BaseApplication.parametersData.startDateTime;
-        String endDateTime = BaseApplication.parametersData.endDateTime;
-        String currentPage = BaseApplication.parametersData.currentPage;
-        String equipmentNumber = BaseApplication.parametersData.equipmentNumber;
-        String isQualified = BaseApplication.parametersData.isQualified;
-        String isReal = BaseApplication.parametersData.isReal;
-        String testType = BaseApplication.parametersData.testType;
+        String userGroupID = mParametersData.userGroupID;
+        String startDateTime = mParametersData.startDateTime;
+        String endDateTime = mParametersData.endDateTime;
+        String currentPage = mParametersData.currentPage;
+        String equipmentID = mParametersData.equipmentID;
+        String isQualified = mParametersData.isQualified;
+        String isReal = mParametersData.isReal;
+        String testType = mParametersData.testType;
 
         //联网获取数据
-        HttpUtils.getRequest(URL.getYalijiTestList(userGroupID, isQualified, startDateTime, endDateTime, currentPage, equipmentNumber, isReal, testType), new HttpUtils.HttpListener() {
+        HttpUtils.getRequest(URL.getYalijiTestList(userGroupID, isQualified, startDateTime, endDateTime, currentPage, yalijiID, isReal, testType), new HttpUtils.HttpListener() {
             @Override
             public void onSuccess(String response) {
                 Log.e(TAG, response);
@@ -263,15 +303,26 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void updateSearch(ParametersData parametersData) {
-        if (parametersData != null) {
-            ptrframe.autoRefresh(true);
+    public void updateSearch(ParametersData mParametersData) {
+        Log.e(TAG, mParametersData.fromTo);
+
+
+        if (mParametersData != null) {
+            if (mParametersData.fromTo.equals("YaLiJiFragmentViewPagerFragment" + yalijiID)) {
+                Log.e(TAG, "fromto:" + mParametersData.fromTo);
+                ToastUtils.showToast(_mActivity, "刷新");
+                this.mParametersData = mParametersData;
+                getDataFromNetwork(mParametersData);
+                Log.e(TAG, "222222222222222222222222");
+            }
         }
+
+        Log.e(TAG, "YaLiJiFragmentViewPagerFragment" + yalijiID);
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
         BaseApplication.bus.unregister(this);
     }
 }

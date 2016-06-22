@@ -1,5 +1,6 @@
 package com.shtoone.shtw.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,9 @@ import com.shtoone.shtw.bean.UserInfoData;
 import com.shtoone.shtw.utils.HttpUtils;
 import com.shtoone.shtw.utils.SharedPreferencesUtils;
 import com.shtoone.shtw.utils.URL;
+import com.tencent.android.tpush.XGPushConfig;
+import com.tencent.android.tpush.XGPushManager;
+import com.tencent.android.tpush.service.XGPushService;
 
 public class SplashActivity extends BaseActivity {
     private static final String TAG = "SplashActivity";
@@ -23,6 +27,17 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+
+        XGPushConfig.enableDebug(this, true);
+        Context context = getApplicationContext();
+        XGPushManager.registerPush(context);
+
+// 2.36（不包括）之前的版本需要调用以下2行代码
+        Intent service = new Intent(context, XGPushService.class);
+        context.startService(service);
+
+
         //延迟执行，尽量看到闪屏页
         new Handler().postDelayed(new Runnable() {
             public void run() {
@@ -123,5 +138,11 @@ public class SplashActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         //解决闪屏页按返回键还进入主界面，干脆禁止在闪屏页按返回
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);// 必须要调用这句
     }
 }

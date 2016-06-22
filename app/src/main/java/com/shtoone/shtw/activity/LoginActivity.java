@@ -161,13 +161,11 @@ public class LoginActivity extends BaseActivity {
                             if (!NetworkUtils.isConnected(LoginActivity.this)) {
                                 //提示网络异常
                                 login_button.setErrorText("网络异常");
-                                login_button.setProgress(-1);
                             } else {
-
                                 //服务器异常
                                 login_button.setErrorText("服务器异常");
-                                login_button.setProgress(-1);
                             }
+                            login_button.setProgress(-1);
                         }
                     });
 

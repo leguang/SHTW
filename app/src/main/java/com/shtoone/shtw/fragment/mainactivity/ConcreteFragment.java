@@ -15,6 +15,7 @@ import com.shtoone.shtw.fragment.base.BaseFragment;
  * Created by leguang on 2016/5/31 0031.
  */
 public class ConcreteFragment extends BaseFragment {
+    private static final String TAG = ConcreteFragment.class.getSimpleName();
 
     public static ConcreteFragment newInstance() {
         return new ConcreteFragment();

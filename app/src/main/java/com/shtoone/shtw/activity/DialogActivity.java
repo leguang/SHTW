@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.InputType;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -14,7 +15,7 @@ import com.shtoone.shtw.BaseApplication;
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.base.BaseActivity;
 import com.shtoone.shtw.bean.ParametersData;
-import com.shtoone.shtw.utils.ToastUtils;
+import com.shtoone.shtw.utils.ConstantsUtils;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -38,12 +39,14 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
     private boolean isStartDateTime;
     private String startDateTime;
     private String endDateTime;
-    private ParametersData parametersData;
+    private ParametersData mParametersData;
+    private String fromTo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog);
+
         initView();
         initData();
     }
@@ -63,13 +66,19 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void initData() {
-        parametersData = BaseApplication.parametersData;
+        fromTo = getIntent().getExtras().getString(ConstantsUtils.FROMTO);
+        Log.e(TAG + "^^fromTo:", fromTo);
+
+        mParametersData = BaseApplication.parametersData;
+        mParametersData.equipmentID = getIntent().getExtras().getString("yalijiID");
+        Log.e(TAG + "yalijiId:", mParametersData.equipmentID);
+
         start_date_time.getEditText().setInputType(InputType.TYPE_NULL);
 
         //设置显示上一次查询条件的数据
-        if (!parametersData.isFirst) {
-            start_date_time.getEditText().setText(parametersData.startDateTime);
-            end_date_time.getEditText().setText(parametersData.endDateTime);
+        if (!mParametersData.isFirst) {
+            start_date_time.getEditText().setText(mParametersData.startDateTime);
+            end_date_time.getEditText().setText(mParametersData.endDateTime);
             select_equipment.setSelection(3);
             select_test_type.setSelection(2);
         }
@@ -92,6 +101,7 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
         });
 
         end_date_time.getEditText().setOnTouchListener(new View.OnTouchListener() {
+
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
@@ -119,14 +129,15 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_cancel_dialog:
-                ToastUtils.showToast(this, "取消");
+//                ToastUtils.showToast(this, "取消");
                 finish();
                 break;
 
             case R.id.bt_search_dialog:
-                ToastUtils.showToast(this, "查询");
-                parametersData.isFirst = false;
-                BaseApplication.bus.post(BaseApplication.parametersData);
+//                ToastUtils.showToast(this, "查询");
+                mParametersData.isFirst = false;
+                mParametersData.fromTo = fromTo;
+                BaseApplication.bus.post(mParametersData);
                 finish();
                 break;
         }
@@ -181,11 +192,11 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
         if (isStartDateTime) {
             startDateTime = startDateTime + timeString;
             start_date_time.getEditText().setText(startDateTime);
-            parametersData.startDateTime = startDateTime;
+            mParametersData.startDateTime = startDateTime;
         } else {
             endDateTime = endDateTime + timeString;
             end_date_time.getEditText().setText(endDateTime);
-            parametersData.endDateTime = endDateTime;
+            mParametersData.endDateTime = endDateTime;
         }
     }
 

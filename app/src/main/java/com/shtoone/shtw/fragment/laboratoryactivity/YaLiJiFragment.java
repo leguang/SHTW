@@ -20,8 +20,10 @@ import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.DialogActivity;
 import com.shtoone.shtw.adapter.YaLiJiFragmentViewPagerAdapter;
 import com.shtoone.shtw.bean.EquipmentData;
+import com.shtoone.shtw.bean.ParametersData;
 import com.shtoone.shtw.fragment.base.BaseFragment;
 import com.shtoone.shtw.ui.PageStateLayout;
+import com.shtoone.shtw.utils.ConstantsUtils;
 import com.shtoone.shtw.utils.HttpUtils;
 import com.shtoone.shtw.utils.NetworkUtils;
 import com.shtoone.shtw.utils.URL;
@@ -37,6 +39,8 @@ public class YaLiJiFragment extends BaseFragment {
     private TabLayout mTabLayout;
     private PageStateLayout pageStateLayout;
     private EquipmentData mEquipmentData;
+    private ParametersData mParametersData;
+    private String[] yalijiID = {"", "", ""};
 
     public static YaLiJiFragment newInstance() {
         return new YaLiJiFragment();
@@ -62,12 +66,29 @@ public class YaLiJiFragment extends BaseFragment {
     }
 
     private void initData() {
-
+        mParametersData = BaseApplication.parametersData;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 fab.hide();
+
+                int yalijiCount = 1;
+                for (int i = 0; i < mEquipmentData.getData().size(); i++) {
+                    if (mEquipmentData.getData().get(i).getBanhezhanminchen().contains("压力机")) {
+                        yalijiID[yalijiCount] = mEquipmentData.getData().get(i).getGprsbianhao();
+                        yalijiCount++;
+                        Log.e(TAG, mEquipmentData.getData().get(i).getGprsbianhao());
+                    }
+                }
+
+                int index = mViewPager.getCurrentItem();
+                Log.e(TAG, index + "");
+
+
+                Log.e(TAG + "^^fromte", "YaLiJiFragmentViewPagerFragment" + yalijiID[index]);
                 Intent intent = new Intent(_mActivity, DialogActivity.class);
+                intent.putExtra(ConstantsUtils.FROMTO, "YaLiJiFragmentViewPagerFragment" + yalijiID[index]);
+                intent.putExtra("yalijiID",  yalijiID[index]);
                 startActivity(intent);
             }
         });
@@ -77,7 +98,7 @@ public class YaLiJiFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 pageStateLayout.showContent();
-                getDataFromNetwork();
+                getDataFromNetwork(mParametersData);
             }
         });
 
@@ -92,14 +113,12 @@ public class YaLiJiFragment extends BaseFragment {
         mToolbar.setTitle("XX高速 > 试验室 > 压力机");
         initToolbarBackNavigation(mToolbar);
         initToolbarMenu(mToolbar);
-        getDataFromNetwork();
+        getDataFromNetwork(mParametersData);
     }
 
-    private void getDataFromNetwork() {
-        //从全局参数类中取出参数，避免太长了，看起来不方便
-        String userGroupID = BaseApplication.parametersData.userGroupID;
+    private void getDataFromNetwork(ParametersData mParametersData) {
         //联网获取数据
-        HttpUtils.getRequest(URL.getEquipment(userGroupID), new HttpUtils.HttpListener() {
+        HttpUtils.getRequest(URL.getEquipment(mParametersData.userGroupID), new HttpUtils.HttpListener() {
             @Override
             public void onSuccess(String response) {
                 Log.e(TAG, response);

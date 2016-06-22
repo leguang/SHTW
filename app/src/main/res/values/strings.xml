@@ -32,4 +32,8 @@
     <string name="statistic">统计分析</string>
     <string name="disqualification">不合格</string>
 
+    <!--版本更新模块-->
+    <string name="check_update">检测更新</string>
+    <string name="update">更新</string>
+
 </resources>

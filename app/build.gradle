@@ -17,6 +17,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 
 dependencies {
@@ -42,4 +47,6 @@ dependencies {
     compile 'com.github.PhilJay:MPAndroidChart:v2.2.5'
     compile 'jp.wasabeef:recyclerview-animators:2.2.3'
     compile 'com.github.zzz40500:android-shapeLoadingView:1.0.3.2'
+    compile 'com.dinuscxj:circleprogressbar:1.1.0'
+    compile 'cn.pedant.sweetalert:library:1.3'
 }

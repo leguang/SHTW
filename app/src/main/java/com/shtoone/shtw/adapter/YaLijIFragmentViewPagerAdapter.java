@@ -3,6 +3,7 @@ package com.shtoone.shtw.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
 import com.shtoone.shtw.bean.EquipmentData;
 import com.shtoone.shtw.fragment.laboratoryactivity.YaLiJiFragmentViewPagerFragment;
@@ -13,7 +14,8 @@ import com.shtoone.shtw.fragment.laboratoryactivity.YaLiJiFragmentViewPagerFragm
 public class YaLiJiFragmentViewPagerAdapter extends FragmentPagerAdapter {
     private static final String TAG = "YaLiJiFragVPAdapter";
     private EquipmentData mEquipmentData;
-    private String[] yaliji = {"全部", "", ""};
+    private String[] yalijiName = {"全部", "", ""};
+    private String[] yalijiID = {"", "", ""};
 
     public YaLiJiFragmentViewPagerAdapter(FragmentManager fm, EquipmentData mEquipmentData) {
         super(fm);
@@ -21,14 +23,17 @@ public class YaLiJiFragmentViewPagerAdapter extends FragmentPagerAdapter {
         int yalijiCount = 1;
         for (int i = 0; i < mEquipmentData.getData().size(); i++) {
             if (mEquipmentData.getData().get(i).getBanhezhanminchen().contains("压力机")) {
-                yaliji[yalijiCount++] = mEquipmentData.getData().get(i).getBanhezhanminchen();
+                yalijiName[yalijiCount] = mEquipmentData.getData().get(i).getBanhezhanminchen();
+                yalijiID[yalijiCount] = mEquipmentData.getData().get(i).getGprsbianhao();
+                yalijiCount++;
+                Log.e(TAG, mEquipmentData.getData().get(i).getGprsbianhao());
             }
         }
     }
 
     @Override
     public Fragment getItem(int position) {
-        return YaLiJiFragmentViewPagerFragment.newInstance();
+        return YaLiJiFragmentViewPagerFragment.newInstance(yalijiID[position]);
     }
 
     @Override
@@ -36,7 +41,7 @@ public class YaLiJiFragmentViewPagerAdapter extends FragmentPagerAdapter {
 
         if (null != mEquipmentData && mEquipmentData.isSuccess()) {
 
-            return yaliji.length;
+            return yalijiName.length;
         }
         return 0;
     }
@@ -44,7 +49,7 @@ public class YaLiJiFragmentViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         if (null != mEquipmentData && mEquipmentData.isSuccess()) {
-            return yaliji[position];
+            return yalijiName[position];
         }
         return null;
     }

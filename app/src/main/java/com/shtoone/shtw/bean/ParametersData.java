@@ -19,10 +19,12 @@ public class ParametersData {
     public String disposition = "";
     public String level = "";
     public String isQualified = "";
-    public String equipmentNumber = "";
+    public String equipmentID = "";
     public String currentPage = "";
     public String isReal = "";
     public boolean isFirst = true;
+    public String detailID = "";
+    public String fromTo = "";
 
     public ParametersData() {
         initParametersData();
