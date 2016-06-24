@@ -1,7 +1,7 @@
 package com.shtoone.shtw.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.content.res.Resources;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -20,10 +20,6 @@ public class LaboratoryFragmentRecyclerViewAdapter extends RecyclerView.Adapter<
     private Context context;
     private OnItemClickListener mOnItemClickListener;
     private LaboratoryFragmentRecyclerViewItemData itemData;
-
-    public enum ITEM_TYPE {
-        TONGKANGYAQIANGDU, GANGJINLALI, GANGJINJIXIELIANJIE
-    }
 
     public LaboratoryFragmentRecyclerViewAdapter(Context context, LaboratoryFragmentRecyclerViewItemData itemData) {
         super();
@@ -49,32 +45,30 @@ public class LaboratoryFragmentRecyclerViewAdapter extends RecyclerView.Adapter<
 
 
         if (itemData != null && itemData.isSuccess() && itemData.getData().size() > 0) {
-            holder.cv.setCardBackgroundColor(position % 2 == 0 ? Color.argb(250, 78, 100, 132) : Color.argb(255, 66, 90, 126));
+//            holder.cv.setCardBackgroundColor(position % 2 == 0 ? Color.argb(250, 78, 100, 132) : Color.argb(255, 66, 90, 126));
             //此处该优化，相同的部位应提取出来
             holder.tv_organization.setText(itemData.getData().get(position).get(0).getDepartName());
             holder.tv_laboratory_count.setText(itemData.getData().get(position).get(0).getSysCount());     //拌合站总数
             holder.tv_machine_countll.setText(itemData.getData().get(position).get(0).getSyjCount());     //拌合机总数xx
+            Resources mResources = context.getResources();
             for (int i = 0; i < itemData.getData().get(position).size(); i++) {
 
                 ItemInItemView itemInItem = new ItemInItemView(context);
 
                 switch (itemData.getData().get(position).get(i).getTesttype()) {
                     case "100014":
-                        itemInItem.setBackgroundColor(Color.parseColor("#"));
+                        itemInItem.setBackgroundColor(mResources.getColor(R.color.material_green_100));
                         break;
                     case "100047":
-
+                        itemInItem.setBackgroundColor(mResources.getColor(R.color.material_Lime_100));
                         break;
                     case "100048":
-
+                        itemInItem.setBackgroundColor(mResources.getColor(R.color.material_brown_100));
                         break;
                     case "100049":
-
+                        itemInItem.setBackgroundColor(mResources.getColor(R.color.material_blue_100));
                         break;
-
                 }
-
-
                 itemInItem.setTestType(itemData.getData().get(position).get(i).getTestName());
                 itemInItem.setTestCount(itemData.getData().get(position).get(i).getTestCount());
                 itemInItem.setDisqualificationCount(itemData.getData().get(position).get(i).getNotQualifiedCount());

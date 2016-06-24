@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#3F51B5</color>
-    <color name="colorAccent">#009789</color>
+    <color name="colorAccent">#FF4081</color>
 
     <!-- 常用颜色值 -->
     <color name="base_color">#3F51B5</color>
@@ -23,8 +23,6 @@
     <color name="lightest_gray">#0a000000</color>
 
     <!-- 特定部位颜色值 -->
-
-
     <!--登陆模块-->
     <color name="material_login_login_color">#3F51B5</color>
     <color name="material_login_register_color">#3F51B5</color>
@@ -33,7 +31,6 @@
     <color name="material_login_login_text_color">#000</color>
     <color name="material_login_register_text_color">#000</color>
     <color name="login_register_background">#C000</color>
-
 
     <!-- Material Color Palette -->
     <!-- Red -->
@@ -347,5 +344,24 @@
     <color name="material_textWhite_disable">#42ffffff</color>
     <color name="material_textWhite_secondaryText">#89ffffff</color>
     <color name="material_textWhite_text">#ddffffff</color>
+
+    <!-- 26% white (foreground) -->
+    <color name="white_26_percent_alpha">#42ffffff</color>
+    <!-- White 50% -->
+    <color name="white_50_percent_alpha">#80ffffff</color>
+    <!-- 70% white -->
+    <color name="white_70_percent_alpha">#b3ffffff</color>
+    <!-- 30% of default values -->
+    <color name="primary_white_30_percent_alpha">#4Dffffff</color>
+    <color name="secondary_white_30_percent_alpha">#36ffffff</color>
+
+    <!-- 87% black -->
+    <color name="black_87_percent_alpha">#de000000</color>
+    <!-- 54% black -->
+    <color name="black_54_percent_alpha">#8a000000</color>
+    <!-- 38% black -->
+    <color name="black_38_percent_alpha">#4c000000</color>
+    <!-- 12% black (foreground) -->
+    <color name="black_12_percent_alpha">#1f000000</color>
 
 </resources>

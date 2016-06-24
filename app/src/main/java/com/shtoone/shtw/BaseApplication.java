@@ -6,6 +6,7 @@ import android.content.Context;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.shtoone.shtw.bean.ParametersData;
+import com.socks.library.KLog;
 import com.squareup.otto.Bus;
 
 /**
@@ -23,6 +24,7 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        KLog.init(true, "SHTW");
         application = this;
         context = getApplicationContext();
         // 添加功能：程序异常关闭1s之后重新启动

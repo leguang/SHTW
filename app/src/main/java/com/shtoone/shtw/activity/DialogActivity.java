@@ -51,11 +51,6 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
         initData();
     }
 
-    @Override
-    protected int setContainerId() {
-        return 0;
-    }
-
     private void initView() {
         start_date_time = (TextInputLayout) findViewById(R.id.start_date_time_dialog);
         end_date_time = (TextInputLayout) findViewById(R.id.end_date_time_dialog);

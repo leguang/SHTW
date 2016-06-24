@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -26,6 +25,7 @@ import com.shtoone.shtw.utils.DisplayUtils;
 import com.shtoone.shtw.utils.HttpUtils;
 import com.shtoone.shtw.utils.NetworkUtils;
 import com.shtoone.shtw.utils.URL;
+import com.socks.library.KLog;
 
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
@@ -194,7 +194,7 @@ public class YaLiJiDetailActivity extends BaseActivity {
         HttpUtils.getRequest(URL.getYalijiDetailData(detaiID), new HttpUtils.HttpListener() {
             @Override
             public void onSuccess(String response) {
-                Log.e(TAG, response);
+                KLog.json(TAG, response);
                 parseData(response);
             }
 
@@ -253,11 +253,5 @@ public class YaLiJiDetailActivity extends BaseActivity {
         tv_central_value.setText(mYalijiDetailData.getData().getQDDBZ());
         mViewPager.setAdapter(new YaLiJiDetailActivityChartViewPagerAdapter(getSupportFragmentManager()));
         mTabLayout.setupWithViewPager(mViewPager);
-    }
-
-
-    @Override
-    protected int setContainerId() {
-        return 0;
     }
 }

@@ -74,11 +74,6 @@ public class VersionActivity extends BaseActivity {
         registerReceiver(onNotificationClick, new IntentFilter(DownloadManager.ACTION_NOTIFICATION_CLICKED));
     }
 
-    @Override
-    protected int setContainerId() {
-        return 0;
-    }
-
     public class JumpToSettingOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {

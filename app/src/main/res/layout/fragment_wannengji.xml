@@ -16,11 +16,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
-            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:titleTextAppearance="@style/ToolbarTextAppearance" />
 
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout_wannengji_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </android.support.design.widget.AppBarLayout>
+
+
+    <com.shtoone.shtw.ui.PageStateLayout
+        android:id="@+id/psl_wannengji_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:emptyView="@layout/page_state_empty_view"
+        app:errorView="@layout/page_state_error_view"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:loadingView="@layout/page_state_loading_view"
+        app:netErrorView="@layout/page_state_net_error_view">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_wannengji_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="50dp" />
+    </com.shtoone.shtw.ui.PageStateLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_wannengji_fragment"

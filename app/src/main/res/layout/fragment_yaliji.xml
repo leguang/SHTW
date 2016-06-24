@@ -23,10 +23,7 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_layout_yaliji_fragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabIndicatorColor="@color/red"
-            app:tabSelectedTextColor="@color/red"
-            app:tabTextColor="@color/white" />
+            android:layout_height="wrap_content"/>
 
     </android.support.design.widget.AppBarLayout>
 

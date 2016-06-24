@@ -8,7 +8,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +30,7 @@ import com.shtoone.shtw.utils.HttpUtils;
 import com.shtoone.shtw.utils.NetworkUtils;
 import com.shtoone.shtw.utils.ToastUtils;
 import com.shtoone.shtw.utils.URL;
+import com.socks.library.KLog;
 import com.squareup.otto.Subscribe;
 
 import in.srain.cube.views.ptr.PtrDefaultHandler;
@@ -223,7 +223,7 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
         HttpUtils.getRequest(URL.getYalijiTestList(userGroupID, isQualified, startDateTime, endDateTime, currentPage, yalijiID, isReal, testType), new HttpUtils.HttpListener() {
             @Override
             public void onSuccess(String response) {
-                Log.e(TAG, response);
+                KLog.e(TAG, response);
                 parseData(response);
             }
 
@@ -292,7 +292,7 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
     }
 
     @Override
-    protected FragmentAnimator onCreateFragmentAnimation() {
+    protected FragmentAnimator onCreateFragmentAnimator() {
         return new DefaultNoAnimator();
     }
 
@@ -304,20 +304,19 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
 
     @Subscribe
     public void updateSearch(ParametersData mParametersData) {
-        Log.e(TAG, mParametersData.fromTo);
-
+        KLog.e(TAG, mParametersData.fromTo);
 
         if (mParametersData != null) {
             if (mParametersData.fromTo.equals("YaLiJiFragmentViewPagerFragment" + yalijiID)) {
-                Log.e(TAG, "fromto:" + mParametersData.fromTo);
+                KLog.e(TAG, "fromto:" + mParametersData.fromTo);
                 ToastUtils.showToast(_mActivity, "刷新");
                 this.mParametersData = mParametersData;
                 getDataFromNetwork(mParametersData);
-                Log.e(TAG, "222222222222222222222222");
+                KLog.e(TAG, "222222222222222222222222");
             }
         }
 
-        Log.e(TAG, "YaLiJiFragmentViewPagerFragment" + yalijiID);
+        KLog.e(TAG, "YaLiJiFragmentViewPagerFragment" + yalijiID);
     }
 
     @Override

@@ -29,17 +29,12 @@ public class GuideActivity extends BaseActivity {
         initDate();
     }
 
-    @Override
-    protected int setContainerId() {
-        return 0;
-    }
-
     private void initDate() {
         vp.setAdapter(new GuideViewPagerAdapter());
         bt_guide.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferencesUtils.put(GuideActivity.this, "firstentry", false);
+                SharedPreferencesUtils.put(GuideActivity.this, "isFirstEntry", false);
                 // 页面跳转
                 Intent intent = new Intent(GuideActivity.this, LoginActivity.class);
                 startActivity(intent);

@@ -114,7 +114,7 @@ public class SplashActivity extends BaseActivity {
     //进入MainActivity
     private void jumpToMain() {
 
-        Boolean isFirstentry = (Boolean) SharedPreferencesUtils.get(this, "firstentry", true);
+        Boolean isFirstentry = (Boolean) SharedPreferencesUtils.get(this, "isFirstEntry", true);
         Intent intent;
         if (isFirstentry) {
             intent = new Intent(this, GuideActivity.class);
@@ -128,11 +128,6 @@ public class SplashActivity extends BaseActivity {
 
     private void initParametersData() {
         BaseApplication.parametersData.userGroupID = userInfoData.getDepartId();
-    }
-
-    @Override
-    protected int setContainerId() {
-        return 0;
     }
 
     @Override

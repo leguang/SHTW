@@ -189,11 +189,6 @@ public class LoginActivity extends BaseActivity {
         BaseApplication.parametersData.userGroupID = userInfoData.getDepartId();
     }
 
-    @Override
-    protected int setContainerId() {
-        return 0;
-    }
-
     //点击空白处隐藏键盘
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {

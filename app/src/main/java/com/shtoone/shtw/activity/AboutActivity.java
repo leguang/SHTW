@@ -10,7 +10,7 @@ import com.shtoone.shtw.activity.base.BaseActivity;
  */
 
 public class AboutActivity extends BaseActivity {
-    private static final String TAG = "TestActivity";
+    private static final String TAG = "AboutActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,10 +22,6 @@ public class AboutActivity extends BaseActivity {
         initDate();
     }
 
-    @Override
-    protected int setContainerId() {
-        return 0;
-    }
 
     private void initDate() {
     }

@@ -1,7 +1,7 @@
 package com.shtoone.shtw.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.content.res.Resources;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,6 +18,10 @@ public class YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter extends Recycler
     private Context context;
     private OnItemClickListener mOnItemClickListener;
     private YalijiFragmentViewPagerFragmentRecyclerViewItemData itemsData;
+
+    public enum ITEM_TYPE {
+        KANGYAQIANGDU, GANGJINLALI, GANGJINHANJIE, GANGJINJIXIELIANJIE
+    }
 
     public YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter(Context context, YalijiFragmentViewPagerFragmentRecyclerViewItemData itemsData) {
         super();
@@ -38,9 +42,18 @@ public class YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter extends Recycler
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public int getItemViewType(int position) {
+        //需要返回试验类型编码给我，如：100047，100048等
+//        YalijiFragmentViewPagerFragmentRecyclerViewItemData.DataBean item = itemsData.getData().get(position);
 
-        holder.cv.setCardBackgroundColor(position % 2 == 0 ? Color.argb(250, 78, 100, 132) : Color.argb(255, 66, 90, 126));
+//        switch (item.getT)
+        return 0;
+    }
+
+    @Override
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
+        Resources mResources = context.getResources();
+        holder.cv.setCardBackgroundColor(position % 2 == 0 ? mResources.getColor(R.color.material_teal_50) : mResources.getColor(R.color.material_blue_50));
 
         YalijiFragmentViewPagerFragmentRecyclerViewItemData.DataBean item = itemsData.getData().get(position);
         holder.tv_title.setText(item.getSYRQ());

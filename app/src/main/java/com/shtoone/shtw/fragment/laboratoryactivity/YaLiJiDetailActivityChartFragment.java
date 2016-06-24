@@ -65,7 +65,7 @@ public class YaLiJiDetailActivityChartFragment extends BaseFragment {
         getChartData(50, 100);
         mLineChart.animateX(3000);
 
-        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Light.ttf");
+        Typeface tf = Typeface.createFromAsset(_mActivity.getAssets(), "OpenSans-Light.ttf");
 
         Legend l = mLineChart.getLegend();
         l.setTypeface(tf);

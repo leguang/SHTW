@@ -38,7 +38,7 @@ public abstract class BaseActivity extends SupportActivity {
     }
 
     protected void initToolbarBackNavigation(Toolbar toolbar) {
-        toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_white_24dp);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,8 +63,11 @@ public abstract class BaseActivity extends SupportActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

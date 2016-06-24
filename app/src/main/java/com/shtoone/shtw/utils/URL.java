@@ -3,6 +3,8 @@ package com.shtoone.shtw.utils;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.socks.library.KLog;
+
 public class URL {
 
     public static final String TAG = "URL";
@@ -80,7 +82,7 @@ public class URL {
         //如果开始时间大于结束时间，返回null
         if (Integer.valueOf(startTime) <= Integer.valueOf(endTime)) {
             String url = SYS_Items.replace("%1", userGroupId).replace("%2", startTime).replace("%3", endTime);
-            Log.e(TAG, "试验室主界面URL :" + url);
+            KLog.e(TAG, "试验室主界面URL :" + url);
             if (TextUtils.isEmpty(url)) {
                 return null;
             }
@@ -112,7 +114,7 @@ public class URL {
 
 
     /**
-     * 得到混泥土强度列表数据
+     * 得到压力机列表数据
      *
      * @param userGroupID    组织结构ID
      * @param isQualified    是否合格
@@ -130,7 +132,7 @@ public class URL {
         //如果开始时间大于结束时间，返回null
         if (Integer.valueOf(startTime) <= Integer.valueOf(endTime)) {
             String url = HNT_URL.replace("%1", userGroupID).replace("%2", isQualified).replace("%3", startTime).replace("%4", endTime).replace("%5", current_PageNo).replace("%6", deviceNo).replace("%7", isReal).replace("%8", testType);
-            Log.d(TAG, "混泥土强度列表 :" + url);
+            KLog.d(TAG, "压力机列表 :" + url);
             if (TextUtils.isEmpty(url)) {
                 return null;
             }
@@ -152,7 +154,7 @@ public class URL {
      */
     public static String getYalijiDetailData(String detailID) {
         String url = HNTXQ_URL.replace("%1", detailID);
-        Log.d(TAG, "压力机详情页 :" + url);
+        KLog.d(TAG, "压力机详情页 :" + url);
         if (TextUtils.isEmpty(url)) {
             return null;
         }
@@ -248,7 +250,7 @@ public class URL {
      */
     public static String getEquipment(String userGroupID) {
         String url = SYS_SHEBEI_LIST.replace("%1", userGroupID);
-        Log.e(TAG, "获取设备的URL:" + url);
+        KLog.e(TAG, "获取设备的URL:" + url);
         if (TextUtils.isEmpty(url)) {
             return null;
         }
@@ -270,10 +272,31 @@ public class URL {
      */
     public static final String GJ_URL = BaseURL + "sysController.do?gangjin&userGroupId=%1&isQualified=%2&startTime=%3&endTime=%4&pageNo=%5&shebeibianhao=%6&isReal=%7&maxPageItems=15&testId=%8";
 
-
     /**
-     * 正则表达式：验证手机号
+     * 得到万能机列表数据
+     *
+     * @param userGroupID    组织结构ID
+     * @param isQualified    是否合格
+     * @param startTime      开始时间
+     * @param endTime        结束时间
+     * @param current_PageNo 页码
+     * @param deviceNo       设备编号
+     * @param isReal         是否处置
+     * @param testType       试验类型
+     * @return url
      */
-    public static final String REGEX_MOBILE = "^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
-
+    public static String getWannengjiTestList(String userGroupID, String isQualified, String startTime, String endTime, String current_PageNo, String deviceNo, String isReal, String testType) {
+        startTime = DateUtils.ChangeTimeToLong(startTime);
+        endTime = DateUtils.ChangeTimeToLong(endTime);
+        //如果开始时间大于结束时间，返回null
+        if (Integer.valueOf(startTime) <= Integer.valueOf(endTime)) {
+            String url = GJ_URL.replace("%1", userGroupID).replace("%2", isQualified).replace("%3", startTime).replace("%4", endTime).replace("%5", current_PageNo).replace("%6", deviceNo).replace("%7", isReal).replace("%8", testType);
+            KLog.d(TAG, "万能机列表 :" + url);
+            if (TextUtils.isEmpty(url)) {
+                return null;
+            }
+            return url;
+        }
+        return null;
+    }
 }

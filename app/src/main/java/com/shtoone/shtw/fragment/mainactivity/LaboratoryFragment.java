@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +34,7 @@ import com.shtoone.shtw.utils.HttpUtils;
 import com.shtoone.shtw.utils.NetworkUtils;
 import com.shtoone.shtw.utils.ToastUtils;
 import com.shtoone.shtw.utils.URL;
+import com.socks.library.KLog;
 import com.squareup.otto.Subscribe;
 
 import in.srain.cube.views.ptr.PtrDefaultHandler;
@@ -45,6 +45,7 @@ import in.srain.cube.views.ptr.header.StoreHouseHeader;
 import in.srain.cube.views.ptr.indicator.PtrIndicator;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.SlideInLeftAnimationAdapter;
+import zhy.com.highlight.HighLight;
 
 
 /**
@@ -62,6 +63,8 @@ public class LaboratoryFragment extends BaseFragment {
     private PageStateLayout pageStateLayout;
     private boolean isRegistered;
     private ParametersData mParametersData;
+    private HighLight mHightLight;
+    private View view;
 
     public static LaboratoryFragment newInstance() {
         return new LaboratoryFragment();
@@ -71,7 +74,7 @@ public class LaboratoryFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         BaseApplication.bus.register(this);
-        View view = inflater.inflate(R.layout.fragment_laboratory, container, false);
+        view = inflater.inflate(R.layout.fragment_laboratory, container, false);
         initView(view);
         initData();
         return view;
@@ -195,6 +198,8 @@ public class LaboratoryFragment extends BaseFragment {
                 frame.refreshComplete();
             }
         });
+
+//        showTipMask();
     }
 
 
@@ -204,7 +209,7 @@ public class LaboratoryFragment extends BaseFragment {
         HttpUtils.getRequest(URL.getSYSLingdaoData(mParametersData.userGroupID, mParametersData.startDateTime, mParametersData.endDateTime), new HttpUtils.HttpListener() {
             @Override
             public void onSuccess(String response) {
-                Log.e(TAG, response);
+                KLog.e(TAG, response);
                 parseData(response);
             }
 
@@ -290,7 +295,7 @@ public class LaboratoryFragment extends BaseFragment {
                 ToastUtils.showToast(_mActivity, "刷新");
                 this.mParametersData = mParametersData;
                 getDataFromNetwork(mParametersData);
-                Log.e(TAG, "fromto:" + mParametersData.fromTo);
+                KLog.e(TAG, "fromto:" + mParametersData.fromTo);
             }
         }
     }

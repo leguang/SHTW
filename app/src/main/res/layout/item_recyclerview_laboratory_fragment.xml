@@ -20,8 +20,9 @@
         <!-- 顶部图形标题，数据所属组织机构 -->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:padding="5dp">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:paddingBottom="2dp">
 
             <TextView
                 android:id="@+id/tv_organization_item_recyclerview_laboratory_fragment"
@@ -30,8 +31,8 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerInParent="true"
                 android:text="监理公司"
-                android:textColor="@color/orange"
-                android:textSize="18sp"
+                android:textColor="@color/primary_text_default_material_light"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <!-- 右边显示拌合站数量 -->
@@ -49,7 +50,7 @@
                     android:gravity="center"
                     android:text="0"
                     android:textColor="@android:color/white"
-                    android:textSize="15dp" />
+                    android:textSize="14dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -57,8 +58,8 @@
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="3dp"
                     android:text="室"
-                    android:textColor="@color/orange"
-                    android:textSize="16sp"
+                    android:textColor="@color/secondary_text_default_material_light"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -69,7 +70,7 @@
                     android:gravity="center"
                     android:text="0"
                     android:textColor="@android:color/white"
-                    android:textSize="15dp" />
+                    android:textSize="14dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -77,11 +78,16 @@
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="3dp"
                     android:text="机"
-                    android:textColor="@color/orange"
-                    android:textSize="16sp"
+                    android:textColor="@color/secondary_text_default_material_light"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
             </LinearLayout>
         </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/secondary_text_default_material_light" />
 
         <!-- 表头部分：监理1标，总盘数，报警等级 -->
 
@@ -89,8 +95,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingBottom="3dp"
-            android:paddingTop="3dp">
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp">
 
             <TextView
                 android:layout_width="0dp"
@@ -98,7 +104,7 @@
                 android:layout_weight="0.3"
                 android:gravity="left"
                 android:text="试验类型"
-                android:textColor="@color/black"
+                android:textColor="@color/secondary_text_default_material_light"
                 android:textSize="15dp" />
 
             <TextView
@@ -107,7 +113,7 @@
                 android:layout_weight="0.18"
                 android:gravity="center_horizontal"
                 android:text="试验数"
-                android:textColor="@color/black"
+                android:textColor="@color/secondary_text_default_material_light"
                 android:textSize="15dp" />
 
             <TextView
@@ -116,7 +122,7 @@
                 android:layout_weight="0.18"
                 android:gravity="center_horizontal"
                 android:text="不合格"
-                android:textColor="@color/black"
+                android:textColor="@color/secondary_text_default_material_light"
                 android:textSize="15dp" />
 
             <TextView
@@ -125,7 +131,7 @@
                 android:layout_weight="0.18"
                 android:gravity="center_horizontal"
                 android:text="处置数"
-                android:textColor="@color/black"
+                android:textColor="@color/secondary_text_default_material_light"
                 android:textSize="15dp" />
 
             <TextView
@@ -134,14 +140,15 @@
                 android:layout_weight="0.16"
                 android:gravity="center_horizontal"
                 android:text="处置率"
-                android:textColor="@color/black"
+                android:textColor="@color/secondary_text_default_material_light"
                 android:textSize="15dp" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/black" />
+            android:layout_marginBottom="2dp"
+            android:background="@color/secondary_text_default_material_light" />
         <!-- 混泥土强度 -->
         <LinearLayout
             android:id="@+id/ll_content_item_recyclerview_laboratory_fragment"

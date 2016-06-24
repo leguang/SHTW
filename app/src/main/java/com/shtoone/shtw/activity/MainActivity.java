@@ -1,6 +1,7 @@
 package com.shtoone.shtw.activity;
 
 import android.content.Intent;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,19 +24,38 @@ import java.util.ArrayList;
 
 import me.yokeyword.fragmentation.SupportFragment;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
+import zhy.com.highlight.HighLight;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String TAG = "MainActivity";
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
-
+    private SupportFragment[] mFragments = new SupportFragment[3];
     private ArrayList<AHBottomNavigationItem> bottomNavigationItems = new ArrayList<>();
     private AHBottomNavigation bottomNavigation;
+    private int bottomNavigationPreposition = 0;
+    private HighLight mHightLight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (savedInstanceState == null) {
+            mFragments[0] = LaboratoryFragment.newInstance();
+            mFragments[1] = ConcreteFragment.newInstance();
+            mFragments[2] = AsphaltFragment.newInstance();
+
+            loadMultipleRootFragment(R.id.fl_container_main_activity, 0, mFragments[0], mFragments[1], mFragments[2]);
+        } else {
+            // 这里库已经做了Fragment恢复,所有不需要额外的处理了, 不会出现重叠问题
+            // 这里我们需要拿到mFragments的引用,也可以通过getSupportFragmentManager.getFragments()自行进行判断查找(效率更高些),用下面的方法查找更方便些
+            mFragments[0] = findFragment(LaboratoryFragment.class);
+            mFragments[1] = findFragment(ConcreteFragment.class);
+            mFragments[2] = findFragment(AsphaltFragment.class);
+        }
+
         initView();
         initData();
     }
@@ -68,67 +88,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 //        bottomNavigation.setColored(true);
 //        bottomNavigation.setForceTint(true);
 //        bottomNavigation.setForceTitlesDisplay(true);
+        bottomNavigation.setCurrentItem(0);
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position, boolean wasSelected) {
-                switch (position) {
-                    case 0:
-                        LaboratoryFragment fragment0 = findFragment(LaboratoryFragment.class);
-                        if (fragment0 == null) {
-                            popTo(LaboratoryFragment.class, false, new Runnable() {
-                                @Override
-                                public void run() {
-                                    start(LaboratoryFragment.newInstance());
-                                }
-                            });
-                        } else {
-                            // 如果已经在栈内,则以SingleTask模式start
-                            start(fragment0, SupportFragment.SINGLETASK);
-                        }
-
-                        break;
-
-                    case 1:
-
-                        ConcreteFragment fragment1 = findFragment(ConcreteFragment.class);
-                        if (fragment1 == null) {
-                            popTo(LaboratoryFragment.class, false, new Runnable() {
-                                @Override
-                                public void run() {
-                                    start(ConcreteFragment.newInstance());
-                                }
-                            });
-                        } else {
-                            // 如果已经在栈内,则以SingleTask模式start
-                            start(fragment1, SupportFragment.SINGLETASK);
-                        }
-
-                        break;
-
-                    case 2:
-
-                        AsphaltFragment fragment2 = findFragment(AsphaltFragment.class);
-                        if (fragment2 == null) {
-                            popTo(LaboratoryFragment.class, false, new Runnable() {
-                                @Override
-                                public void run() {
-                                    start(AsphaltFragment.newInstance());
-                                }
-                            });
-                        } else {
-                            // 如果已经在栈内,则以SingleTask模式start
-                            start(fragment2, SupportFragment.SINGLETASK);
-                        }
-                        break;
-                }
+                showHideFragment(mFragments[position], mFragments[bottomNavigationPreposition]);
+                bottomNavigationPreposition = position;
             }
         });
-        bottomNavigation.setCurrentItem(0);
-    }
 
-    @Override
-    protected int setContainerId() {
-        return R.id.fl_container_main_activity;
+//        showTipMask();
     }
 
     @Override
@@ -146,22 +115,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return new FragmentAnimator(0, 0, 0, 0);
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -169,7 +122,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         int id = item.getItemId();
 
         if (id == R.id.message_drawer_main_activity) {
-
+            JumpToMessageActivity();
         } else if (id == R.id.logout_drawer_main_activity) {
             JumpToLoginActivity();
         } else if (id == R.id.about_drawer_main_activity) {
@@ -198,6 +151,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         finish();
     }
 
+    private void JumpToMessageActivity() {
+        Intent intent = new Intent(this, MessageActivity.class);
+        startActivity(intent);
+    }
+
     private void JumpToAboutActivity() {
         Intent intent = new Intent(this, AboutActivity.class);
         startActivity(intent);
@@ -206,6 +164,43 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void JumpToVersionActivity() {
         Intent intent = new Intent(this, VersionActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        if ((Boolean) SharedPreferencesUtils.get(MainActivity.this, "isFirstGuide", true)) {
+            showTipMask();
+        }
+        super.onResume();
+    }
+
+    private void showTipMask() {
+        mHightLight = new HighLight(MainActivity.this)//
+                .addHighLight(R.id.action_hierarchy, R.layout.info_gravity_right_up, new HighLight.OnPosCallback() {
+                    @Override
+                    public void getPos(float rightMargin, float bottomMargin, RectF rectF, HighLight.MarginInfo marginInfo) {
+                        marginInfo.rightMargin = 1;
+                        marginInfo.topMargin = rectF.bottom;
+                    }
+                }).setClickCallback(new HighLight.OnClickCallback() {
+                    @Override
+                    public void onClick() {
+                        mHightLight = new HighLight(MainActivity.this);
+                        mHightLight.addHighLight(R.id.fab_laboratory_fragment, R.layout.info_down, new HighLight.OnPosCallback() {
+                            @Override
+                            public void getPos(float rightMargin, float bottomMargin, RectF rectF, HighLight.MarginInfo marginInfo) {
+                                marginInfo.rightMargin = rectF.width() / 2 + 1;
+                                marginInfo.bottomMargin = bottomMargin + rectF.height();
+                            }
+                        }).setClickCallback(new HighLight.OnClickCallback() {
+                            @Override
+                            public void onClick() {
+                                SharedPreferencesUtils.put(MainActivity.this, "isFirstGuide", false);
+                            }
+                        }).show();
+                    }
+                });
+        mHightLight.show();
     }
 
 }

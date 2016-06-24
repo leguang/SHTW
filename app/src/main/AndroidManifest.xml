@@ -72,7 +72,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.MainActivity"
-            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.DialogActivity"
@@ -80,10 +79,11 @@
 
         <activity android:name=".activity.TestActivity" />
         <activity android:name=".activity.AboutActivity" />
+        <activity android:name=".activity.MessageActivity" />
         <activity android:name=".activity.VersionActivity" />
         <activity android:name=".activity.LaboratoryActivity" />
         <activity android:name=".activity.YaLiJiDetailActivity" />
-
+        <activity android:name=".activity.WannengjiDetailActivity" />
         <!-- 【必须】 信鸽receiver广播接收 -->
         <receiver
             android:name="com.tencent.android.tpush.XGPushReceiver"
