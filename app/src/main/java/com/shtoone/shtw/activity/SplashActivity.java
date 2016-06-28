@@ -20,7 +20,7 @@ import com.tencent.android.tpush.XGPushManager;
 import com.tencent.android.tpush.service.XGPushService;
 
 public class SplashActivity extends BaseActivity {
-    private static final String TAG = "SplashActivity";
+    private static final String TAG = SplashActivity.class.getSimpleName();
     private UserInfoData userInfoData;
 
     @Override

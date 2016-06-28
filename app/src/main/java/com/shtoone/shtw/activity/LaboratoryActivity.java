@@ -17,7 +17,7 @@ import me.yokeyword.fragmentation.SupportFragment;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
 public class LaboratoryActivity extends BaseActivity {
-    private static final String TAG = "LaboratoryActivity";
+    private static final String TAG = LaboratoryActivity.class.getSimpleName();
     private ArrayList<AHBottomNavigationItem> bottomNavigationItems = new ArrayList<>();
     private AHBottomNavigation bottomNavigation;
     private int bottomNavigationPreposition = 0;
@@ -72,58 +72,6 @@ public class LaboratoryActivity extends BaseActivity {
 
                 showHideFragment(mFragments[position], mFragments[bottomNavigationPreposition]);
                 bottomNavigationPreposition = position;
-//                switch (position) {
-//                    case 0:
-//
-//
-//                        YaLiJiFragment fragment0 = findFragment(YaLiJiFragment.class);
-//                        if (fragment0 == null) {
-////                            popTo(YaLiJiFragment.class, false, new Runnable() {
-////                                @Override
-////                                public void run() {
-//                            start(YaLiJiFragment.newInstance());
-////                                }
-////                            });
-//                        } else {
-//                            // 如果已经在栈内,则以SingleTask模式start
-//                            start(fragment0, SupportFragment.SINGLETOP);
-//                        }
-//
-//                        break;
-//
-//                    case 1:
-//
-//                        WannengjiFragment fragment1 = findFragment(WannengjiFragment.class);
-//                        if (fragment1 == null) {
-////                            popTo(YaLiJiFragment.class, false, new Runnable() {
-////                                @Override
-////                                public void run() {
-//                            start(WannengjiFragment.newInstance());
-////                                }
-////                            });
-//                        } else {
-//                            // 如果已经在栈内,则以SingleTask模式start
-//                            start(fragment1, SupportFragment.SINGLETOP);
-//                        }
-//
-//                        break;
-//
-//                    case 2:
-//
-//                        LaboratoryStatisticFragment fragment3 = findFragment(LaboratoryStatisticFragment.class);
-//                        if (fragment3 == null) {
-////                            popTo(YaLiJiFragment.class, false, new Runnable() {
-////                                @Override
-////                                public void run() {
-//                            start(LaboratoryStatisticFragment.newInstance());
-////                                }
-////                            });
-//                        } else {
-//                            // 如果已经在栈内,则以SingleTask模式start
-//                            start(fragment3, SupportFragment.SINGLETOP);
-//                        }
-//                        break;
-//                }
             }
         });
 

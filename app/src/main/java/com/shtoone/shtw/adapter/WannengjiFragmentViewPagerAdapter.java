@@ -12,7 +12,7 @@ import com.shtoone.shtw.fragment.laboratoryactivity.WannengjiFragmentViewPagerFr
  * Created by leguang on 2016/6/9 0009.
  */
 public class WannengjiFragmentViewPagerAdapter extends FragmentPagerAdapter {
-    private static final String TAG = "YaLiJiFragVPAdapter";
+    private static final String TAG = "WannengjiFragmentViewPagerAdapter";
     private EquipmentData mEquipmentData;
     private String[] wannengjiName = {"全部", "", ""};
     private String[] wannengjiID = {"", "", ""};

@@ -10,13 +10,12 @@ import com.shtoone.shtw.activity.base.BaseActivity;
  */
 
 public class AboutActivity extends BaseActivity {
-    private static final String TAG = "AboutActivity";
+    private static final String TAG = AboutActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-
 
         initView();
         initDate();

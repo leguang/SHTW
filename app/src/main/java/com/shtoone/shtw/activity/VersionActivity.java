@@ -30,7 +30,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
 public class VersionActivity extends BaseActivity {
-    private static final String TAG = "VersionActivity";
+    private static final String TAG = VersionActivity.class.getSimpleName();
     private TextView tv_project_name;
     private TextView tv_app_name;
     private TextView tv_version;

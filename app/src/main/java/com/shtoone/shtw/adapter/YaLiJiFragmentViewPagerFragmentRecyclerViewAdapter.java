@@ -14,7 +14,7 @@ import com.shtoone.shtw.R;
 import com.shtoone.shtw.bean.YalijiFragmentViewPagerFragmentRecyclerViewItemData;
 
 public class YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter extends RecyclerView.Adapter<YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter.MyViewHolder> {
-    private static final String TAG = "YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter";
+    private static final String TAG = YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter.class.getSimpleName();
     private Context context;
     private OnItemClickListener mOnItemClickListener;
     private YalijiFragmentViewPagerFragmentRecyclerViewItemData itemsData;

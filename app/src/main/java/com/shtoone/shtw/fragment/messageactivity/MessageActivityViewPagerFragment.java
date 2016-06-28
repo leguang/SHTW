@@ -2,6 +2,7 @@ package com.shtoone.shtw.fragment.messageactivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +24,11 @@ import com.shtoone.shtw.utils.ConstantsUtils;
 import com.shtoone.shtw.utils.DisplayUtils;
 import com.shtoone.shtw.utils.NetworkUtils;
 import com.shtoone.shtw.utils.ToastUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -50,6 +56,10 @@ public class MessageActivityViewPagerFragment extends BaseFragment {
     private YalijiFragmentViewPagerFragmentRecyclerViewItemData itemsData;
     private ParametersData mParametersData;
     private String yalijiID;
+    private boolean isLoading;
+    private int lastVisibleItemPosition;
+    private List<Map<String, Object>> data = new ArrayList<>();
+    private Handler handler = new Handler();
 
     public static MessageActivityViewPagerFragment newInstance() {
 
@@ -188,11 +198,13 @@ public class MessageActivityViewPagerFragment extends BaseFragment {
                 frame.refreshComplete();
             }
         });
+
         setAdapter();
     }
 
     private void getDataFromNetwork(ParametersData mParametersData) {
         //从全局参数类中取出参数，避免太长了，看起来不方便
+        getData();
 
     }
 
@@ -203,7 +215,7 @@ public class MessageActivityViewPagerFragment extends BaseFragment {
     //还是不能这样搞，可能会内存泄漏，重复创建Adapyer对象。后面解决
     private void setAdapter() {
         //设置动画
-        SlideInLeftAnimationAdapter mSlideInLeftAnimationAdapter = new SlideInLeftAnimationAdapter(mAdapter = new MessageActivityViewPagerFragmentRecyclerViewAdapter(_mActivity));
+        SlideInLeftAnimationAdapter mSlideInLeftAnimationAdapter = new SlideInLeftAnimationAdapter(mAdapter = new MessageActivityViewPagerFragmentRecyclerViewAdapter(_mActivity, data));
         mSlideInLeftAnimationAdapter.setFirstOnly(true);
         mSlideInLeftAnimationAdapter.setDuration(500);
         mSlideInLeftAnimationAdapter.setInterpolator(new OvershootInterpolator(.5f));
@@ -211,6 +223,34 @@ public class MessageActivityViewPagerFragment extends BaseFragment {
         ScaleInAnimationAdapter mScaleInAnimationAdapter = new ScaleInAnimationAdapter(mSlideInLeftAnimationAdapter);
         mScaleInAnimationAdapter.setFirstOnly(true);
         mRecyclerView.setAdapter(mScaleInAnimationAdapter);
+        final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(_mActivity);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                //还有一个不完美的地方就是当规定的item个数时，最后一个item在屏幕外滑到可见时，其底部没有footview，这点以后再解决。
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItemPosition + 1 == mAdapter.getItemCount() && data.size() >= 5) {
+
+                    if (!isLoading) {
+                        isLoading = true;
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                getData();
+                                isLoading = false;
+                            }
+                        }, 3000);
+                    }
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                lastVisibleItemPosition = mLinearLayoutManager.findLastVisibleItemPosition();
+            }
+        });
 
         // 设置item动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -235,5 +275,14 @@ public class MessageActivityViewPagerFragment extends BaseFragment {
     //进入YaLiJiDetailActivity
     private void jumpTo() {
 
+    }
+
+    private void getData() {
+        for (int i = 0; i < 5; i++) {
+            Map<String, Object> map = new HashMap<>();
+            data.add(map);
+        }
+        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyItemRemoved(mAdapter.getItemCount());
     }
 }

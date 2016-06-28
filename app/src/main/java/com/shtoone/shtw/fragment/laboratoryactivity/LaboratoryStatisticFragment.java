@@ -9,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.github.mikephil.charting.charts.BarChart;
@@ -31,9 +33,11 @@ import com.shtoone.shtw.utils.HttpUtils;
 import com.shtoone.shtw.utils.NetworkUtils;
 import com.shtoone.shtw.utils.URL;
 import com.socks.library.KLog;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
@@ -44,7 +48,7 @@ import in.srain.cube.views.ptr.indicator.PtrIndicator;
 /**
  * Created by leguang on 2016/6/9 0031.
  */
-public class LaboratoryStatisticFragment extends BaseFragment {
+public class LaboratoryStatisticFragment extends BaseFragment implements DatePickerDialog.OnDateSetListener {
     private static final String TAG = LaboratoryStatisticFragment.class.getSimpleName();
     private Toolbar mToolbar;
     private NestedScrollView mNestedScrollView;
@@ -53,6 +57,10 @@ public class LaboratoryStatisticFragment extends BaseFragment {
     private PtrFrameLayout ptrframe;
     private BarChart mBarChart;
     private Typeface mTf;
+    private TextView tv_start_date;
+    private TextView tv_end_date;
+    private Button bt_search;
+    private boolean isStartDateTime;
 
     protected String[] mMonths = new String[]{
             "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"
@@ -72,6 +80,9 @@ public class LaboratoryStatisticFragment extends BaseFragment {
     }
 
     private void initView(View view) {
+        tv_start_date = (TextView) view.findViewById(R.id.tv_start_date_laboratory_statistic_fragment);
+        tv_end_date = (TextView) view.findViewById(R.id.tv_end_date_laboratory_statistic_fragment);
+        bt_search = (Button) view.findViewById(R.id.bt_search_laboratory_statistic_fragment);
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar_laboratory_statistic_fragment);
         mNestedScrollView = (NestedScrollView) view.findViewById(R.id.nsv_laboratory_statistic_fragment);
         ptrframe = (PtrFrameLayout) view.findViewById(R.id.ptr_laboratory_statistic_fragment);
@@ -83,11 +94,33 @@ public class LaboratoryStatisticFragment extends BaseFragment {
         mToolbar.setTitle("XX高速 > 试验室 > 综合统计");
         initToolbarBackNavigation(mToolbar);
         initToolbarMenu(mToolbar);
+
+        tv_start_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setStartDateTime();
+            }
+        });
+
+        tv_end_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setEndDateTime();
+            }
+        });
+
+        bt_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getDataFromNetwork();
+            }
+        });
+
         pageStateLayout.setOnRetryClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 pageStateLayout.showContent();
-                getDataFromNetwork();
+                ptrframe.autoRefresh(true);
             }
         });
 
@@ -324,6 +357,45 @@ public class LaboratoryStatisticFragment extends BaseFragment {
         @Override
         public String getFormattedValue(float value, YAxis yAxis) {
             return mFormat.format(value) + " $";
+        }
+    }
+
+    private void setStartDateTime() {
+        isStartDateTime = true;
+        showDatePicker();
+    }
+
+    private void setEndDateTime() {
+        isStartDateTime = false;
+        showDatePicker();
+    }
+
+
+    private void showDatePicker() {
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(this, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
+        dpd.vibrate(true);
+        dpd.dismissOnPause(false);
+        dpd.setAccentColor(getResources().getColor(R.color.base_color));
+        dpd.show(_mActivity.getFragmentManager(), "Datepickerdialog");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        DatePickerDialog dpd = (DatePickerDialog) _mActivity.getFragmentManager().findFragmentByTag("Datepickerdialog");
+        if (dpd != null) dpd.setOnDateSetListener(this);
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        String monthString = (++monthOfYear) < 10 ? "0" + (monthOfYear) : "" + (monthOfYear);
+        String dayString = dayOfMonth < 10 ? "0" + dayOfMonth : "" + dayOfMonth;
+        String dateString = year + "-" + monthString + "-" + dayString + " ";
+        if (isStartDateTime) {
+            tv_start_date.setText(dateString);
+        } else {
+            tv_end_date.setText(dateString);
         }
     }
 }

@@ -27,7 +27,7 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
 import zhy.com.highlight.HighLight;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private static final String TAG = "MainActivity";
+    private static final String TAG = MainActivity.class.getSimpleName();
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
@@ -203,4 +203,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mHightLight.show();
     }
 
+    @Override
+    public boolean swipeBackPriority() {
+        return false;
+    }
 }

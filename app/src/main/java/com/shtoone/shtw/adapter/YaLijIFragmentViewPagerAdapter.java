@@ -3,16 +3,16 @@ package com.shtoone.shtw.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
 
 import com.shtoone.shtw.bean.EquipmentData;
 import com.shtoone.shtw.fragment.laboratoryactivity.YaLiJiFragmentViewPagerFragment;
+import com.socks.library.KLog;
 
 /**
  * Created by leguang on 2016/6/9 0009.
  */
 public class YaLiJiFragmentViewPagerAdapter extends FragmentPagerAdapter {
-    private static final String TAG = "YaLiJiFragVPAdapter";
+    private static final String TAG = YaLiJiFragmentViewPagerAdapter.class.getSimpleName();
     private EquipmentData mEquipmentData;
     private String[] yalijiName = {"全部", "", ""};
     private String[] yalijiID = {"", "", ""};
@@ -26,7 +26,7 @@ public class YaLiJiFragmentViewPagerAdapter extends FragmentPagerAdapter {
                 yalijiName[yalijiCount] = mEquipmentData.getData().get(i).getBanhezhanminchen();
                 yalijiID[yalijiCount] = mEquipmentData.getData().get(i).getGprsbianhao();
                 yalijiCount++;
-                Log.e(TAG, mEquipmentData.getData().get(i).getGprsbianhao());
+                KLog.e(TAG, mEquipmentData.getData().get(i).getGprsbianhao());
             }
         }
     }

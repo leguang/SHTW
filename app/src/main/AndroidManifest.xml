@@ -76,14 +76,28 @@
         <activity
             android:name=".activity.DialogActivity"
             android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name=".activity.TestActivity"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name=".activity.AboutActivity"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name=".activity.MessageActivity"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name=".activity.VersionActivity"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name=".activity.LaboratoryActivity"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name=".activity.YaLiJiDetailActivity"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name=".activity.WannengjiDetailActivity"
+            android:theme="@style/AppTheme.Transparent" />
 
-        <activity android:name=".activity.TestActivity" />
-        <activity android:name=".activity.AboutActivity" />
-        <activity android:name=".activity.MessageActivity" />
-        <activity android:name=".activity.VersionActivity" />
-        <activity android:name=".activity.LaboratoryActivity" />
-        <activity android:name=".activity.YaLiJiDetailActivity" />
-        <activity android:name=".activity.WannengjiDetailActivity" />
         <!-- 【必须】 信鸽receiver广播接收 -->
         <receiver
             android:name="com.tencent.android.tpush.XGPushReceiver"

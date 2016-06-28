@@ -29,7 +29,7 @@ import fr.ganfra.materialspinner.MaterialSpinner;
  */
 
 public class DialogActivity extends BaseActivity implements View.OnClickListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
-    private static final String TAG = "DialogActivity";
+    private static final String TAG = DialogActivity.class.getSimpleName();
     private TextInputLayout start_date_time;
     private TextInputLayout end_date_time;
     private CircularProgressButton bt_search;
@@ -66,7 +66,7 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
 
         mParametersData = BaseApplication.parametersData;
         mParametersData.equipmentID = getIntent().getExtras().getString("yalijiID");
-        Log.e(TAG + "yalijiId:", mParametersData.equipmentID);
+//        Log.e(TAG + "yalijiId:", mParametersData.equipmentID);
 
         start_date_time.getEditText().setInputType(InputType.TYPE_NULL);
 
@@ -206,10 +206,5 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
             endDateTime = dateString;
         }
         showTimePicker();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 }

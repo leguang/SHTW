@@ -3,8 +3,8 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
+    <string name="loading">加载中……</string>
 
     <!--登陆模块-->
     <string name="system_name">拌合站与试验室信息管理系统</string>

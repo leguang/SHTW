@@ -132,7 +132,7 @@ public class URL {
         //如果开始时间大于结束时间，返回null
         if (Integer.valueOf(startTime) <= Integer.valueOf(endTime)) {
             String url = HNT_URL.replace("%1", userGroupID).replace("%2", isQualified).replace("%3", startTime).replace("%4", endTime).replace("%5", current_PageNo).replace("%6", deviceNo).replace("%7", isReal).replace("%8", testType);
-            KLog.d(TAG, "压力机列表 :" + url);
+            KLog.e(TAG, "压力机列表 :" + url);
             if (TextUtils.isEmpty(url)) {
                 return null;
             }
@@ -154,7 +154,7 @@ public class URL {
      */
     public static String getYalijiDetailData(String detailID) {
         String url = HNTXQ_URL.replace("%1", detailID);
-        KLog.d(TAG, "压力机详情页 :" + url);
+        KLog.e(TAG, "压力机详情页 :" + url);
         if (TextUtils.isEmpty(url)) {
             return null;
         }
@@ -291,7 +291,7 @@ public class URL {
         //如果开始时间大于结束时间，返回null
         if (Integer.valueOf(startTime) <= Integer.valueOf(endTime)) {
             String url = GJ_URL.replace("%1", userGroupID).replace("%2", isQualified).replace("%3", startTime).replace("%4", endTime).replace("%5", current_PageNo).replace("%6", deviceNo).replace("%7", isReal).replace("%8", testType);
-            KLog.d(TAG, "万能机列表 :" + url);
+            KLog.e(TAG, "万能机列表 :" + url);
             if (TextUtils.isEmpty(url)) {
                 return null;
             }

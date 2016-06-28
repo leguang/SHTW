@@ -16,7 +16,7 @@ import com.shtoone.shtw.utils.SharedPreferencesUtils;
 
 
 public class GuideActivity extends BaseActivity {
-    private static final String TAG = "GuideActivity";
+    private static final String TAG = GuideActivity.class.getSimpleName();
     private Button bt_guide;
     private ViewPager vp;
     private int[] resouces = {R.drawable.welcome_1, R.drawable.welcome_2, R.drawable.welcome_3};
@@ -79,5 +79,10 @@ public class GuideActivity extends BaseActivity {
             container.removeView((View) object);
         }
 
+    }
+
+    @Override
+    public boolean swipeBackPriority() {
+        return false;
     }
 }

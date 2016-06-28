@@ -16,7 +16,7 @@ import com.shtoone.shtw.utils.ToastUtils;
  */
 
 public class MessageActivity extends BaseActivity {
-    private static final String TAG = "MessageActivity";
+    private static final String TAG = MessageActivity.class.getSimpleName();
     private Toolbar mToolbar;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;

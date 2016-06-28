@@ -10,7 +10,7 @@ import com.shtoone.shtw.fragment.messageactivity.MessageActivityViewPagerFragmen
  * Created by leguang on 2016/6/9 0009.
  */
 public class MessageActivityViewPagerAdapter extends FragmentPagerAdapter {
-    private static final String TAG = "MessageActivityViewPagerAdapter";
+    private static final String TAG = MessageActivityViewPagerAdapter.class.getSimpleName();
     private String[] title = {"试验室", "拌合站", "施工现场"};
 
     public MessageActivityViewPagerAdapter(FragmentManager fm) {

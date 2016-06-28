@@ -16,7 +16,7 @@ import com.shtoone.shtw.bean.LaboratoryFragmentRecyclerViewItemData;
 import com.shtoone.shtw.ui.ItemInItemView;
 
 public class LaboratoryFragmentRecyclerViewAdapter extends RecyclerView.Adapter<LaboratoryFragmentRecyclerViewAdapter.MyViewHolder> {
-    private static final String TAG = "LaboratoryFragmentRecyclerViewAdapter";
+    private static final String TAG = LaboratoryFragmentRecyclerViewAdapter.class.getSimpleName();
     private Context context;
     private OnItemClickListener mOnItemClickListener;
     private LaboratoryFragmentRecyclerViewItemData itemData;

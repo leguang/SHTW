@@ -10,7 +10,6 @@ import com.shtoone.shtw.fragment.laboratoryactivity.YaLiJiDetailActivityChartFra
  * Created by leguang on 2016/6/9 0009.
  */
 public class YaLiJiDetailActivityChartViewPagerAdapter extends FragmentPagerAdapter {
-
     private static final String TAG = "YaLiJiDetailActivityChartViewPagerAdapter";
     String[] mTitles = new String[]{"1111", "2222", "33333"};
 

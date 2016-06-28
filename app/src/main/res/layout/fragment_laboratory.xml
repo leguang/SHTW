@@ -72,8 +72,6 @@
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="70dp"
         android:layout_marginRight="16dp"
-        android:src="@drawable/ic_search_white_18dp"
-        app:backgroundTint="@color/green1"
-        app:rippleColor="@color/white" />
+        android:src="@drawable/ic_search_white_18dp" />
 
 </android.support.design.widget.CoordinatorLayout>

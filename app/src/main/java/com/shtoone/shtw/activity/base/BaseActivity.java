@@ -11,10 +11,11 @@ import android.view.WindowManager;
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.utils.NetworkUtils;
 
-import me.yokeyword.fragmentation.SupportActivity;
+import me.yokeyword.fragmentation.SwipeBackLayout;
+import me.yokeyword.fragmentation_swipeback.SwipeBackActivity;
 
 
-public abstract class BaseActivity extends SupportActivity {
+public abstract class BaseActivity extends SwipeBackActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,8 @@ public abstract class BaseActivity extends SupportActivity {
             // 透明状态栏
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+
+        getSwipeBackLayout().setEdgeOrientation(SwipeBackLayout.EDGE_ALL);
     }
 
     protected void initToolbarBackNavigation(Toolbar toolbar) {
@@ -69,5 +72,10 @@ public abstract class BaseActivity extends SupportActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean swipeBackPriority() {
+        return true;
     }
 }

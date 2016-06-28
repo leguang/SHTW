@@ -117,6 +117,7 @@ public class YaLiJiFragment extends BaseFragment {
     }
 
     private void getDataFromNetwork(ParametersData mParametersData) {
+
         //联网获取数据
         HttpUtils.getRequest(URL.getEquipment(mParametersData.userGroupID), new HttpUtils.HttpListener() {
             @Override

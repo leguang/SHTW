@@ -24,7 +24,7 @@ import com.shtoone.shtw.utils.SharedPreferencesUtils;
 import com.shtoone.shtw.utils.URL;
 
 public class LoginActivity extends BaseActivity {
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = LoginActivity.class.getSimpleName();
     private TextInputLayout login_username;
     private TextInputLayout login_password;
     private CircularProgressButton login_button;
@@ -195,6 +195,11 @@ public class LoginActivity extends BaseActivity {
         View v = this.getCurrentFocus();
         KeyBoardUtils.hideKeybord(v, this);
         return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public boolean swipeBackPriority() {
+        return false;
     }
 
 }
