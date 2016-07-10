@@ -84,7 +84,11 @@ public class YaLiJiDetailActivity extends BaseActivity {
     }
 
     private void initDate() {
-        mToolbar.setTitle("XX高速 > 试验室 > 压力机 > 压力机详情");
+        StringBuffer sb = new StringBuffer(BaseApplication.mUserInfoData.getDepartName() + " > ");
+        sb.append(getString(R.string.laboratory) + " > ");
+        sb.append(getString(R.string.yaliji) + " > ");
+        sb.append(getString(R.string.detail)).trimToSize();
+        mToolbar.setTitle(sb.toString());
         initToolbarBackNavigation(mToolbar);
         setSupportActionBar(mToolbar);
 

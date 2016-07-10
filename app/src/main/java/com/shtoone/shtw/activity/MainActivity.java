@@ -8,10 +8,15 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.shtoone.shtw.BaseApplication;
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.base.BaseActivity;
 import com.shtoone.shtw.fragment.mainactivity.AsphaltFragment;
@@ -19,6 +24,7 @@ import com.shtoone.shtw.fragment.mainactivity.ConcreteFragment;
 import com.shtoone.shtw.fragment.mainactivity.LaboratoryFragment;
 import com.shtoone.shtw.utils.ConstantsUtils;
 import com.shtoone.shtw.utils.SharedPreferencesUtils;
+import com.shtoone.shtw.utils.ToastUtils;
 
 import java.util.ArrayList;
 
@@ -28,14 +34,16 @@ import zhy.com.highlight.HighLight;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = MainActivity.class.getSimpleName();
-    private NavigationView navigationView;
-    private DrawerLayout drawer;
+    private NavigationView mNavigationView;
+    private DrawerLayout mDrawer;
     private ActionBarDrawerToggle toggle;
     private SupportFragment[] mFragments = new SupportFragment[3];
     private ArrayList<AHBottomNavigationItem> bottomNavigationItems = new ArrayList<>();
     private AHBottomNavigation bottomNavigation;
     private int bottomNavigationPreposition = 0;
     private HighLight mHightLight;
+    private TextView tv_username;
+    private TextView tv_phone_number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,19 +69,46 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void initView() {
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.navigationView_main_activity);
-        navigationView.setNavigationItemSelectedListener(this);
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mNavigationView = (NavigationView) findViewById(R.id.navigationView_main_activity);
+        mNavigationView.setNavigationItemSelectedListener(this);
+
+        LinearLayout llNavHeader = (LinearLayout) mNavigationView.getHeaderView(0);
+        tv_username = (TextView) llNavHeader.findViewById(R.id.tv_username_nav_header_main);
+        tv_phone_number = (TextView) llNavHeader.findViewById(R.id.tv_phone_number_nav_header_main);
+        llNavHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawer.closeDrawer(GravityCompat.START);
+
+                mDrawer.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+//                        goLogin();
+                        ToastUtils.showToast(MainActivity.this, "点击……");
+                    }
+                }, 3000);
+            }
+        });
         bottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation_main_activity);
     }
 
     public void initToolBar(Toolbar toolbar) {
-        toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        toggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.setDrawerListener(toggle);
         toggle.syncState();
     }
 
     public void initData() {
+        if (null != BaseApplication.mUserInfoData) {
+            if (!TextUtils.isEmpty(BaseApplication.mUserInfoData.getUserFullName())) {
+                tv_username.setText("用户：" + BaseApplication.mUserInfoData.getUserFullName());
+            }
+            if (!TextUtils.isEmpty(BaseApplication.mUserInfoData.getUserPhoneNum())) {
+                tv_phone_number.setText("电话：" + BaseApplication.mUserInfoData.getUserPhoneNum());
+            }
+        }
+
         AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.laboratory, R.drawable.ic_favorites, R.color.base_color);
         AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.concrete, R.drawable.ic_nearby, R.color.base_color);
         AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.asphalt, R.drawable.ic_friends, R.color.base_color);

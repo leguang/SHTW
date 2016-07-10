@@ -98,7 +98,12 @@ public class LaboratoryFragment extends BaseFragment {
     private void initData() {
         mParametersData = BaseApplication.parametersData;
         isRegistered = false;
-        mToolbar.setTitle("XX高速 > 试验室");
+
+        //做健壮性判断
+        StringBuffer sb = new StringBuffer(BaseApplication.mUserInfoData.getDepartName() + " > ");
+        sb.append(getString(R.string.laboratory)).trimToSize();
+        mToolbar.setTitle(sb.toString());
+
         ((MainActivity) _mActivity).initToolBar(mToolbar);
         initToolbarMenu(mToolbar);
 

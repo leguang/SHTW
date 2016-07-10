@@ -22,6 +22,7 @@ import com.shtoone.shtw.utils.KeyBoardUtils;
 import com.shtoone.shtw.utils.NetworkUtils;
 import com.shtoone.shtw.utils.SharedPreferencesUtils;
 import com.shtoone.shtw.utils.URL;
+import com.socks.library.KLog;
 
 public class LoginActivity extends BaseActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
@@ -120,13 +121,16 @@ public class LoginActivity extends BaseActivity {
                     login_button.setProgress(0);
                     login_button.setProgress(50);
                     //联网校对密码正确后保存
+                    //没有加url健壮性判断……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………
                     HttpUtils.getRequest(URL.loginCheck(username, password), new HttpUtils.HttpListener() {
                         @Override
                         public void onSuccess(String response) {
+                            KLog.json(response);
                             if (!TextUtils.isEmpty(response)) {
                                 userInfoData = new Gson().fromJson(response, UserInfoData.class);
                                 if (null != userInfoData) {
                                     if (userInfoData.isSuccess()) {
+                                        BaseApplication.mUserInfoData = userInfoData;
                                         SharedPreferencesUtils.put(LoginActivity.this, ConstantsUtils.USERNAME, username);
                                         SharedPreferencesUtils.put(LoginActivity.this, ConstantsUtils.PASSWORD, password);
                                         SharedPreferencesUtils.put(LoginActivity.this, ConstantsUtils.LOGINCHECK, response);

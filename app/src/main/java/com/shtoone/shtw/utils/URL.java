@@ -1,7 +1,6 @@
 package com.shtoone.shtw.utils;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.socks.library.KLog;
 
@@ -41,7 +40,7 @@ public class URL {
      */
     public static String loginCheck(String username, String password) {
         String url = Login_URL.replace("%1", username).replace("%2", password);
-        Log.d(TAG, "登录验证 :" + url);
+        KLog.e(TAG, "登录验证 :" + url);
         if (TextUtils.isEmpty(url)) {
             return null;
         }
@@ -110,7 +109,7 @@ public class URL {
     /**
      * 混泥土强度列表地址
      */
-    public static final String HNT_URL = BaseURL + "sysController.do?hntkangya&userGroupId=%1&isQualified=%2&startTime=%3&endTime=%4&pageNo=%5&shebeibianhao=%6&isReal=%7&maxPageItems=15";
+    public static final String HNT_URL = BaseURL + "sysController.do?hntkangya&userGroupId=%1&isQualified=%2&startTime=%3&endTime=%4&pageNo=%5&shebeibianhao=%6&isReal=%7&maxPageItems=30";
 
 
     /**

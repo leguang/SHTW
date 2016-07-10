@@ -15,6 +15,7 @@ import com.shtoone.shtw.bean.UserInfoData;
 import com.shtoone.shtw.utils.HttpUtils;
 import com.shtoone.shtw.utils.SharedPreferencesUtils;
 import com.shtoone.shtw.utils.URL;
+import com.socks.library.KLog;
 import com.tencent.android.tpush.XGPushConfig;
 import com.tencent.android.tpush.XGPushManager;
 import com.tencent.android.tpush.service.XGPushService;
@@ -22,6 +23,7 @@ import com.tencent.android.tpush.service.XGPushService;
 public class SplashActivity extends BaseActivity {
     private static final String TAG = SplashActivity.class.getSimpleName();
     private UserInfoData userInfoData;
+    private boolean isBackPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,31 +65,46 @@ public class SplashActivity extends BaseActivity {
             HttpUtils.getRequest(URL.loginCheck(username, password), new HttpUtils.HttpListener() {
                 @Override
                 public void onSuccess(String response) {
+                    KLog.json(response);
                     if (!TextUtils.isEmpty(response)) {
                         userInfoData = new Gson().fromJson(response, UserInfoData.class);
                         if (null != userInfoData) {
                             if (userInfoData.isSuccess()) {
+                                BaseApplication.mUserInfoData = userInfoData;
                                 SharedPreferencesUtils.put(SplashActivity.this, "loginCheck", response);
                                 initParametersData();
-                                jumpToMain();
+                                //在跳转之前判断是否按了返回键返回桌面了，这代表用户不想进应用了
+                                if (!isBackPressed) {
+                                    jumpToMain();
+                                }
+
                             } else {
                                 //提示用户名或密码错误,有可能用户在Web端改了密码
-                                jumpToLogin();
+                                if (!isBackPressed) {
+                                    jumpToLogin();
+                                }
+
                             }
                         } else {
                             //提示数据解析异常，与硬件和系统有关的问题，几乎不可能出现
-                            jumpToLogin();
+                            if (!isBackPressed) {
+                                jumpToLogin();
+                            }
                         }
                     } else {
                         //提示返回数据异常，丢包的情况，几乎不会出现
-                        jumpToLogin();
+                        if (!isBackPressed) {
+                            jumpToLogin();
+                        }
                     }
                 }
 
                 @Override
                 public void onFailed(VolleyError error) {
                     //提示网络数据异常，无网络
-                    jumpToLogin();
+                    if (!isBackPressed) {
+                        jumpToLogin();
+                    }
                 }
             });
 
@@ -132,7 +149,8 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        //解决闪屏页按返回键还进入主界面，干脆禁止在闪屏页按返回
+        super.onBackPressed();
+        isBackPressed = true;
     }
 
     @Override

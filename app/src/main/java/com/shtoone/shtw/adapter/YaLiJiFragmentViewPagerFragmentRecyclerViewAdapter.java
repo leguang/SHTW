@@ -2,16 +2,17 @@ package com.shtoone.shtw.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.bean.YalijiFragmentViewPagerFragmentRecyclerViewItemData;
+import com.shtoone.shtw.ui.SlantedTextView;
 
 public class YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter extends RecyclerView.Adapter<YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter.MyViewHolder> {
     private static final String TAG = YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter.class.getSimpleName();
@@ -63,9 +64,26 @@ public class YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter extends Recycler
         holder.tv_project_name.setText(item.getGCMC());
         holder.tv_position.setText(item.getSGBW());
         holder.tv_testtype.setText(item.getTestName());
-        if (!("合格".equals(item.getPDJG()) || "有效".equals(item.getPDJG()))) {
-            holder.iv_qualified.setImageResource(R.drawable.ic_logo);
+        if ("合格".equals(item.getPDJG())) {
+            //默认就是合格设置
+        } else if ("有效".equals(item.getPDJG())) {
+            holder.stv_qualified.setText("有效");
+        } else {
+            //设置是否处置标签
+            holder.stv_handle.setVisibility(View.VISIBLE);
+            if (true) {
+//                holder.stv_handle.setText("已处置").setSlantedBackgroundColor(Color.RED);
+            } else {
+                holder.stv_handle.setText("未处置").setSlantedBackgroundColor(Color.RED);
+            }
+
+            if ("不合格".equals(item.getPDJG())) {
+                holder.stv_qualified.setText("不合格").setSlantedBackgroundColor(Color.RED);
+            } else if ("无效".equals(item.getPDJG())) {
+                holder.stv_qualified.setText("无效").setSlantedBackgroundColor(Color.RED);
+            }
         }
+
 
         if (mOnItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +110,8 @@ public class YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter extends Recycler
         TextView tv_project_name;
         TextView tv_position;
         TextView tv_testtype;
-        ImageView iv_qualified;
+        SlantedTextView stv_qualified;
+        SlantedTextView stv_handle;
         CardView cv;
 
         public MyViewHolder(View view) {
@@ -104,7 +123,8 @@ public class YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter extends Recycler
             tv_project_name = (TextView) view.findViewById(R.id.tv_project_name_item_recyclerview_yaliji_fragment_viewpager_fragment);
             tv_position = (TextView) view.findViewById(R.id.tv_position_item_recyclerview_yaliji_fragment_viewpager_fragment);
             tv_testtype = (TextView) view.findViewById(R.id.tv_testtype_item_recyclerview_yaliji_fragment_viewpager_fragment);
-            iv_qualified = (ImageView) view.findViewById(R.id.iv_qualified_item_recyclerview_yaliji_fragment_viewpager_fragment);
+            stv_qualified = (SlantedTextView) view.findViewById(R.id.stv_qualified_item_recyclerview_yaliji_fragment_viewpager_fragment);
+            stv_handle = (SlantedTextView) view.findViewById(R.id.stv_handle_item_recyclerview_yaliji_fragment_viewpager_fragment);
             cv = (CardView) view.findViewById(R.id.cv_item_recyclerview_yaliji_fragment_viewpager_fragment);
         }
     }

@@ -58,15 +58,12 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
     private boolean isRegistered = false;
     private YalijiFragmentViewPagerFragmentRecyclerViewItemData itemsData;
     private ParametersData mParametersData;
-    private String yalijiID;
+    private int titleType;
 
-    public static YaLiJiFragmentViewPagerFragment newInstance(String yalijiID) {
-//        YaLiJiFragmentViewPagerFragment.mParametersData = BaseApplication.parametersData;
-//        YaLiJiFragmentViewPagerFragment.mParametersData.equipmentID = yalijiID;
-
+    public static YaLiJiFragmentViewPagerFragment newInstance(int titleType) {
 
         Bundle args = new Bundle();
-        args.putString("yalijiID", yalijiID);
+        args.putInt("titleType", titleType);
 
         YaLiJiFragmentViewPagerFragment fragment = new YaLiJiFragmentViewPagerFragment();
         fragment.setArguments(args);
@@ -82,7 +79,7 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
 
         Bundle args = getArguments();
         if (args != null) {
-            yalijiID = args.getString("yalijiID");
+            titleType = args.getInt("titleType");
         }
     }
 
@@ -113,8 +110,17 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
 
     private void initData() {
 
-        mParametersData = BaseApplication.parametersData;
-        mParametersData.equipmentID = yalijiID;
+        mParametersData = (ParametersData) BaseApplication.parametersData.clone();
+        if (titleType <= 3) {
+            mParametersData.isQualified = titleType + "";
+            mParametersData.isReal = "";
+        } else {
+            mParametersData.isQualified = "0";
+            if (titleType == 4) {
+                mParametersData.isReal = "0";
+            } else if (titleType == 5)
+                mParametersData.isReal = "1";
+        }
 
         pageStateLayout.setOnRetryClickListener(new View.OnClickListener() {
             @Override
@@ -187,7 +193,7 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
                 if (null != mRecyclerView) {
                     if (mRecyclerView.getLayoutManager() instanceof LinearLayoutManager) {
                         LinearLayoutManager lm = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-                        if (null != lm) {
+                        if (lm.findFirstVisibleItemPosition() >= 0) {
                             if (lm.findViewByPosition(lm.findFirstVisibleItemPosition()).getTop() == 0 && lm.findFirstVisibleItemPosition() == 0) {
                                 return true;
                             }
@@ -219,8 +225,10 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
         String isReal = mParametersData.isReal;
         String testType = mParametersData.testType;
 
+
         //联网获取数据
-        HttpUtils.getRequest(URL.getYalijiTestList(userGroupID, isQualified, startDateTime, endDateTime, currentPage, yalijiID, isReal, testType), new HttpUtils.HttpListener() {
+        //还没有判断url，用户再判断
+        HttpUtils.getRequest(URL.getYalijiTestList(userGroupID, isQualified, startDateTime, endDateTime, currentPage, equipmentID, isReal, testType), new HttpUtils.HttpListener() {
             @Override
             public void onSuccess(String response) {
                 KLog.e(TAG, response);
@@ -306,17 +314,16 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
     public void updateSearch(ParametersData mParametersData) {
         KLog.e(TAG, mParametersData.fromTo);
 
-        if (mParametersData != null) {
-            if (mParametersData.fromTo.equals("YaLiJiFragmentViewPagerFragment" + yalijiID)) {
-                KLog.e(TAG, "fromto:" + mParametersData.fromTo);
-                ToastUtils.showToast(_mActivity, "刷新");
-                this.mParametersData = mParametersData;
-                getDataFromNetwork(mParametersData);
-                KLog.e(TAG, "222222222222222222222222");
-            }
-        }
+//        if (mParametersData != null) {
+//            if (mParametersData.fromTo.equals("YaLiJiFragmentViewPagerFragment" + yalijiID)) {
+//                KLog.e(TAG, "fromto:" + mParametersData.fromTo);
+//                ToastUtils.showToast(_mActivity, "刷新");
+//                this.mParametersData = mParametersData;
+//                getDataFromNetwork(mParametersData);
+//                KLog.e(TAG, "222222222222222222222222");
+//            }
+//        }
 
-        KLog.e(TAG, "YaLiJiFragmentViewPagerFragment" + yalijiID);
     }
 
     @Override

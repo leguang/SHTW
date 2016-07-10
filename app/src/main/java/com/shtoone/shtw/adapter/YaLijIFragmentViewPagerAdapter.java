@@ -16,6 +16,7 @@ public class YaLiJiFragmentViewPagerAdapter extends FragmentPagerAdapter {
     private EquipmentData mEquipmentData;
     private String[] yalijiName = {"全部", "", ""};
     private String[] yalijiID = {"", "", ""};
+    private String[] titleType = {"不合格", "合格", "有效", "无效", "已处置", "未处置"};
 
     public YaLiJiFragmentViewPagerAdapter(FragmentManager fm, EquipmentData mEquipmentData) {
         super(fm);
@@ -33,23 +34,24 @@ public class YaLiJiFragmentViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return YaLiJiFragmentViewPagerFragment.newInstance(yalijiID[position]);
+        return YaLiJiFragmentViewPagerFragment.newInstance(position);
     }
 
     @Override
     public int getCount() {
-
-        if (null != mEquipmentData && mEquipmentData.isSuccess()) {
-
-            return yalijiName.length;
+        if (null != titleType) {
+            return titleType.length;
         }
         return 0;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (null != mEquipmentData && mEquipmentData.isSuccess()) {
-            return yalijiName[position];
+//        if (null != mEquipmentData && mEquipmentData.isSuccess()) {
+//            return yalijiName[position];
+//        }
+        if (null != titleType) {
+            return titleType[position];
         }
         return null;
     }

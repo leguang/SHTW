@@ -9,8 +9,8 @@ import java.util.Locale;
  * Created by leguang on 2016/5/31 0031.
  * 请求参数实体类
  */
-public class ParametersData {
-    private static final String TAG = "ParametersData";
+public class ParametersData implements Cloneable {
+    private static final String TAG = ParametersData.class.getSimpleName();
     public String startDateTime = "2015-03-01 00:00:00";
     public String endDateTime = "2016-06-01 00:00:00";
     public String userGroupID = "";
@@ -36,5 +36,13 @@ public class ParametersData {
         endDateTime = sdf.format(rld.getTime());
         rld.add(Calendar.MONTH, -3);
         startDateTime = sdf.format(rld.getTime());
+    }
+
+    public Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
     }
 }

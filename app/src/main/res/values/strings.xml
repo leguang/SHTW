@@ -31,6 +31,7 @@
     <string name="wannengji">万能机</string>
     <string name="statistic">统计分析</string>
     <string name="disqualification">不合格</string>
+    <string name="detail">详情</string>
 
     <!--版本更新模块-->
     <string name="check_update">检测更新</string>

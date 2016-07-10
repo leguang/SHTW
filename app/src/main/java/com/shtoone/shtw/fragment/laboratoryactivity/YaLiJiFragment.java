@@ -88,7 +88,7 @@ public class YaLiJiFragment extends BaseFragment {
                 Log.e(TAG + "^^fromte", "YaLiJiFragmentViewPagerFragment" + yalijiID[index]);
                 Intent intent = new Intent(_mActivity, DialogActivity.class);
                 intent.putExtra(ConstantsUtils.FROMTO, "YaLiJiFragmentViewPagerFragment" + yalijiID[index]);
-                intent.putExtra("yalijiID",  yalijiID[index]);
+                intent.putExtra("yalijiID", yalijiID[index]);
                 startActivity(intent);
             }
         });
@@ -110,7 +110,10 @@ public class YaLiJiFragment extends BaseFragment {
             }
         });
 
-        mToolbar.setTitle("XX高速 > 试验室 > 压力机");
+        StringBuffer sb = new StringBuffer(BaseApplication.mUserInfoData.getDepartName() + " > ");
+        sb.append(getString(R.string.laboratory) + " > ");
+        sb.append(getString(R.string.yaliji)).trimToSize();
+        mToolbar.setTitle(sb.toString());
         initToolbarBackNavigation(mToolbar);
         initToolbarMenu(mToolbar);
         getDataFromNetwork(mParametersData);
