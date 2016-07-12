@@ -68,7 +68,7 @@ public class MessageActivityViewPagerFragmentRecyclerViewAdapter extends Recycle
             mItemViewHolder.tv_title.setText("消息：拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！拌合站出事啦！" + position);
 
             if (mOnItemClickListener != null) {
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                mItemViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         int position = holder.getLayoutPosition();

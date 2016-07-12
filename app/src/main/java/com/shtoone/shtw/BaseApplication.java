@@ -22,6 +22,7 @@ public class BaseApplication extends Application {
     public static ParametersData parametersData = new ParametersData();
     public static RequestQueue requestQueue;
     public static UserInfoData mUserInfoData;
+    public static boolean isExpand;
 
     @Override
     public void onCreate() {

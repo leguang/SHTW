@@ -15,6 +15,9 @@ public class ConstantsUtils {
     public static final String PASSWORD = "password";
     public static final String LOGINCHECK = "logincheck";
     public static final String FROMTO = "fromto";
+    public static final String PARAMETERS = "parameters";
 
+    public static final int LABORATORYFRAGMENT = 0;
+    public static final int YALIJIFRAGMENT = 1;
 
 }

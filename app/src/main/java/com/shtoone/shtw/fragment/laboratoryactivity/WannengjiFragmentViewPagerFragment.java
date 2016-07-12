@@ -58,7 +58,6 @@ public class WannengjiFragmentViewPagerFragment extends BaseFragment {
     private boolean isRegistered = false;
     private WannengjiFragmentViewPagerFragmentRecyclerViewItemData itemsData;
     private ParametersData mParametersData;
-    private String wannengjiID;
 
     public static WannengjiFragmentViewPagerFragment newInstance(String wannengjiID) {
 //        YaLiJiFragmentViewPagerFragment.mParametersData = BaseApplication.parametersData;
@@ -82,7 +81,6 @@ public class WannengjiFragmentViewPagerFragment extends BaseFragment {
 
         Bundle args = getArguments();
         if (args != null) {
-            wannengjiID = args.getString("wannengjiID");
         }
     }
 
@@ -114,7 +112,6 @@ public class WannengjiFragmentViewPagerFragment extends BaseFragment {
     private void initData() {
 
         mParametersData = BaseApplication.parametersData;
-        mParametersData.equipmentID = wannengjiID;
 
         pageStateLayout.setOnRetryClickListener(new View.OnClickListener() {
             @Override
@@ -217,10 +214,10 @@ public class WannengjiFragmentViewPagerFragment extends BaseFragment {
         String equipmentID = mParametersData.equipmentID;
         String isQualified = mParametersData.isQualified;
         String isReal = mParametersData.isReal;
-        String testType = mParametersData.testType;
+        String testType = mParametersData.testTypeID;
 
         //联网获取数据
-        HttpUtils.getRequest(URL.getWannengjiTestList(userGroupID, isQualified, startDateTime, endDateTime, currentPage, wannengjiID, isReal, testType), new HttpUtils.HttpListener() {
+        HttpUtils.getRequest(URL.getWannengjiTestList(userGroupID, isQualified, startDateTime, endDateTime, currentPage, equipmentID, isReal, testType), new HttpUtils.HttpListener() {
             @Override
             public void onSuccess(String response) {
                 KLog.e(TAG, response);
@@ -304,19 +301,16 @@ public class WannengjiFragmentViewPagerFragment extends BaseFragment {
 
     @Subscribe
     public void updateSearch(ParametersData mParametersData) {
-        KLog.e(TAG, mParametersData.fromTo);
 
         if (mParametersData != null) {
-            if (mParametersData.fromTo.equals("YaLiJiFragmentViewPagerFragment" + wannengjiID)) {
-                KLog.e(TAG, "fromto:" + mParametersData.fromTo);
-                ToastUtils.showToast(_mActivity, "刷新");
-                this.mParametersData = mParametersData;
-                getDataFromNetwork(mParametersData);
-                KLog.e(TAG, "222222222222222222222222");
-            }
+//            if (mParametersData.fromTo.equals("YaLiJiFragmentViewPagerFragment" + wannengjiID)) {
+//                KLog.e(TAG, "fromto:" + mParametersData.fromTo);
+//                ToastUtils.showToast(_mActivity, "刷新");
+//                this.mParametersData = mParametersData;
+//                getDataFromNetwork(mParametersData);
+//                KLog.e(TAG, "222222222222222222222222");
+//            }
         }
-
-        KLog.e(TAG, "YaLiJiFragmentViewPagerFragment" + wannengjiID);
     }
 
     @Override

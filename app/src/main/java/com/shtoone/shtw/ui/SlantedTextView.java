@@ -88,7 +88,6 @@ public class SlantedTextView extends View {
         mTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setAntiAlias(true);
         mTextPaint.setTextSize(mTextSize);
-        mTextPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.ADD));
         mTextPaint.setColor(mTextColor);
     }
 
@@ -169,46 +168,46 @@ public class SlantedTextView extends View {
     }
 
     private Path getModeLeftTrianglePath(Path path, int w, int h) {
-        path.lineTo(0, h);
-        path.lineTo(w, 0);
+        path.lineTo(0,h);
+        path.lineTo(w,0);
         return path;
     }
 
     private Path getModeRightTrianglePath(Path path, int w, int h) {
-        path.lineTo(w, 0);
-        path.lineTo(w, h);
+        path.lineTo(w,0);
+        path.lineTo(w,h);
         return path;
     }
 
     private Path getModeLeftBottomTrianglePath(Path path, int w, int h) {
-        path.lineTo(w, h);
-        path.lineTo(0, h);
+        path.lineTo(w,h);
+        path.lineTo(0,h);
         return path;
     }
 
     private Path getModeRightBottomTrianglePath(Path path, int w, int h) {
-        path.moveTo(0, h);
-        path.lineTo(w, h);
-        path.lineTo(w, 0);
+        path.moveTo(0,h);
+        path.lineTo(w,h);
+        path.lineTo(w,0);
         return path;
     }
 
     private void drawText(Canvas canvas) {
         int w = (int) (canvas.getWidth() - mSlantedLength / 2);
         int h = (int) (canvas.getHeight() - mSlantedLength / 2);
-        float[] xy = calculateXY(canvas, w, h);
+        float[] xy = calculateXY(canvas,w, h);
         float toX = xy[0];
         float toY = xy[1];
         float centerX = xy[2];
         float centerY = xy[3];
         float angle = xy[4];
 
-        canvas.rotate(angle, centerX, centerY);
+        canvas.rotate(angle, centerX , centerY );
 
         canvas.drawText(mSlantedText, toX, toY, mTextPaint);
     }
 
-    private float[] calculateXY(Canvas canvas, int w, int h) {
+    private float[] calculateXY(Canvas canvas,int w, int h) {
         float[] xy = new float[5];
         Rect rect = null;
         RectF rectF = null;
@@ -244,7 +243,7 @@ public class SlantedTextView extends View {
                 break;
             case MODE_LEFT_BOTTOM_TRIANGLE:
             case MODE_LEFT_BOTTOM:
-                rect = new Rect(0, offset, w, h + offset);
+                rect = new Rect(0, offset, w, h+offset);
                 rectF = new RectF(rect);
                 rectF.right = mTextPaint.measureText(mSlantedText, 0, mSlantedText.length());
                 rectF.bottom = mTextPaint.descent() - mTextPaint.ascent();
@@ -259,7 +258,7 @@ public class SlantedTextView extends View {
                 break;
             case MODE_RIGHT_BOTTOM_TRIANGLE:
             case MODE_RIGHT_BOTTOM:
-                rect = new Rect(offset, offset, w + offset, h + offset);
+                rect = new Rect(offset, offset, w+offset, h+offset);
                 rectF = new RectF(rect);
                 rectF.right = mTextPaint.measureText(mSlantedText, 0, mSlantedText.length());
                 rectF.bottom = mTextPaint.descent() - mTextPaint.ascent();
@@ -343,5 +342,4 @@ public class SlantedTextView extends View {
         postInvalidate();
         return this;
     }
-
 }

@@ -95,11 +95,6 @@ public class MessageActivityViewPagerFragment extends BaseFragment {
         return view;
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//    }
-
     private void initView(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_fragment_view_pager_message_activity);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(_mActivity));

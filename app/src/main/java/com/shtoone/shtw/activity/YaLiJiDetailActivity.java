@@ -54,6 +54,7 @@ public class YaLiJiDetailActivity extends BaseActivity {
     private TextView tv_size;
     private TextView tv_age;
     private TextView tv_central_value;
+    private String detaiID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +85,8 @@ public class YaLiJiDetailActivity extends BaseActivity {
     }
 
     private void initDate() {
+        detaiID = getIntent().getStringExtra("detailID");
+        KLog.e(detaiID);
         StringBuffer sb = new StringBuffer(BaseApplication.mUserInfoData.getDepartName() + " > ");
         sb.append(getString(R.string.laboratory) + " > ");
         sb.append(getString(R.string.yaliji) + " > ");
@@ -190,10 +193,6 @@ public class YaLiJiDetailActivity extends BaseActivity {
     }
 
     private void getDataFromNetwork() {
-
-        //从全局参数类中取出参数，避免太长了，看起来不方便
-        String detaiID = BaseApplication.parametersData.detailID;
-        detaiID = "7AAFB8D1-AFFC-4AAA-9F9A-19324061AA54";
         //联网获取数据
         HttpUtils.getRequest(URL.getYalijiDetailData(detaiID), new HttpUtils.HttpListener() {
             @Override

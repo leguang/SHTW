@@ -1,6 +1,7 @@
 package com.shtoone.shtw.bean;
 
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -9,22 +10,21 @@ import java.util.Locale;
  * Created by leguang on 2016/5/31 0031.
  * 请求参数实体类
  */
-public class ParametersData implements Cloneable {
+public class ParametersData implements Cloneable, Serializable {
     private static final String TAG = ParametersData.class.getSimpleName();
     public String startDateTime = "2015-03-01 00:00:00";
     public String endDateTime = "2016-06-01 00:00:00";
     public String userGroupID = "";
     public String deviceType = "";
-    public String testType = "";
+    public String testTypeID = "";
     public String disposition = "";
     public String level = "";
     public String isQualified = "";
     public String equipmentID = "";
-    public String currentPage = "";
+    public String currentPage = "1";
     public String isReal = "";
-    public boolean isFirst = true;
     public String detailID = "";
-    public String fromTo = "";
+    public int fromTo;
 
     public ParametersData() {
         initParametersData();
@@ -44,5 +44,24 @@ public class ParametersData implements Cloneable {
         } catch (CloneNotSupportedException e) {
             return null;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "ParametersData{" +
+                "startDateTime='" + startDateTime + '\'' +
+                ", endDateTime='" + endDateTime + '\'' +
+                ", userGroupID='" + userGroupID + '\'' +
+                ", deviceType='" + deviceType + '\'' +
+                ", testTypeID='" + testTypeID + '\'' +
+                ", disposition='" + disposition + '\'' +
+                ", level='" + level + '\'' +
+                ", isQualified='" + isQualified + '\'' +
+                ", equipmentID='" + equipmentID + '\'' +
+                ", currentPage='" + currentPage + '\'' +
+                ", isReal='" + isReal + '\'' +
+                ", detailID='" + detailID + '\'' +
+                ", fromTo=" + fromTo +
+                '}';
     }
 }

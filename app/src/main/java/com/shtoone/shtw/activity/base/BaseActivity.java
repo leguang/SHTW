@@ -37,7 +37,7 @@ public abstract class BaseActivity extends SwipeBackActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
 
-        getSwipeBackLayout().setEdgeOrientation(SwipeBackLayout.EDGE_ALL);
+        getSwipeBackLayout().setEdgeOrientation(SwipeBackLayout.EDGE_LEFT);
     }
 
     protected void initToolbarBackNavigation(Toolbar toolbar) {

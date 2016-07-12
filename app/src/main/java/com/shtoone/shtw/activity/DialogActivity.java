@@ -4,9 +4,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.InputType;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
@@ -16,6 +16,7 @@ import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.base.BaseActivity;
 import com.shtoone.shtw.bean.ParametersData;
 import com.shtoone.shtw.utils.ConstantsUtils;
+import com.socks.library.KLog;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -33,14 +34,18 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
     private TextInputLayout start_date_time;
     private TextInputLayout end_date_time;
     private CircularProgressButton bt_search;
-    private MaterialSpinner select_equipment;
-    private MaterialSpinner select_test_type;
+    private MaterialSpinner ms_select_equipment;
+    private MaterialSpinner ms_select_test_type;
     private ImageView iv_cancel;
     private boolean isStartDateTime;
     private String startDateTime;
     private String endDateTime;
     private ParametersData mParametersData;
-    private String fromTo;
+    private String[] equipmentNames = {"1标压力机", "3标压力机"};
+    private String[] equipmentIDs = {"sphntyl0101", "sphntyl0301"};
+
+    private String[] testTypeNames = {"砼抗压强度", "钢筋拉力", "钢筋焊接接头", "钢筋机械连接接头"};
+    private String[] testTypeIDs = {"100014", "100047", "100048", "100049"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,35 +54,39 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
 
         initView();
         initData();
+//        getDataFromNetwork();
     }
 
     private void initView() {
+        //获取传过来的参数对象
+        mParametersData = (ParametersData) getIntent().getSerializableExtra(ConstantsUtils.PARAMETERS);
         start_date_time = (TextInputLayout) findViewById(R.id.start_date_time_dialog);
         end_date_time = (TextInputLayout) findViewById(R.id.end_date_time_dialog);
         bt_search = (CircularProgressButton) findViewById(R.id.bt_search_dialog);
         iv_cancel = (ImageView) findViewById(R.id.iv_cancel_dialog);
-        select_equipment = (MaterialSpinner) findViewById(R.id.select_equipment_dialog);
-        select_test_type = (MaterialSpinner) findViewById(R.id.select_test_type_dialog);
+        ms_select_equipment = (MaterialSpinner) findViewById(R.id.ms_select_equipment_dialog);
+        ms_select_test_type = (MaterialSpinner) findViewById(R.id.ms_select_test_type_dialog);
+
+        //设置哪些条件选择该显示，默认只有时间选择是显示的
+        switch (mParametersData.fromTo) {
+            case ConstantsUtils.LABORATORYFRAGMENT:
+                //默认开始和结束时间是可见的
+                break;
+            case ConstantsUtils.YALIJIFRAGMENT:
+                //设置设备和试验类型的下拉选择可见
+                ms_select_equipment.setVisibility(View.VISIBLE);
+                ms_select_test_type.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
     private void initData() {
-        fromTo = getIntent().getExtras().getString(ConstantsUtils.FROMTO);
-        Log.e(TAG + "^^fromTo:", fromTo);
 
-        mParametersData = BaseApplication.parametersData;
-        mParametersData.equipmentID = getIntent().getExtras().getString("yalijiID");
-//        Log.e(TAG + "yalijiId:", mParametersData.equipmentID);
+        //根据传过来的参数对象来设置这些选择框该显示的内容
+        start_date_time.getEditText().setText(mParametersData.startDateTime);
+        end_date_time.getEditText().setText(mParametersData.endDateTime);
 
         start_date_time.getEditText().setInputType(InputType.TYPE_NULL);
-
-        //设置显示上一次查询条件的数据
-        if (!mParametersData.isFirst) {
-            start_date_time.getEditText().setText(mParametersData.startDateTime);
-            end_date_time.getEditText().setText(mParametersData.endDateTime);
-            select_equipment.setSelection(3);
-            select_test_type.setSelection(2);
-        }
-
         end_date_time.getEditText().setInputType(InputType.TYPE_NULL);
         iv_cancel.setOnClickListener(this);
         bt_search.setOnClickListener(this);
@@ -109,29 +118,74 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
             }
         });
 
-        String[] equipments = {"压力机1", "压力机2", "压力机3", "压力机4", "压力机5", "压力机6", "压力机7", "压力机8"};
-        ArrayAdapter<String> equipmentsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, equipments);
+        ArrayAdapter<String> equipmentsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, equipmentNames);
         equipmentsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        select_equipment.setAdapter(equipmentsAdapter);
+        ms_select_equipment.setAdapter(equipmentsAdapter);
+        for (int i = 0; i < equipmentIDs.length; i++) {
+            if (mParametersData.equipmentID.equals(equipmentIDs[i])) {
+                ms_select_equipment.setSelection(i + 1);
+                KLog.e("默认：" + (i + 1) + "个");
+            }
+        }
 
-        String[] testTypes = {"钢筋拉力1", "钢筋拉力2", "钢筋拉力3", "钢筋拉力4", "钢筋拉力5", "钢筋拉力6", "钢筋拉力7", "钢筋拉力8"};
-        ArrayAdapter<String> testTypessAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, testTypes);
+        ms_select_equipment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                KLog.e("选择第：" + i + "个");
+                if (i >= 0) {
+                    mParametersData.equipmentID = equipmentIDs[i];
+                    KLog.e("equipmentIDs[i]:" + equipmentNames[i]);
+                } else if (i == -1) {
+                    mParametersData.equipmentID = "";
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        ArrayAdapter<String> testTypessAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, testTypeNames);
         testTypessAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        select_test_type.setAdapter(testTypessAdapter);
+        ms_select_test_type.setAdapter(testTypessAdapter);
+
+        for (int i = 0; i < testTypeIDs.length; i++) {
+            if (mParametersData.testTypeID.equals(testTypeIDs[i])) {
+                ms_select_test_type.setSelection(i + 1);
+            }
+        }
+
+
+        ms_select_test_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                KLog.e("选择第：" + i + "个");
+                if (i >= 0) {
+                    mParametersData.testTypeID = testTypeIDs[i];
+                    KLog.e("testTypeIDs[i]:" + testTypeNames[i]);
+                } else if (i == -1) {
+                    mParametersData.testTypeID = "";
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_cancel_dialog:
-//                ToastUtils.showToast(this, "取消");
                 finish();
                 break;
 
             case R.id.bt_search_dialog:
-//                ToastUtils.showToast(this, "查询");
-                mParametersData.isFirst = false;
-                mParametersData.fromTo = fromTo;
                 BaseApplication.bus.post(mParametersData);
                 finish();
                 break;
@@ -166,7 +220,6 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
         tpd.setAccentColor(Color.parseColor("#3F51B5"));
         tpd.show(getFragmentManager(), "Timepickerdialog");
     }
-
 
     @Override
     public void onResume() {
@@ -207,4 +260,55 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
         }
         showTimePicker();
     }
+
+//    /********************
+//     * 以下为临时作用
+//     ***************************/
+//
+//    private void getDataFromNetwork() {
+//        //联网获取数据
+//        //还没有判断url，用户再判断
+//        HttpUtils.getRequest(URL.getTestType("1"), new HttpUtils.HttpListener() {
+//            @Override
+//            public void onSuccess(String response) {
+//                KLog.json(response);
+//                parseData(response);
+//            }
+//
+//            @Override
+//            public void onFailed(VolleyError error) {
+//                //提示网络数据异常，展示网络错误页面。此时：1.可能是本机网络有问题，2.可能是服务器问题
+//                if (!NetworkUtils.isConnected(DialogActivity.this)) {
+//                    //提示网络异常,让用户点击设置网络
+////                    pageStateLayout.showNetError();
+//                } else {
+//                    //服务器异常，展示错误页面，点击刷新
+////                    pageStateLayout.showError();
+//                }
+//            }
+//        });
+//    }
+//
+//    private TestTypeData itemsData;
+//
+//    protected void parseData(String response) {
+//        if (!TextUtils.isEmpty(response)) {
+//            itemsData = new Gson().fromJson(response, TestTypeData.class);
+//            if (null != itemsData) {
+//                if (itemsData.isSuccess()) {
+////                    pageStateLayout.showContent();
+////                    setAdapter();
+//                } else {
+//                    //提示数据为空，展示空状态
+////                    pageStateLayout.showEmpty();
+//                }
+//            } else {
+//                //提示数据解析异常，展示错误页面
+////                pageStateLayout.showError();
+//            }
+//        } else {
+//            //提示返回数据异常，展示错误页面
+////            pageStateLayout.showError();
+//        }
+//    }
 }

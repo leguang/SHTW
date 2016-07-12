@@ -109,7 +109,7 @@ public class URL {
     /**
      * 混泥土强度列表地址
      */
-    public static final String HNT_URL = BaseURL + "sysController.do?hntkangya&userGroupId=%1&isQualified=%2&startTime=%3&endTime=%4&pageNo=%5&shebeibianhao=%6&isReal=%7&maxPageItems=30";
+    public static final String HNT_URL = BaseURL + "sysController.do?hntkangya&userGroupId=%1&isQualified=%2&startTime=%3&endTime=%4&pageNo=%5&shebeibianhao=%6&isReal=%7&maxPageItems=10&testId=%8";
 
 
     /**
@@ -131,7 +131,7 @@ public class URL {
         //如果开始时间大于结束时间，返回null
         if (Integer.valueOf(startTime) <= Integer.valueOf(endTime)) {
             String url = HNT_URL.replace("%1", userGroupID).replace("%2", isQualified).replace("%3", startTime).replace("%4", endTime).replace("%5", current_PageNo).replace("%6", deviceNo).replace("%7", isReal).replace("%8", testType);
-            KLog.e(TAG, "压力机列表 :" + url);
+            KLog.e(TAG, "试验室压力机列表 :" + url);
             if (TextUtils.isEmpty(url)) {
                 return null;
             }
@@ -159,7 +159,6 @@ public class URL {
         }
         return url;
     }
-
 
     /**
      * 钢筋拉力列表地址
@@ -260,6 +259,15 @@ public class URL {
      * 试验室试验类型列表
      */
     public static final String SYS_SHEBEI_TEST_LIST = BaseURL + "sysController.do?getSyLx";
+
+    public static String getTestType(String userGroupID) {
+        String url = SYS_SHEBEI_TEST_LIST.replace("%1", userGroupID);
+        KLog.e(TAG, "试验室试验类型列表URL:" + url);
+        if (TextUtils.isEmpty(url)) {
+            return null;
+        }
+        return url;
+    }
 
     /**
      * 试验室综合统计分析

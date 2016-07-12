@@ -45,7 +45,6 @@ import in.srain.cube.views.ptr.header.StoreHouseHeader;
 import in.srain.cube.views.ptr.indicator.PtrIndicator;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.SlideInLeftAnimationAdapter;
-import zhy.com.highlight.HighLight;
 
 
 /**
@@ -63,7 +62,6 @@ public class LaboratoryFragment extends BaseFragment {
     private PageStateLayout pageStateLayout;
     private boolean isRegistered;
     private ParametersData mParametersData;
-    private HighLight mHightLight;
     private View view;
 
     public static LaboratoryFragment newInstance() {
@@ -96,7 +94,8 @@ public class LaboratoryFragment extends BaseFragment {
     }
 
     private void initData() {
-        mParametersData = BaseApplication.parametersData;
+        mParametersData = (ParametersData) BaseApplication.parametersData.clone();
+        mParametersData.fromTo = ConstantsUtils.LABORATORYFRAGMENT;
         isRegistered = false;
 
         //做健壮性判断
@@ -112,7 +111,9 @@ public class LaboratoryFragment extends BaseFragment {
             public void onClick(View view) {
                 fab.hide();
                 Intent intent = new Intent(_mActivity, DialogActivity.class);
-                intent.putExtra(ConstantsUtils.FROMTO, "LaboratoryFragment");
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(ConstantsUtils.PARAMETERS, mParametersData);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
@@ -295,7 +296,7 @@ public class LaboratoryFragment extends BaseFragment {
     public void updateSearch(ParametersData mParametersData) {
 
         if (mParametersData != null) {
-            if (mParametersData.fromTo.equals("LaboratoryFragment")) {
+            if (mParametersData.fromTo == ConstantsUtils.LABORATORYFRAGMENT) {
                 fab.show();
                 ToastUtils.showToast(_mActivity, "刷新");
                 this.mParametersData = mParametersData;

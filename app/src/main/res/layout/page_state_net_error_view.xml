@@ -16,7 +16,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="网络问题，请点击设置网络"
+        android:text="网络异常，点击设置"
         android:textSize="14sp" />
 
 </LinearLayout>
