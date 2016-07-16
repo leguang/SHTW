@@ -7,7 +7,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlHighlight">@color/colorAccent</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimary</item>
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
         <item name="windowActionBar">false</item>
+        <item name="android:windowIsTranslucent">true</item>
         <item name="windowNoTitle">true</item>
 
     </style>
@@ -34,6 +37,14 @@
         <item name="android:windowBackground">@color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
+    <!--对话框模块-->
+    <style name="AppTheme.Dialog" parent="AppTheme.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowBackground">@color/dialog_background_scrim</item>
         <item name="android:windowAnimationStyle">@null</item>
     </style>
 
@@ -112,5 +123,14 @@
         <item name="android:padding">1dp</item>
         <item name="android:textSize">15sp</item>
         <item name="android:lines">2</item>
+    </style>
+
+    <!--详情页模块-->
+    <style name="DetailTextTheme">
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:padding">3dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/material_orange_400</item>
     </style>
 </resources>

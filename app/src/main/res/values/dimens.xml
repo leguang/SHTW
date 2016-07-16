@@ -7,7 +7,9 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="card_Corner_Radius">3dp</dimen>
 
-
     <!--登陆模块-->
     <dimen name="login_register_editview_text_size">16sp</dimen>
+
+    <!--对话框模块-->
+    <dimen name="dialog_corners">4dp</dimen>
 </resources>

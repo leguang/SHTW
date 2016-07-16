@@ -192,7 +192,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void JumpToAboutActivity() {
-        Intent intent = new Intent(this, AboutActivity.class);
+        Intent intent = new Intent(this, TestActivity.class);
         startActivity(intent);
     }
 

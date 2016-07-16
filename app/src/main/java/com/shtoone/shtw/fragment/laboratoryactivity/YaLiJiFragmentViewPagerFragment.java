@@ -166,7 +166,7 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
         pageStateLayout.setOnRetryClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pageStateLayout.showContent();
+                pageStateLayout.showLoading();
                 mParametersData.currentPage = "1";
                 if (null != listData) {
                     listData.clear();
@@ -232,20 +232,26 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
         ptrframe.setPtrHandler(new PtrHandler() {
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                //判断RecyclerView是否在在顶部，在顶部则允许滑动下拉刷新
-                if (null != mRecyclerView) {
-                    if (mRecyclerView.getLayoutManager() instanceof LinearLayoutManager) {
-                        LinearLayoutManager lm = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-                        if (lm.findFirstVisibleItemPosition() >= 0) {
-                            if (lm.findViewByPosition(lm.findFirstVisibleItemPosition()).getTop() == 0 && lm.findFirstVisibleItemPosition() == 0 && BaseApplication.isExpand) {
-                                return true;
+                //判断是哪种状态的页面，都让其可下拉
+                if (pageStateLayout.isShowContent) {
+                    //判断RecyclerView是否在在顶部，在顶部则允许滑动下拉刷新
+                    if (null != mRecyclerView) {
+                        if (mRecyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+                            LinearLayoutManager lm = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+                            int position = lm.findFirstVisibleItemPosition();
+                            if (position >= 0) {
+                                if (lm.findViewByPosition(position).getTop() == 0 && position == 0 && BaseApplication.isExpand) {
+                                    return true;
+                                }
                             }
                         }
+                    } else {
+                        return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
                     }
+                    return false;
                 } else {
-                    return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+                    return true;
                 }
-                return false;
             }
 
             @Override

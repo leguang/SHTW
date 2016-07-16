@@ -16,6 +16,7 @@ import com.shtoone.shtw.BaseApplication;
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.base.BaseActivity;
 import com.shtoone.shtw.bean.UserInfoData;
+import com.shtoone.shtw.utils.AESCryptUtils;
 import com.shtoone.shtw.utils.ConstantsUtils;
 import com.shtoone.shtw.utils.HttpUtils;
 import com.shtoone.shtw.utils.KeyBoardUtils;
@@ -23,6 +24,8 @@ import com.shtoone.shtw.utils.NetworkUtils;
 import com.shtoone.shtw.utils.SharedPreferencesUtils;
 import com.shtoone.shtw.utils.URL;
 import com.socks.library.KLog;
+
+import java.security.GeneralSecurityException;
 
 public class LoginActivity extends BaseActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
@@ -56,18 +59,16 @@ public class LoginActivity extends BaseActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 login_button.setProgress(0);
                 if (TextUtils.isEmpty(s)) {
-                    login_username.getEditText().setError("用户名不能为空");
+                    login_username.setError("用户名不能为空");
                     login_username.setErrorEnabled(true);
                 } else {
+                    login_username.setError("");
                     login_username.setErrorEnabled(false);
                 }
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
-
             }
         });
 
@@ -78,7 +79,6 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-
         login_password.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -88,10 +88,11 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 login_button.setProgress(0);
-                login_password.setErrorEnabled(true);
                 if (TextUtils.isEmpty(s)) {
-                    login_password.getEditText().setError("密码不能为空");
+                    login_password.setError("密码不能为空");
+                    login_password.setErrorEnabled(true);
                 } else {
+                    login_password.setError("");
                     login_password.setErrorEnabled(false);
                 }
             }
@@ -115,68 +116,84 @@ public class LoginActivity extends BaseActivity {
             public void onClick(View v) {
 
                 KeyBoardUtils.hideKeybord(v, LoginActivity.this);
-                final String username = login_username.getEditText().getText().toString().trim();
-                final String password = login_password.getEditText().getText().toString().trim();
-                if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
-                    login_button.setProgress(0);
-                    login_button.setProgress(50);
-                    //联网校对密码正确后保存
-                    //没有加url健壮性判断……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………
-                    HttpUtils.getRequest(URL.loginCheck(username, password), new HttpUtils.HttpListener() {
-                        @Override
-                        public void onSuccess(String response) {
-                            KLog.json(response);
-                            if (!TextUtils.isEmpty(response)) {
-                                userInfoData = new Gson().fromJson(response, UserInfoData.class);
-                                if (null != userInfoData) {
-                                    if (userInfoData.isSuccess()) {
-                                        BaseApplication.mUserInfoData = userInfoData;
-                                        SharedPreferencesUtils.put(LoginActivity.this, ConstantsUtils.USERNAME, username);
-                                        SharedPreferencesUtils.put(LoginActivity.this, ConstantsUtils.PASSWORD, password);
-                                        SharedPreferencesUtils.put(LoginActivity.this, ConstantsUtils.LOGINCHECK, response);
-                                        initParametersData();
-                                        login_button.setProgress(100);
-                                        login_button.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                jumpTo();
-                                            }
-                                        }, 500);
+                String username = login_username.getEditText().getText().toString().trim();
+                String password = login_password.getEditText().getText().toString().trim();
+                //进行加密
+                final String usernameEncrypted;
+                final String passwordEncrypted;
+                try {
+                    usernameEncrypted = AESCryptUtils.encrypt("leguang", username);
+                    passwordEncrypted = AESCryptUtils.encrypt("leguang", password);
+                    KLog.e("username加密后:" + usernameEncrypted);
+                    KLog.e("password加密后:" + passwordEncrypted);
+                    if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
+                        login_button.setProgress(0);
+                        login_button.setProgress(50);
+                        //联网校对密码正确后保存
+                        //没有加url健壮性判断……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………
+                        HttpUtils.getRequest(URL.loginCheck(username, password), new HttpUtils.HttpListener() {
+                            @Override
+                            public void onSuccess(String response) {
+                                KLog.json(response);
+                                if (!TextUtils.isEmpty(response)) {
+                                    userInfoData = new Gson().fromJson(response, UserInfoData.class);
+                                    if (null != userInfoData) {
+                                        if (userInfoData.isSuccess()) {
+                                            BaseApplication.mUserInfoData = userInfoData;
+                                            SharedPreferencesUtils.put(LoginActivity.this, ConstantsUtils.USERNAME, usernameEncrypted);
+                                            SharedPreferencesUtils.put(LoginActivity.this, ConstantsUtils.PASSWORD, passwordEncrypted);
+                                            SharedPreferencesUtils.put(LoginActivity.this, ConstantsUtils.LOGINCHECK, response);
+                                            initParametersData();
+                                            login_button.setProgress(100);
+                                            login_button.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    jumpTo();
+                                                }
+                                            }, 500);
+                                        } else {
+                                            //提示用户名或密码错误
+                                            login_button.setErrorText("用户名或密码错误");
+                                            login_button.setProgress(-1);
+                                        }
                                     } else {
-                                        //提示用户名或密码错误
-                                        login_button.setErrorText("用户名或密码错误");
+                                        //提示数据解析异常
+                                        login_button.setErrorText("解析数据异常");
                                         login_button.setProgress(-1);
                                     }
                                 } else {
-                                    //提示数据解析异常
-                                    login_button.setErrorText("解析数据异常");
+                                    //提示返回数据异常
+                                    login_button.setErrorText("返回数据异常");
                                     login_button.setProgress(-1);
                                 }
-                            } else {
-                                //提示返回数据异常
-                                login_button.setErrorText("返回数据异常");
+                            }
+
+                            @Override
+                            public void onFailed(VolleyError error) {
+                                //提示网络数据异常。1.可能是本机网络机场。2.可能是服务器异常。
+                                if (!NetworkUtils.isConnected(LoginActivity.this)) {
+                                    //提示网络异常
+                                    login_button.setErrorText("网络异常");
+                                } else {
+                                    //服务器异常
+                                    login_button.setErrorText("服务器异常");
+                                }
                                 login_button.setProgress(-1);
                             }
-                        }
+                        });
 
-                        @Override
-                        public void onFailed(VolleyError error) {
-                            //提示网络数据异常。1.可能是本机网络机场。2.可能是服务器异常。
-                            if (!NetworkUtils.isConnected(LoginActivity.this)) {
-                                //提示网络异常
-                                login_button.setErrorText("网络异常");
-                            } else {
-                                //服务器异常
-                                login_button.setErrorText("服务器异常");
-                            }
-                            login_button.setProgress(-1);
-                        }
-                    });
+                    } else if (TextUtils.isEmpty(username)) {
+                        login_username.setErrorEnabled(true);
+                        login_username.setError("");
+                        login_username.setError("用户名不能为空");
+                    } else if (TextUtils.isEmpty(password)) {
+                        login_username.setErrorEnabled(true);
+                        login_username.setError("");
+                        login_password.setError("密码不能为空");
+                    }
 
-                } else if (TextUtils.isEmpty(username)) {
-                    login_username.setError("用户名不能为空");
-                } else if (TextUtils.isEmpty(password)) {
-                    login_password.setError("密码不能为空");
+                } catch (GeneralSecurityException e) {
+                    e.printStackTrace();
                 }
             }
         });

@@ -22,6 +22,8 @@ import com.shtoone.shtw.utils.ConstantsUtils;
 import com.socks.library.KLog;
 import com.squareup.otto.Subscribe;
 
+import me.yokeyword.fragmentation.anim.FragmentAnimator;
+
 /**
  * Created by leguang on 2016/6/9 0031.
  */
@@ -89,21 +91,6 @@ public class YaLiJiFragment extends BaseFragment {
                 }
             }
         });
-//        pageStateLayout.setOnRetryClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                pageStateLayout.showContent();
-//                getDataFromNetwork(mParametersData);
-//            }
-//        });
-//
-//        pageStateLayout.setOnNetErrorClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                pageStateLayout.showEmpty();
-//                NetworkUtils.openSetting(_mActivity);
-//            }
-//        });
 
         StringBuffer sb = new StringBuffer(BaseApplication.mUserInfoData.getDepartName() + " > ");
         sb.append(getString(R.string.laboratory) + " > ");
@@ -112,54 +99,7 @@ public class YaLiJiFragment extends BaseFragment {
         initToolbarBackNavigation(mToolbar);
         initToolbarMenu(mToolbar);
         setAdapter();
-//        getDataFromNetwork(mParametersData);
     }
-
-//    private void getDataFromNetwork(ParametersData mParametersData) {
-//
-//        //联网获取数据
-//        HttpUtils.getRequest(URL.getEquipment(mParametersData.userGroupID), new HttpUtils.HttpListener() {
-//            @Override
-//            public void onSuccess(String response) {
-//                KLog.json(response);
-//                parseData(response);
-//            }
-//
-//            @Override
-//            public void onFailed(VolleyError error) {
-//                //提示网络数据异常，展示网络错误页面。此时：1.可能是本机网络有问题，2.可能是服务器问题
-//                if (!NetworkUtils.isConnected(_mActivity)) {
-//                    //提示网络异常,让用户点击设置网络
-//                    pageStateLayout.showNetError();
-//                } else {
-//                    //服务器异常，展示错误页面，点击刷新
-//                    pageStateLayout.showError();
-//                }
-//            }
-//        });
-//    }
-//
-//    protected void parseData(String response) {
-//        if (!TextUtils.isEmpty(response)) {
-//            mEquipmentData = new Gson().fromJson(response, EquipmentData.class);
-//            if (null != mEquipmentData) {
-//                if (mEquipmentData.isSuccess()) {
-//                    pageStateLayout.showContent();
-//                    setAdapter();
-//                } else {
-//                    //提示数据为空，展示空状态
-//                    pageStateLayout.showEmpty();
-//                }
-//            } else {
-//                //提示数据解析异常，展示错误页面
-//                pageStateLayout.showError();
-//            }
-//        } else {
-//            //提示返回数据异常，展示错误页面
-//            pageStateLayout.showError();
-//        }
-//
-//    }
 
     //还是不能这样搞，可能会内存泄漏，重复创建Adapyer对象。后面解决
     private void setAdapter() {
@@ -196,5 +136,10 @@ public class YaLiJiFragment extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
         BaseApplication.bus.unregister(this);
+    }
+
+    @Override
+    protected FragmentAnimator onCreateFragmentAnimator() {
+        return new FragmentAnimator(0, 0, 0, 0);
     }
 }

@@ -3,7 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#3F51B5</color>
     <color name="colorAccent">#FF4081</color>
-
+    <color name="fab_background_color">@color/colorAccent</color>
+    <color name="dialog_background_color">#fafafa</color>
     <!-- 常用颜色值 -->
     <color name="base_color">#3F51B5</color>
     <color name="white">#FFF</color>
@@ -31,6 +32,10 @@
     <color name="material_login_login_text_color">#000</color>
     <color name="material_login_register_text_color">#000</color>
     <color name="login_register_background">#C000</color>
+
+    <!--对话框模块-->
+    <color name="dialog_background_scrim">#00000000</color>
+
 
     <!-- Material Color Palette -->
     <!-- Red -->

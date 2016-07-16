@@ -12,6 +12,8 @@ import com.shtoone.shtw.BaseApplication;
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.base.BaseActivity;
 import com.shtoone.shtw.bean.UserInfoData;
+import com.shtoone.shtw.utils.AESCryptUtils;
+import com.shtoone.shtw.utils.ConstantsUtils;
 import com.shtoone.shtw.utils.HttpUtils;
 import com.shtoone.shtw.utils.SharedPreferencesUtils;
 import com.shtoone.shtw.utils.URL;
@@ -19,6 +21,8 @@ import com.socks.library.KLog;
 import com.tencent.android.tpush.XGPushConfig;
 import com.tencent.android.tpush.XGPushManager;
 import com.tencent.android.tpush.service.XGPushService;
+
+import java.security.GeneralSecurityException;
 
 public class SplashActivity extends BaseActivity {
     private static final String TAG = SplashActivity.class.getSimpleName();
@@ -54,9 +58,26 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void initData() {
-        String username = (String) SharedPreferencesUtils.get(this, "username", "");
-        String password = (String) SharedPreferencesUtils.get(this, "password", "");
-        String loginCheck = (String) SharedPreferencesUtils.get(this, "loginCheck", "");
+        String usernameEncrypted = (String) SharedPreferencesUtils.get(this, ConstantsUtils.USERNAME, "");
+        String passwordEncrypted = (String) SharedPreferencesUtils.get(this, ConstantsUtils.PASSWORD, "");
+        String loginCheck = (String) SharedPreferencesUtils.get(this, ConstantsUtils.LOGINCHECK, "");
+        KLog.e("username加密从sp中:" + usernameEncrypted);
+        KLog.e("password加密从sp中:" + passwordEncrypted);
+        //进行解密
+        String username = null;
+        String password = null;
+        if (!(TextUtils.isEmpty(usernameEncrypted) && TextUtils.isEmpty(passwordEncrypted))) {
+            try {
+                username = AESCryptUtils.decrypt("leguang", usernameEncrypted);
+                password = AESCryptUtils.decrypt("leguang", passwordEncrypted);
+            } catch (GeneralSecurityException e) {
+                e.printStackTrace();
+            }
+        }
+
+        KLog.e("username解密:" + username);
+        KLog.e("password解密:" + password);
+
         if (!TextUtils.isEmpty(loginCheck)) {
             userInfoData = new Gson().fromJson(loginCheck, UserInfoData.class);
         }
@@ -117,7 +138,7 @@ public class SplashActivity extends BaseActivity {
 
     //进入LoginActivity
     private void jumpToLogin() {
-        Boolean isFirstentry = (Boolean) SharedPreferencesUtils.get(this, "firstentry", true);
+        Boolean isFirstentry = (Boolean) SharedPreferencesUtils.get(this, ConstantsUtils.ISFIRSTENTRY, true);
         Intent intent;
         if (isFirstentry) {
             intent = new Intent(this, GuideActivity.class);

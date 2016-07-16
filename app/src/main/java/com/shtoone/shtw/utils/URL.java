@@ -25,6 +25,7 @@ public class URL {
      * 基础地址
      */
     public static final String BaseURL = "http://120.27.146.66:8083/nxsy/";
+//    public static final String BaseURL = "http://192.168.11.102:8080/qms/";
 
     /**
      * 登录地址

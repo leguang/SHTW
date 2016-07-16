@@ -1,7 +1,9 @@
 package com.shtoone.shtw.fragment.mainactivity;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -109,19 +111,29 @@ public class LaboratoryFragment extends BaseFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fab.hide();
-                Intent intent = new Intent(_mActivity, DialogActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(ConstantsUtils.PARAMETERS, mParametersData);
-                intent.putExtras(bundle);
-                startActivity(intent);
+                //Activity共享元素切换版本适配
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+                    fab.hide();
+                    Intent intent = new Intent(_mActivity, DialogActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(ConstantsUtils.PARAMETERS, mParametersData);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(_mActivity, DialogActivity.class);
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(_mActivity, fab, getString(R.string.transition_dialog));
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(ConstantsUtils.PARAMETERS, mParametersData);
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, 100, options.toBundle());
+                }
             }
         });
 
         pageStateLayout.setOnRetryClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pageStateLayout.showContent();
+                pageStateLayout.showLoading();
                 getDataFromNetwork(mParametersData);
             }
         });

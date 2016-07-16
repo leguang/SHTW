@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.base.BaseActivity;
+import com.shtoone.shtw.utils.ConstantsUtils;
 import com.shtoone.shtw.utils.SharedPreferencesUtils;
 
 
@@ -34,7 +35,7 @@ public class GuideActivity extends BaseActivity {
         bt_guide.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferencesUtils.put(GuideActivity.this, "isFirstEntry", false);
+                SharedPreferencesUtils.put(GuideActivity.this, ConstantsUtils.ISFIRSTENTRY, false);
                 // 页面跳转
                 Intent intent = new Intent(GuideActivity.this, LoginActivity.class);
                 startActivity(intent);

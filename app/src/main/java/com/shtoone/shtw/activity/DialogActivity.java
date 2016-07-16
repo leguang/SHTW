@@ -49,12 +49,12 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_dialog);
+        super.onCreate(savedInstanceState);
 
         initView();
         initData();
-//        getDataFromNetwork();
     }
 
     private void initView() {
@@ -174,8 +174,6 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
 
             }
         });
-
-
     }
 
     @Override
@@ -260,55 +258,4 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
         }
         showTimePicker();
     }
-
-//    /********************
-//     * 以下为临时作用
-//     ***************************/
-//
-//    private void getDataFromNetwork() {
-//        //联网获取数据
-//        //还没有判断url，用户再判断
-//        HttpUtils.getRequest(URL.getTestType("1"), new HttpUtils.HttpListener() {
-//            @Override
-//            public void onSuccess(String response) {
-//                KLog.json(response);
-//                parseData(response);
-//            }
-//
-//            @Override
-//            public void onFailed(VolleyError error) {
-//                //提示网络数据异常，展示网络错误页面。此时：1.可能是本机网络有问题，2.可能是服务器问题
-//                if (!NetworkUtils.isConnected(DialogActivity.this)) {
-//                    //提示网络异常,让用户点击设置网络
-////                    pageStateLayout.showNetError();
-//                } else {
-//                    //服务器异常，展示错误页面，点击刷新
-////                    pageStateLayout.showError();
-//                }
-//            }
-//        });
-//    }
-//
-//    private TestTypeData itemsData;
-//
-//    protected void parseData(String response) {
-//        if (!TextUtils.isEmpty(response)) {
-//            itemsData = new Gson().fromJson(response, TestTypeData.class);
-//            if (null != itemsData) {
-//                if (itemsData.isSuccess()) {
-////                    pageStateLayout.showContent();
-////                    setAdapter();
-//                } else {
-//                    //提示数据为空，展示空状态
-////                    pageStateLayout.showEmpty();
-//                }
-//            } else {
-//                //提示数据解析异常，展示错误页面
-////                pageStateLayout.showError();
-//            }
-//        } else {
-//            //提示返回数据异常，展示错误页面
-////            pageStateLayout.showError();
-//        }
-//    }
 }

@@ -391,8 +391,17 @@ public class DeviceUtils {
      *
      * @return
      */
-    public static String getOSVersion() {
+    public static String getOSVersionName() {
         return Build.VERSION.RELEASE;
+    }
+
+    /**
+     * 获取系统版本号
+     *
+     * @return
+     */
+    public static int getOSVersionNumber() {
+        return Build.VERSION.SDK_INT;
     }
 
     /**

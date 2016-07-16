@@ -17,7 +17,6 @@ import com.google.gson.Gson;
 import com.shtoone.shtw.BaseApplication;
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.base.BaseActivity;
-import com.shtoone.shtw.adapter.YaLiJiDetailActivityChartViewPagerAdapter;
 import com.shtoone.shtw.bean.YalijiDetailData;
 import com.shtoone.shtw.ui.PageStateLayout;
 import com.shtoone.shtw.utils.ConstantsUtils;
@@ -248,7 +247,7 @@ public class WannengjiDetailActivity extends BaseActivity {
         tv_identifier.setText(mYalijiDetailData.getData().getSJQD());
         tv_diameter.setText(mYalijiDetailData.getData().getSJCC());
         tv_kind.setText(mYalijiDetailData.getData().getLQ());
-        mViewPager.setAdapter(new YaLiJiDetailActivityChartViewPagerAdapter(getSupportFragmentManager()));
+//        mViewPager.setAdapter(new YaLiJiDetailActivityChartViewPagerAdapter(getSupportFragmentManager()));
         mTabLayout.setupWithViewPager(mViewPager);
     }
 }

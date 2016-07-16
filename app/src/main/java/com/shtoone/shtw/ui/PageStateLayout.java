@@ -16,6 +16,7 @@ public class PageStateLayout extends FrameLayout {
 
     private int emptyView, errorView, netErrorView, loadingView;
     private OnClickListener onRetryClickListener, onNetErrorClickListener;
+    public boolean isShowEmpty = false, isShowError = false, isShowNetError = false, isShowLoading = false, isShowContent = true;
 
     public PageStateLayout(Context context) {
         this(context, null);
@@ -98,6 +99,12 @@ public class PageStateLayout extends FrameLayout {
                 child.setVisibility(GONE);
             }
         }
+        isShowEmpty = true;
+        isShowError = false;
+        isShowNetError = false;
+        isShowLoading = false;
+        isShowContent = false;
+
     }
 
     public void showError() {
@@ -109,6 +116,11 @@ public class PageStateLayout extends FrameLayout {
                 child.setVisibility(GONE);
             }
         }
+        isShowEmpty = false;
+        isShowError = true;
+        isShowNetError = false;
+        isShowLoading = false;
+        isShowContent = false;
     }
 
     public void showNetError() {
@@ -120,6 +132,11 @@ public class PageStateLayout extends FrameLayout {
                 child.setVisibility(GONE);
             }
         }
+        isShowEmpty = false;
+        isShowError = false;
+        isShowNetError = true;
+        isShowLoading = false;
+        isShowContent = false;
     }
 
     public void showLoading() {
@@ -131,6 +148,11 @@ public class PageStateLayout extends FrameLayout {
                 child.setVisibility(GONE);
             }
         }
+        isShowEmpty = false;
+        isShowError = false;
+        isShowNetError = false;
+        isShowLoading = true;
+        isShowContent = false;
     }
 
     public void showContent() {
@@ -142,5 +164,10 @@ public class PageStateLayout extends FrameLayout {
                 child.setVisibility(GONE);
             }
         }
+        isShowEmpty = false;
+        isShowError = false;
+        isShowNetError = false;
+        isShowLoading = false;
+        isShowContent = true;
     }
 }
