@@ -176,7 +176,7 @@ public class MessageActivityViewPagerFragment extends BaseFragment {
                     if (mRecyclerView.getLayoutManager() instanceof LinearLayoutManager) {
                         LinearLayoutManager lm = (LinearLayoutManager) mRecyclerView.getLayoutManager();
                         if (null != lm) {
-                            if (lm.findViewByPosition(lm.findFirstVisibleItemPosition()).getTop() == 0 && lm.findFirstVisibleItemPosition() == 0) {
+                            if (lm.findViewByPosition(lm.findFirstVisibleItemPosition()).getTop() > 0 && lm.findFirstVisibleItemPosition() == 0) {
                                 return true;
                             }
                         }

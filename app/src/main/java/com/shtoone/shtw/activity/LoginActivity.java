@@ -6,8 +6,9 @@ import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.android.volley.VolleyError;
 import com.dd.CircularProgressButton;
@@ -33,6 +34,8 @@ public class LoginActivity extends BaseActivity {
     private TextInputLayout login_password;
     private CircularProgressButton login_button;
     private UserInfoData userInfoData;
+    private ScrollView mScrollView;
+    private LinearLayout ll_container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +47,10 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void initView() {
+        mScrollView = (ScrollView) findViewById(R.id.sv_login_activity);
+        ll_container = (LinearLayout) findViewById(R.id.ll_container_login_register_activity);
         login_username = (TextInputLayout) findViewById(R.id.login_username);
+        login_username.getEditText().clearFocus();
         login_password = (TextInputLayout) findViewById(R.id.login_password);
         login_button = (CircularProgressButton) findViewById(R.id.login_button);
     }
@@ -76,6 +82,12 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 login_button.setProgress(0);
+                login_username.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                    }
+                }, 300);
             }
         });
 
@@ -107,6 +119,12 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 login_button.setProgress(0);
+                login_password.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                    }
+                }, 300);
             }
         });
 
@@ -201,9 +219,9 @@ public class LoginActivity extends BaseActivity {
 
     //进入MainActivity
     private void jumpTo() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
     }
 
     private void initParametersData() {
@@ -211,16 +229,15 @@ public class LoginActivity extends BaseActivity {
     }
 
     //点击空白处隐藏键盘
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        View v = this.getCurrentFocus();
-        KeyBoardUtils.hideKeybord(v, this);
-        return super.dispatchTouchEvent(ev);
-    }
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent ev) {
+//        View v = this.getCurrentFocus();
+//        KeyBoardUtils.hideKeybord(v, this);
+//        return super.dispatchTouchEvent(ev);
+//    }
 
     @Override
     public boolean swipeBackPriority() {
         return false;
     }
-
 }

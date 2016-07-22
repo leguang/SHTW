@@ -1,5 +1,6 @@
 package com.shtoone.shtw.activity.base;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,7 @@ import com.shtoone.shtw.R;
 import com.shtoone.shtw.utils.NetworkUtils;
 
 import me.yokeyword.fragmentation.SwipeBackLayout;
+import me.yokeyword.fragmentation.anim.FragmentAnimator;
 import me.yokeyword.fragmentation_swipeback.SwipeBackActivity;
 
 
@@ -22,15 +24,17 @@ public abstract class BaseActivity extends SwipeBackActivity {
         super.onCreate(savedInstanceState);
         if (!NetworkUtils.isConnected(this)) {
             View view = getWindow().getDecorView();
-            Snackbar.make(view, "当前网络已断开！", Snackbar.LENGTH_LONG)
+            Snackbar mSnackbar = Snackbar.make(view, "当前网络已断开！", Snackbar.LENGTH_LONG)
                     .setAction("设置网络", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             // 跳转到系统的网络设置界面
                             NetworkUtils.openSetting(BaseActivity.this);
                         }
-                    })
-                    .show();
+                    });
+            View v = mSnackbar.getView();
+            v.setBackgroundColor(Color.parseColor("#FFCC00"));
+            mSnackbar.show();
         }
         if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
             // 透明状态栏
@@ -49,7 +53,6 @@ public abstract class BaseActivity extends SwipeBackActivity {
             }
         });
     }
-
 
     protected void initToolbarMenu(Toolbar toolbar) {
         toolbar.inflateMenu(R.menu.menu_hierarchy);
@@ -77,5 +80,10 @@ public abstract class BaseActivity extends SwipeBackActivity {
     @Override
     public boolean swipeBackPriority() {
         return true;
+    }
+
+    @Override
+    protected FragmentAnimator onCreateFragmentAnimator() {
+        return new FragmentAnimator(0, 0, 0, 0);
     }
 }

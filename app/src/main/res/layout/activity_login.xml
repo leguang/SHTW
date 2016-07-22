@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sv_login_activity"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/light_gray"
-    android:fitsSystemWindows="true">
+    android:layout_height="wrap_content"
+    android:background="@color/material_grey_50"
+    android:fadingEdge="none"
+    android:fitsSystemWindows="true"
+    android:scrollbars="none">
 
     <LinearLayout
+        android:id="@+id/ll_container_login_register_activity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:paddingBottom="10dp"
@@ -55,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             app:errorTextAppearance="@style/MaterialLoginTheme.TextAppearanceLoginError"
             app:theme="@style/MaterialLoginTheme.TextAppearanceLogin">
 
@@ -109,5 +113,4 @@
                 android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
-
-</FrameLayout>
+</ScrollView>

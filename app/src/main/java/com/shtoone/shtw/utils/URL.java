@@ -26,6 +26,8 @@ public class URL {
      */
     public static final String BaseURL = "http://120.27.146.66:8083/nxsy/";
 //    public static final String BaseURL = "http://192.168.11.102:8080/qms/";
+//    public static final String BaseURL = "http://192.168.11.108:8080/qms/";
+
 
     /**
      * 登录地址
@@ -69,19 +71,19 @@ public class URL {
     public static final String SYS_Items = BaseURL + "sysController.do?sysHome&userGroupId=%1&startTime=%2&endTime=%3";
 
     /**
-     * 登录验证
+     * 试验室主页
      *
-     * @param userGroupId 组织ID
+     * @param userGroupID 组织ID
      * @param startTime   查询的起始时间
      * @param endTime     查询的结束时间
      * @return 返回拼凑后的url
      */
-    public static String getSYSLingdaoData(String userGroupId, String startTime, String endTime) {
+    public static String getSYSLingdaoData(String userGroupID, String startTime, String endTime) {
         startTime = DateUtils.ChangeTimeToLong(startTime);
         endTime = DateUtils.ChangeTimeToLong(endTime);
         //如果开始时间大于结束时间，返回null
         if (Integer.valueOf(startTime) <= Integer.valueOf(endTime)) {
-            String url = SYS_Items.replace("%1", userGroupId).replace("%2", startTime).replace("%3", endTime);
+            String url = SYS_Items.replace("%1", userGroupID).replace("%2", startTime).replace("%3", endTime);
             KLog.e(TAG, "试验室主界面URL :" + url);
             if (TextUtils.isEmpty(url)) {
                 return null;
@@ -108,9 +110,32 @@ public class URL {
     public static final String BHZ_Lingdao = BaseURL + "app.do?AppHntMain&departId=%1&startTime=%2&endTime=%3";
 
     /**
+     * 混凝土主页
+     *
+     * @param userGroupID 组织ID
+     * @param startTime   查询的起始时间
+     * @param endTime     查询的结束时间
+     * @return 返回拼凑后的url
+     */
+    public static String getBHZLingdaoData(String userGroupID, String startTime, String endTime) {
+        startTime = DateUtils.ChangeTimeToLong(startTime);
+        endTime = DateUtils.ChangeTimeToLong(endTime);
+        //如果开始时间大于结束时间，返回null
+        if (Integer.valueOf(startTime) <= Integer.valueOf(endTime)) {
+            String url = BHZ_Lingdao.replace("%1", userGroupID).replace("%2", startTime).replace("%3", endTime);
+            KLog.e(TAG, "混凝土拌合站主界面URL :" + url);
+            if (TextUtils.isEmpty(url)) {
+                return null;
+            }
+            return url;
+        }
+        return null;
+    }
+
+    /**
      * 混泥土强度列表地址
      */
-    public static final String HNT_URL = BaseURL + "sysController.do?hntkangya&userGroupId=%1&isQualified=%2&startTime=%3&endTime=%4&pageNo=%5&shebeibianhao=%6&isReal=%7&maxPageItems=10&testId=%8";
+    public static final String HNT_URL = BaseURL + "sysController.do?hntkangya&userGroupId=%1&isQualified=%2&startTime=%3&endTime=%4&pageNo=%5&shebeibianhao=%6&isReal=%7&maxPageItems=30&testId=%8";
 
 
     /**
@@ -189,7 +214,33 @@ public class URL {
     /**
      * 拌合站生产数据查询
      */
-    public static final String BHZ_SCDATA_URL = BaseURL + "app.do?AppHntXiangxiList&departId=%1&startTime=%2&endTime=%3&pageNo=%4&shebeibianhao=%5&maxPageItems=15";
+    public static final String BHZ_SCDATA_URL = BaseURL + "app.do?AppHntXiangxiList&departId=%1&startTime=%2&endTime=%3&pageNo=%4&shebeibianhao=%5&maxPageItems=30";
+
+    /**
+     * 拌合站生产数据查询
+     *
+     * @param userGroupID    组织结构ID
+     * @param startTime      开始时间
+     * @param endTime        结束时间
+     * @param current_PageNo 当前页码
+     * @param deviceNo       设备编号
+     * @return url
+     */
+    public static String getProduceData(String userGroupID, String startTime, String endTime, String current_PageNo, String deviceNo) {
+        startTime = DateUtils.ChangeTimeToLong(startTime);
+        endTime = DateUtils.ChangeTimeToLong(endTime);
+        //如果开始时间大于结束时间，返回null
+        if (Integer.valueOf(startTime) <= Integer.valueOf(endTime)) {
+            String url = BHZ_SCDATA_URL.replace("%1", userGroupID).replace("%2", startTime).replace("%3", endTime).replace("%4", current_PageNo).replace("%5", deviceNo);
+            KLog.e(TAG, "拌合站生产数据查询URL :" + url);
+            if (TextUtils.isEmpty(url)) {
+                return null;
+            }
+            return url;
+        }
+        return null;
+    }
+
 
     /**
      * 拌合站生产数据详情查询
@@ -199,7 +250,7 @@ public class URL {
     /**
      * 拌合站待处置超标列表查询
      */
-    public static final String BHZ_CHAOBIAO_LIST_URL = BaseURL + "app.do?AppHntChaobiaoList&departId=%1&startTime=%2&endTime=%3&dengji=%4&chuzhileixing=%5&pageNo=%6&shebeibianhao=%7&maxPageItems=15";
+    public static final String BHZ_CHAOBIAO_LIST_URL = BaseURL + "app.do?AppHntChaobiaoList&departId=%1&startTime=%2&endTime=%3&dengji=%4&chuzhileixing=%5&pageNo=%6&shebeibianhao=%7&maxPageItems=30";
 
     /**
      * 拌合站待处置超标详情
@@ -222,6 +273,30 @@ public class URL {
     public static final String BHZ_CAILIAO_URL = BaseURL + "app.do?AppHntMaterial&departId=%1&startTime=%2&endTime=%3&shebeibianhao=%4";
 
     /**
+     * 混凝土材料用量
+     *
+     * @param userGroupID 组织ID
+     * @param startTime   查询的起始时间
+     * @param endTime     查询的结束时间
+     * @return 返回拼凑后的url
+     */
+    public static String getBHZCailiaoyongliang(String userGroupID, String startTime, String endTime, String equipmentID) {
+        startTime = DateUtils.ChangeTimeToLong(startTime);
+        endTime = DateUtils.ChangeTimeToLong(endTime);
+        //如果开始时间大于结束时间，返回null
+        if (Integer.valueOf(startTime) <= Integer.valueOf(endTime)) {
+            String url = BHZ_CAILIAO_URL.replace("%1", userGroupID).replace("%2", startTime).replace("%3", endTime).replace("%4", equipmentID);
+            KLog.e(TAG, "混凝土材料用量URL :" + url);
+            if (TextUtils.isEmpty(url)) {
+                return null;
+            }
+            return url;
+        }
+        return null;
+    }
+
+
+    /**
      * 试验室超标处置
      */
     public static final String SYS_CHAOBIAO_DO_URL = BaseURL + "sysController.do?hntkangyaPost";
@@ -229,7 +304,7 @@ public class URL {
     /**
      * 拌合站状态
      */
-    public static final String COMM_BHZ_STS = BaseURL + "app.do?AppHntBanhejiState&departId=%1&pageNo=%2&maxPageItems=15";
+    public static final String COMM_BHZ_STS = BaseURL + "app.do?AppHntBanhejiState&departId=%1&pageNo=%2&maxPageItems=30";
 
     /**
      * 拌合站超标审批
@@ -275,10 +350,25 @@ public class URL {
      */
     public static final String SYS_TONGJI_FENXI = BaseURL + "sysController.do?sysCountAnalyze&userGroupId=%1&startTime=%2&endTime=%3";
 
+    public static String getLaboratoryStatistic(String userGroupID, String startTime, String endTime) {
+        startTime = DateUtils.ChangeTimeToLong(startTime);
+        endTime = DateUtils.ChangeTimeToLong(endTime);
+        //如果开始时间大于结束时间，返回null
+        if (Integer.valueOf(startTime) <= Integer.valueOf(endTime)) {
+            String url = SYS_TONGJI_FENXI.replace("%1", userGroupID).replace("%2", startTime).replace("%3", endTime);
+            KLog.e(TAG, "试验室统计分析 :" + url);
+            if (TextUtils.isEmpty(url)) {
+                return null;
+            }
+            return url;
+        }
+        return null;
+    }
+
     /**
      * 钢筋列表地址
      */
-    public static final String GJ_URL = BaseURL + "sysController.do?gangjin&userGroupId=%1&isQualified=%2&startTime=%3&endTime=%4&pageNo=%5&shebeibianhao=%6&isReal=%7&maxPageItems=15&testId=%8";
+    public static final String GJ_URL = BaseURL + "sysController.do?gangjin&userGroupId=%1&isQualified=%2&startTime=%3&endTime=%4&pageNo=%5&shebeibianhao=%6&isReal=%7&maxPageItems=30&testId=%8";
 
     /**
      * 得到万能机列表数据

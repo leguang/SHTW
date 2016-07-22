@@ -6,6 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="loading">加载中……</string>
     <string name="transition_dialog">transition_dialog</string>
+    <string name="press_again_exit">再按一次退出</string>
 
     <!--登陆模块-->
     <string name="system_name">拌合站与试验室信息管理系统</string>
@@ -20,6 +21,16 @@
     <string name="laboratory">试验室</string>
     <string name="concrete">混凝土</string>
     <string name="asphalt">沥青</string>
+    <string name="alarm_level">报警等级</string>
+    <string name="zongpanshu">总盘数:</string>
+    <string name="zongfangliang">总方量:</string>
+    <string name="overproof_count">超标盘数</string>
+    <string name="overproof_rate">超标率</string>
+    <string name="handle_count">处置盘数</string>
+    <string name="handle_rate">处置率</string>
+    <string name="elementary_ranking">初级</string>
+    <string name="middle_ranking">中级</string>
+    <string name="high_ranking">高级</string>
 
     <!--选择查询对话框模块-->
     <string name="select_start_time">开始时间</string>
@@ -33,6 +44,15 @@
     <string name="statistic">统计分析</string>
     <string name="disqualification">不合格</string>
     <string name="detail">详情</string>
+
+    <!--主页ConcreteActivity模块-->
+    <string name="produce_query">生产查询</string>
+    <string name="overproof">超标处置</string>
+    <string name="material_statistic">材料核算</string>
+    <string name="deviation">误差值(kg)</string>
+    <string name="matching">配比值(kg)</string>
+    <string name="reality">实际值(kg)</string>
+    <string name="material_name">材料名称</string>
 
     <!--版本更新模块-->
     <string name="check_update">检测更新</string>

@@ -1,12 +1,16 @@
-package com.shtoone.shtw.fragment.laboratoryactivity;
+package com.shtoone.shtw.fragment.concreteactivity;
+
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +20,15 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.shtoone.shtw.BaseApplication;
 import com.shtoone.shtw.R;
+import com.shtoone.shtw.activity.DialogActivity;
 import com.shtoone.shtw.activity.YaLiJiDetailActivity;
 import com.shtoone.shtw.adapter.OnItemClickListener;
 import com.shtoone.shtw.adapter.YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter;
 import com.shtoone.shtw.bean.EventData;
 import com.shtoone.shtw.bean.ParametersData;
 import com.shtoone.shtw.bean.YalijiFragmentViewPagerFragmentRecyclerViewItemData;
-import com.shtoone.shtw.fragment.base.BaseFragment;
+import com.shtoone.shtw.fragment.base.BaseLazyFragment;
+import com.shtoone.shtw.fragment.mainactivity.LaboratoryFragment;
 import com.shtoone.shtw.ui.PageStateLayout;
 import com.shtoone.shtw.utils.ConstantsUtils;
 import com.shtoone.shtw.utils.DisplayUtils;
@@ -46,39 +52,30 @@ import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.SlideInLeftAnimationAdapter;
 
 /**
- * Created by leguang on 2016/6/9 0031.
+ * Created by leguang on 2016/7/20 0020.
  */
-public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
-    private static final String TAG = YaLiJiFragmentViewPagerFragment.class.getSimpleName();
-    private RecyclerView mRecyclerView;
-    private YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter mAdapter;
-    private PageStateLayout pageStateLayout;
+public class ProduceQueryFragment extends BaseLazyFragment {
+    private static final String TAG = LaboratoryFragment.class.getSimpleName();
+    private Toolbar mToolbar;
     private PtrFrameLayout ptrframe;
+    private RecyclerView mRecyclerView;
     private StoreHouseHeader header;
-    private boolean isRegistered = false;
+    private YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter mAdapter;
     private YalijiFragmentViewPagerFragmentRecyclerViewItemData itemsData;
-    private ParametersData mParametersData;
-    private int lastVisibleItemPosition;
+    private FloatingActionButton fab;
+    private boolean isRegistered = false;
+    private PageStateLayout pageStateLayout;
+    private Gson mGson;
     private boolean isLoading;
     private List<YalijiFragmentViewPagerFragmentRecyclerViewItemData.DataBean> listData;
-    private Gson mGson;
+    private ParametersData mParametersData;
+    private View view;
     private LinearLayoutManager mLinearLayoutManager;
+    private int lastVisibleItemPosition;
+    private Handler handler = new Handler();
 
-    public static YaLiJiFragmentViewPagerFragment newInstance(ParametersData mParametersData) {
-        Bundle args = new Bundle();
-        args.putSerializable("ParametersData", mParametersData);
-        YaLiJiFragmentViewPagerFragment fragment = new YaLiJiFragmentViewPagerFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Bundle args = getArguments();
-        if (args != null) {
-            mParametersData = (ParametersData) args.getSerializable("ParametersData");
-        }
+    public static ProduceQueryFragment newInstance() {
+        return new ProduceQueryFragment();
     }
 
     @Nullable
@@ -88,23 +85,63 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
             BaseApplication.bus.register(this);
             isRegistered = true;
         }
-        View view = inflater.inflate(R.layout.fragment_view_pager_yaliji_fragment, container, false);
+        view = inflater.inflate(R.layout.fragment_produce_query, container, false);
         initView(view);
-        initData();
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        //返回到看见此fragment时，fab显示
+        fab.show();
+    }
+
     private void initView(View view) {
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_fragment_view_pager_yaliji_fragment);
-        ptrframe = (PtrFrameLayout) view.findViewById(R.id.ptr_framelayout_fragment_view_pager_yaliji_fragment);
-        pageStateLayout = (PageStateLayout) view.findViewById(R.id.psl_fragment_view_pager_yaliji_fragment);
+        mToolbar = (Toolbar) view.findViewById(R.id.toolbar_produce_query_fragment);
+        fab = (FloatingActionButton) view.findViewById(R.id.fab_produce_query_fragment);
+        ptrframe = (PtrFrameLayout) view.findViewById(R.id.ptr_produce_query_fragment);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_produce_query_fragment);
+        pageStateLayout = (PageStateLayout) view.findViewById(R.id.psl_produce_query_fragment);
+    }
+
+    @Override
+    protected void initLazyView(@Nullable Bundle savedInstanceState) {
+        initData();
     }
 
     private void initData() {
+        mParametersData = (ParametersData) BaseApplication.parametersData.clone();
+        mParametersData.fromTo = ConstantsUtils.LABORATORYFRAGMENT;
         mGson = new Gson();
         listData = new ArrayList<>();
         mLinearLayoutManager = new LinearLayoutManager(_mActivity);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+
+        StringBuffer sb = new StringBuffer(BaseApplication.mUserInfoData.getDepartName() + " > ");
+        sb.append(getString(R.string.concrete) + " > ");
+        sb.append(getString(R.string.produce_query)).trimToSize();
+        mToolbar.setTitle(sb.toString());
+        initToolbarBackNavigation(mToolbar);
+        initToolbarMenu(mToolbar);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(_mActivity, DialogActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(ConstantsUtils.PARAMETERS, mParametersData);
+                intent.putExtras(bundle);
+                //Activity共享元素切换版本适配
+//                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+                startActivity(intent);
+//                } else {
+//                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(_mActivity, fab, getString(R.string.transition_dialog));
+//                    startActivity(intent, options.toBundle());
+//                }
+            }
+        });
+
         //设置动画与适配器
         SlideInLeftAnimationAdapter mSlideInLeftAnimationAdapter = new SlideInLeftAnimationAdapter(mAdapter = new YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter(_mActivity, listData));
         mSlideInLeftAnimationAdapter.setFirstOnly(true);
@@ -118,7 +155,7 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
             public void onItemClick(View view, int position) {
                 // 实现局部界面刷新, 这个view就是被点击的item布局对象
                 changeReadedState(view);
-                jumpToYaLiJiDetailActivity(position);
+                jump2OverproofDetailActivity(position);
             }
         });
 
@@ -131,7 +168,7 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
 
                     if (!isLoading) {
                         isLoading = true;
-                        mRecyclerView.postDelayed(new Runnable() {
+                        handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 mParametersData.currentPage = (Integer.parseInt(mParametersData.currentPage) + 1) + "";
@@ -139,7 +176,6 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
                                 getDataFromNetwork(mParametersData);
                                 KLog.e("上拉加载更多mParametersData.currentPage=" + mParametersData.currentPage);
                                 isLoading = false;
-
                             }
                         }, 500);
                     }
@@ -257,6 +293,7 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
         });
     }
 
+    //联网获取数据
     private void getDataFromNetwork(final ParametersData mParametersData) {
         //从全局参数类中取出参数，避免太长了，看起来不方便
         String userGroupID = mParametersData.userGroupID;
@@ -270,15 +307,17 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
 
         //联网获取数据
         //还没有判断url，用户再判断
-        HttpUtils.getRequest(URL.getYalijiTestList(userGroupID, isQualified, startDateTime, endDateTime, currentPage, equipmentID, isReal, testType), new HttpUtils.HttpListener() {
+        HttpUtils.getRequest(URL.getProduceData(userGroupID, startDateTime, endDateTime, currentPage, equipmentID), new HttpUtils.HttpListener() {
             @Override
             public void onSuccess(String response) {
+                KLog.e("response:" + response);
                 KLog.json(response);
                 parseData(response);
             }
 
             @Override
             public void onFailed(VolleyError error) {
+                KLog.e(error.toString());
                 if (listData.size() > 0) {
                     //此时是分页上拉加载更多
                     //提示网络数据异常，展示网络错误页面。此时：1.可能是本机网络有问题，2.可能是服务器问题
@@ -314,32 +353,32 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
     }
 
     protected void parseData(String response) {
-        if (null != itemsData) {
-            itemsData.getData().clear();
-        }
-        itemsData = mGson.fromJson(response, YalijiFragmentViewPagerFragmentRecyclerViewItemData.class);
-        if (null != itemsData && itemsData.isSuccess()) {
-            listData.addAll(itemsData.getData());
-        }
-
-        if (null != listData) {
-            if (listData.size() > 0) {
-                pageStateLayout.showContent();
-                if (!itemsData.isSuccess()) {
-                    ToastUtils.showToast(_mActivity, "无更多数据");
-                    mParametersData.currentPage = (Integer.parseInt(mParametersData.currentPage) - 1) + "";
-                    mAdapter.notifyItemRemoved(mAdapter.getItemCount());
-                } else {
-                    mAdapter.notifyDataSetChanged();
-                }
-            } else {
-                //提示数据为空，展示空状态
-                pageStateLayout.showEmpty();
-            }
-        } else {
-            //提示数据解析异常，展示错误页面
-            pageStateLayout.showError();
-        }
+//        if (null != itemsData) {
+//            itemsData.getData().clear();
+//        }
+//        itemsData = mGson.fromJson(response, YalijiFragmentViewPagerFragmentRecyclerViewItemData.class);
+//        if (null != itemsData && itemsData.isSuccess()) {
+//            listData.addAll(itemsData.getData());
+//        }
+//
+//        if (null != listData) {
+//            if (listData.size() > 0) {
+//                pageStateLayout.showContent();
+//                if (!itemsData.isSuccess()) {
+//                    ToastUtils.showToast(_mActivity, "无更多数据");
+//                    mParametersData.currentPage = (Integer.parseInt(mParametersData.currentPage) - 1) + "";
+//                    mAdapter.notifyItemRemoved(mAdapter.getItemCount());
+//                } else {
+//                    mAdapter.notifyDataSetChanged();
+//                }
+//            } else {
+//                //提示数据为空，展示空状态
+//                pageStateLayout.showEmpty();
+//            }
+//        } else {
+//            //提示数据解析异常，展示错误页面
+//            pageStateLayout.showError();
+//        }
     }
 
     private void changeReadedState(View view) {
@@ -347,7 +386,7 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
     }
 
     //进入YaLiJiDetailActivity
-    private void jumpToYaLiJiDetailActivity(int position) {
+    private void jump2OverproofDetailActivity(int position) {
         Intent intent = new Intent(_mActivity, YaLiJiDetailActivity.class);
         intent.putExtra("detailID", listData.get(position).getSYJID());
         startActivity(intent);
@@ -355,29 +394,29 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
 
     @Subscribe
     public void updateSearch(ParametersData mParametersData) {
-        if (mParametersData != null) {
-            if (mParametersData.fromTo == ConstantsUtils.YALIJIFRAGMENT) {
-                ToastUtils.showToast(_mActivity, mParametersData.testTypeID);
-                this.mParametersData.startDateTime = mParametersData.startDateTime;
-                this.mParametersData.endDateTime = mParametersData.endDateTime;
-                this.mParametersData.equipmentID = mParametersData.equipmentID;
-                this.mParametersData.testTypeID = mParametersData.testTypeID;
-                this.mParametersData.currentPage = "1";
-                if (null != listData) {
-                    listData.clear();
-                }
-//                getDataFromNetwork(this.mParametersData);
-
-                mRecyclerView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mRecyclerView.smoothScrollToPosition(0);
-                    }
-                }, 300);
-                ptrframe.autoRefresh(true);
-                KLog.e("点击查询mParametersData.currentPage=" + mParametersData.currentPage);
-            }
-        }
+//        if (mParametersData != null) {
+//            if (mParametersData.fromTo == ConstantsUtils.YALIJIFRAGMENT) {
+//                ToastUtils.showToast(_mActivity, mParametersData.testTypeID);
+//                this.mParametersData.startDateTime = mParametersData.startDateTime;
+//                this.mParametersData.endDateTime = mParametersData.endDateTime;
+//                this.mParametersData.equipmentID = mParametersData.equipmentID;
+//                this.mParametersData.testTypeID = mParametersData.testTypeID;
+//                this.mParametersData.currentPage = "1";
+//                if (null != listData) {
+//                    listData.clear();
+//                }
+////                getDataFromNetwork(this.mParametersData);
+//
+//                mRecyclerView.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        mRecyclerView.smoothScrollToPosition(0);
+//                    }
+//                }, 300);
+//                ptrframe.autoRefresh(true);
+//                KLog.e("点击查询mParametersData.currentPage=" + mParametersData.currentPage);
+//            }
+//        }
     }
 
     @Subscribe

@@ -59,6 +59,7 @@
                         android:layout_marginTop="5dp"
                         android:orientation="vertical">
 
+                        <!--详情数据部分-->
                         <android.support.v7.widget.CardView
                             android:id="@+id/cv_wannengji_detail_activity"
                             android:layout_width="match_parent"
@@ -70,17 +71,15 @@
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:padding="5dp">
 
                                 <TextView
                                     android:id="@+id/tv_title_wannengji_detail_activity"
-                                    android:layout_width="wrap_content"
+                                    style="@style/DetailTextTheme"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginBottom="3dp"
-                                    android:drawableLeft="@color/red"
-                                    android:text="压力机试验详情"
-                                    android:textColor="@color/orange"
-                                    android:textSize="16sp" />
+                                    android:text="压力机试验详情" />
 
 
                                 <TextView
@@ -208,12 +207,14 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignBottom="@id/textview6"
+                                    android:layout_marginBottom="10dp"
                                     android:layout_toRightOf="@+id/textview6"
                                     android:text="28" />
 
                             </RelativeLayout>
                         </android.support.v7.widget.CardView>
 
+                        <!--图表部分-->
                         <android.support.v7.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -228,12 +229,10 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    style="@style/DetailTextTheme"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginBottom="3dp"
-                                    android:text="力值曲线详情"
-                                    android:textColor="@color/black_87_percent_alpha"
-                                    android:textSize="16sp" />
+                                    android:text="力值曲线详情" />
 
                                 <android.support.design.widget.TabLayout
                                     android:id="@+id/tab_layout_wannengji_detail_activity"
@@ -245,6 +244,175 @@
                                     android:id="@+id/vp_wannengji_detail_activity"
                                     android:layout_width="match_parent"
                                     android:layout_height="400dp" />
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+
+                        <!--处置部分-->
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/cv_handle_wannengji_detail_activity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="20dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginRight="2dp"
+                            android:layout_marginTop="30dp"
+                            card_view:cardCornerRadius="@dimen/card_Corner_Radius"
+                            card_view:contentPadding="3dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="30dp"
+                                android:layout_marginTop="30dp"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <FrameLayout
+                                        android:layout_width="145dp"
+                                        android:layout_height="match_parent">
+
+                                        <ImageView
+                                            android:id="@+id/iv_photo_select_wannengji_detail_activity"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:layout_marginRight="5dp"
+                                            android:src="@drawable/ic_camera" />
+
+                                        <LinearLayout
+                                            android:id="@+id/ll_camera_album_wannengji_detail_activity"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:layout_gravity="center"
+                                            android:orientation="vertical"
+                                            android:visibility="gone">
+
+                                            <ImageView
+                                                android:id="@+id/iv_camera_select_wannengji_detail_activity"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="1"
+                                                android:background="@color/gray" />
+
+                                            <ImageView
+                                                android:id="@+id/iv_album_select_wannengji_detail_activity"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="1"
+                                                android:background="@color/green" />
+
+                                        </LinearLayout>
+                                    </FrameLayout>
+
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+
+                                        <android.support.design.widget.TextInputLayout
+                                            android:id="@+id/et_handle_person_wannengji_detail_activity"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            app:errorTextAppearance="@style/MaterialLoginTheme.TextAppearanceLoginError"
+                                            app:theme="@style/MaterialLoginTheme.TextAppearanceLogin">
+
+                                            <EditText
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:hint="@string/handle_person"
+                                                android:singleLine="true"
+                                                android:textSize="@dimen/login_register_editview_text_size" />
+                                        </android.support.design.widget.TextInputLayout>
+
+                                        <android.support.design.widget.TextInputLayout
+                                            android:id="@+id/et_handle_time_wannengji_detail_activity"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            app:errorTextAppearance="@style/MaterialLoginTheme.TextAppearanceLoginError"
+                                            app:theme="@style/MaterialLoginTheme.TextAppearanceLogin">
+
+                                            <EditText
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:hint="@string/handle_time"
+                                                android:singleLine="true"
+                                                android:textSize="@dimen/login_register_editview_text_size" />
+                                        </android.support.design.widget.TextInputLayout>
+
+                                        <android.support.design.widget.TextInputLayout
+                                            android:id="@+id/et_handle_reason_wannengji_detail_activity"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            app:errorTextAppearance="@style/MaterialLoginTheme.TextAppearanceLoginError"
+                                            app:theme="@style/MaterialLoginTheme.TextAppearanceLogin">
+
+                                            <EditText
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:hint="@string/handle_reason"
+                                                android:singleLine="true"
+                                                android:textSize="@dimen/login_register_editview_text_size" />
+                                        </android.support.design.widget.TextInputLayout>
+
+                                        <android.support.design.widget.TextInputLayout
+                                            android:id="@+id/et_handle_way_wannengji_detail_activity"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            app:errorTextAppearance="@style/MaterialLoginTheme.TextAppearanceLoginError"
+                                            app:theme="@style/MaterialLoginTheme.TextAppearanceLogin">
+
+                                            <EditText
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:hint="@string/handle_way"
+                                                android:singleLine="true"
+                                                android:textSize="@dimen/login_register_editview_text_size" />
+                                        </android.support.design.widget.TextInputLayout>
+
+                                        <android.support.design.widget.TextInputLayout
+                                            android:id="@+id/et_handle_result_wannengji_detail_activity"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            app:errorTextAppearance="@style/MaterialLoginTheme.TextAppearanceLoginError"
+                                            app:theme="@style/MaterialLoginTheme.TextAppearanceLogin">
+
+                                            <EditText
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:hint="@string/handle_result"
+                                                android:singleLine="true"
+                                                android:textSize="@dimen/login_register_editview_text_size" />
+                                        </android.support.design.widget.TextInputLayout>
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <Button
+                                        android:id="@+id/bt_submit_wannengji_detail_activity"
+                                        android:layout_width="120dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="40dp"
+                                        android:gravity="center"
+                                        android:text="@string/submit" />
+
+                                    <Button
+                                        android:id="@+id/bt_reset_wannengji_detail_activity"
+                                        android:layout_width="120dp"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:text="@string/reset" />
+                                </LinearLayout>
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                     </LinearLayout>
@@ -259,6 +427,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_dialog_info"
+        android:visibility="gone"
         app:layout_anchor="@id/cv_wannengji_detail_activity"
         app:layout_anchorGravity="bottom|end" />
 

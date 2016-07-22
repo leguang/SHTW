@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -20,12 +22,14 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.YAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.gson.Gson;
 import com.shtoone.shtw.BaseApplication;
 import com.shtoone.shtw.R;
-import com.shtoone.shtw.fragment.base.BaseFragment;
+import com.shtoone.shtw.bean.LaboratoryStatisticFragmentData;
+import com.shtoone.shtw.bean.ParametersData;
+import com.shtoone.shtw.fragment.base.BaseLazyFragment;
 import com.shtoone.shtw.ui.PageStateLayout;
 import com.shtoone.shtw.utils.ConstantsUtils;
 import com.shtoone.shtw.utils.DisplayUtils;
@@ -35,7 +39,6 @@ import com.shtoone.shtw.utils.URL;
 import com.socks.library.KLog;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -48,23 +51,24 @@ import in.srain.cube.views.ptr.indicator.PtrIndicator;
 /**
  * Created by leguang on 2016/6/9 0031.
  */
-public class LaboratoryStatisticFragment extends BaseFragment implements DatePickerDialog.OnDateSetListener {
+public class LaboratoryStatisticFragment extends BaseLazyFragment implements DatePickerDialog.OnDateSetListener {
     private static final String TAG = LaboratoryStatisticFragment.class.getSimpleName();
     private Toolbar mToolbar;
     private NestedScrollView mNestedScrollView;
     private StoreHouseHeader header;
     private PageStateLayout pageStateLayout;
     private PtrFrameLayout ptrframe;
-    private BarChart mBarChart;
+    private BarChart mBarChart0, mBarChart1;
     private Typeface mTf;
     private TextView tv_start_date;
     private TextView tv_end_date;
     private Button bt_search;
     private boolean isStartDateTime;
-
-    protected String[] mMonths = new String[]{
-            "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"
-    };
+    private ParametersData mParametersData;
+    private Gson mGson;
+    private LaboratoryStatisticFragmentData data;
+    private TextView sysdh_item1_1, sysdh_item1_2, sysdh_item1_3, sysdh_item1_4, sysdh_item1_5, sysdh_item2_1, sysdh_item2_2, sysdh_item2_3, sysdh_item2_4, sysdh_item2_5, sysdh_item3_1, sysdh_item3_2, sysdh_item3_3, sysdh_item3_4, sysdh_item3_5, sysdh_item4_1, sysdh_item4_2, sysdh_item4_3, sysdh_item4_4, sysdh_item4_5;
+    private String[] testTypes = new String[]{"砼抗压强度", "钢筋拉力", "钢筋焊接接头", "钢筋机械连接"};
 
     public static LaboratoryStatisticFragment newInstance() {
         return new LaboratoryStatisticFragment();
@@ -75,7 +79,6 @@ public class LaboratoryStatisticFragment extends BaseFragment implements DatePic
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_laboratory_statistic, container, false);
         initView(view);
-        initDate();
         return view;
     }
 
@@ -87,11 +90,45 @@ public class LaboratoryStatisticFragment extends BaseFragment implements DatePic
         mNestedScrollView = (NestedScrollView) view.findViewById(R.id.nsv_laboratory_statistic_fragment);
         ptrframe = (PtrFrameLayout) view.findViewById(R.id.ptr_laboratory_statistic_fragment);
         pageStateLayout = (PageStateLayout) view.findViewById(R.id.psl_laboratory_statistic_fragment);
-        mBarChart = (BarChart) view.findViewById(R.id.barchart_laboratory_statistic_fragment);
+        pageStateLayout.showLoading();
+        mBarChart0 = (BarChart) view.findViewById(R.id.barchart0_laboratory_statistic_fragment);
+        mBarChart1 = (BarChart) view.findViewById(R.id.barchart1_laboratory_statistic_fragment);
+
+        //底部表格部分
+        sysdh_item1_1 = (TextView) view.findViewById(R.id.sysdh_item1_1);
+        sysdh_item1_2 = (TextView) view.findViewById(R.id.sysdh_item1_2);
+        sysdh_item1_3 = (TextView) view.findViewById(R.id.sysdh_item1_3);
+        sysdh_item1_4 = (TextView) view.findViewById(R.id.sysdh_item1_4);
+        sysdh_item1_5 = (TextView) view.findViewById(R.id.sysdh_item1_5);
+        sysdh_item2_1 = (TextView) view.findViewById(R.id.sysdh_item2_1);
+        sysdh_item2_2 = (TextView) view.findViewById(R.id.sysdh_item2_2);
+        sysdh_item2_3 = (TextView) view.findViewById(R.id.sysdh_item2_3);
+        sysdh_item2_4 = (TextView) view.findViewById(R.id.sysdh_item2_4);
+        sysdh_item2_5 = (TextView) view.findViewById(R.id.sysdh_item2_5);
+        sysdh_item3_1 = (TextView) view.findViewById(R.id.sysdh_item3_1);
+        sysdh_item3_2 = (TextView) view.findViewById(R.id.sysdh_item3_2);
+        sysdh_item3_3 = (TextView) view.findViewById(R.id.sysdh_item3_3);
+        sysdh_item3_4 = (TextView) view.findViewById(R.id.sysdh_item3_4);
+        sysdh_item3_5 = (TextView) view.findViewById(R.id.sysdh_item3_5);
+        sysdh_item4_1 = (TextView) view.findViewById(R.id.sysdh_item4_1);
+        sysdh_item4_2 = (TextView) view.findViewById(R.id.sysdh_item4_2);
+        sysdh_item4_3 = (TextView) view.findViewById(R.id.sysdh_item4_3);
+        sysdh_item4_4 = (TextView) view.findViewById(R.id.sysdh_item4_4);
+        sysdh_item4_5 = (TextView) view.findViewById(R.id.sysdh_item4_5);
     }
 
-    private void initDate() {
-        mToolbar.setTitle("XX高速 > 试验室 > 综合统计");
+    @Override
+    protected void initLazyView(@Nullable Bundle savedInstanceState) {
+        initData();
+    }
+
+    private void initData() {
+        mGson = new Gson();
+        mParametersData = (ParametersData) BaseApplication.parametersData.clone();
+        StringBuffer sb = new StringBuffer(BaseApplication.mUserInfoData.getDepartName() + " > ");
+        sb.append(getString(R.string.laboratory) + " > ");
+        sb.append(getString(R.string.statistic)).trimToSize();
+        mToolbar.setTitle(sb.toString());
         initToolbarBackNavigation(mToolbar);
         initToolbarMenu(mToolbar);
 
@@ -112,14 +149,20 @@ public class LaboratoryStatisticFragment extends BaseFragment implements DatePic
         bt_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getDataFromNetwork();
+                ptrframe.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ptrframe.autoRefresh(true);
+                    }
+                }, 300);
+                mNestedScrollView.fullScroll(ScrollView.SCROLL_INDICATOR_TOP);
             }
         });
 
         pageStateLayout.setOnRetryClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pageStateLayout.showContent();
+                pageStateLayout.showLoading();
                 ptrframe.autoRefresh(true);
             }
         });
@@ -195,17 +238,15 @@ public class LaboratoryStatisticFragment extends BaseFragment implements DatePic
                 frame.refreshComplete();
             }
         });
-
-        setData(12, 50);
     }
 
     private void getDataFromNetwork() {
-
         //从全局参数类中取出参数，避免太长了，看起来不方便
-        String detaiID = BaseApplication.parametersData.detailID;
-        detaiID = "7AAFB8D1-AFFC-4AAA-9F9A-19324061AA54";
+        String userGroupID = mParametersData.userGroupID;
+        String startDateTime = mParametersData.startDateTime;
+        String endDateTime = mParametersData.endDateTime;
         //联网获取数据
-        HttpUtils.getRequest(URL.getYalijiDetailData(detaiID), new HttpUtils.HttpListener() {
+        HttpUtils.getRequest(URL.getLaboratoryStatistic(userGroupID, startDateTime, endDateTime), new HttpUtils.HttpListener() {
             @Override
             public void onSuccess(String response) {
                 KLog.e(TAG, response);
@@ -227,49 +268,111 @@ public class LaboratoryStatisticFragment extends BaseFragment implements DatePic
     }
 
     protected void parseData(String response) {
-//        if (!TextUtils.isEmpty(response)) {
-//            mYalijiDetailData = new Gson().fromJson(response, YalijiDetailData.class);
-//            if (null != mYalijiDetailData) {
-//                if (mYalijiDetailData.isSuccess()) {
-//                    pageStateLayout.showContent();
-//                    setAdapter();
-//                } else {
-//                    //提示数据为空，展示空状态
-//                    pageStateLayout.showEmpty();
-//                }
-//            } else {
-//                //提示数据解析异常，展示错误页面
-//                pageStateLayout.showError();
-//            }
-//        } else {
-//            //提示返回数据异常，展示错误页面
-//            pageStateLayout.showError();
-//        }
+        if (!TextUtils.isEmpty(response)) {
+            data = mGson.fromJson(response, LaboratoryStatisticFragmentData.class);
+            if (null != data && data.getData().size() > 0) {
+                if (data.isSuccess()) {
+                    pageStateLayout.showContent();
+                    setViewData();
+                } else {
+                    //提示数据为空，展示空状态
+                    pageStateLayout.showEmpty();
+                }
+            } else {
+                //提示数据解析异常，展示错误页面
+                pageStateLayout.showError();
+            }
+        } else {
+            //提示返回数据异常，展示错误页面
+            pageStateLayout.showError();
+        }
 
     }
 
-    //还是不能这样搞，可能会内存泄漏，重复创建Adapyer对象。后面解决
-    private void setAdapter() {
-        // 设置显示数据
+    private void setViewData() {
+
+        setChart(mBarChart0);
+        setChart(mBarChart1);
+
+        setChartData0(mBarChart0);
+        setChartData1(mBarChart1);
+
+        sysdh_item1_1.setText(data.getData().get(0).getTestCount());
+        sysdh_item1_2.setText(data.getData().get(0).getQualifiedCount());
+        sysdh_item1_3.setText(data.getData().get(0).getValidCount());
+        sysdh_item1_4.setText(data.getData().get(0).getNotqualifiedCount());
+        sysdh_item1_5.setText(data.getData().get(0).getQualifiedPer());
+        sysdh_item2_1.setText(data.getData().get(1).getTestCount());
+        sysdh_item2_2.setText(data.getData().get(1).getQualifiedCount());
+        sysdh_item2_3.setText(data.getData().get(1).getValidCount());
+        sysdh_item2_4.setText(data.getData().get(1).getNotqualifiedCount());
+        sysdh_item2_5.setText(data.getData().get(1).getQualifiedPer());
+        sysdh_item3_1.setText(data.getData().get(2).getTestCount());
+        sysdh_item3_2.setText(data.getData().get(2).getQualifiedCount());
+        sysdh_item3_3.setText(data.getData().get(2).getValidCount());
+        sysdh_item3_4.setText(data.getData().get(2).getNotqualifiedCount());
+        sysdh_item3_5.setText(data.getData().get(2).getQualifiedPer());
+        sysdh_item4_1.setText(data.getData().get(3).getTestCount());
+        sysdh_item4_2.setText(data.getData().get(3).getQualifiedCount());
+        sysdh_item4_3.setText(data.getData().get(3).getValidCount());
+        sysdh_item4_4.setText(data.getData().get(3).getNotqualifiedCount());
+        sysdh_item4_5.setText(data.getData().get(3).getQualifiedPer());
+
+
     }
 
-    private void setData(int count, float range) {
+    private void setChartData0(BarChart mBarChart) {
+        ArrayList<String> xVals = new ArrayList<String>();
+        ArrayList<BarEntry> yVals = new ArrayList<BarEntry>();
+        for (int i = 0; i < data.getData().size(); i++) {
+            xVals.add(testTypes[i]);
+            yVals.add(new BarEntry(Float.parseFloat(data.getData().get(i).getTestCount()), i));
+        }
 
+        BarDataSet set1;
 
+        set1 = new BarDataSet(yVals, "试验类型");
+        set1.setBarSpacePercent(35f);
+        set1.setColors(ColorTemplate.MATERIAL_COLORS);
+        ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
+        dataSets.add(set1);
+        BarData data = new BarData(xVals, dataSets);
+        data.setValueTextSize(10f);
+        data.setValueTypeface(mTf);
+        mBarChart.setData(data);
+
+    }
+
+    private void setChartData1(BarChart mBarChart) {
+        ArrayList<String> xVals = new ArrayList<String>();
+        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
+        for (int i = 0; i < data.getData().size(); i++) {
+            xVals.add(testTypes[i]);
+            yVals1.add(new BarEntry(Float.parseFloat(data.getData().get(i).getNotqualifiedCount()), i));
+        }
+
+        BarDataSet set1;
+
+        set1 = new BarDataSet(yVals1, "试验类型");
+        set1.setBarSpacePercent(35f);
+        set1.setColors(ColorTemplate.MATERIAL_COLORS);
+        ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
+        dataSets.add(set1);
+        BarData data = new BarData(xVals, dataSets);
+        data.setValueTextSize(10f);
+        data.setValueTypeface(mTf);
+        mBarChart.setData(data);
+
+    }
+
+    private void setChart(BarChart mBarChart) {
         mBarChart.setDrawBarShadow(false);
         mBarChart.setDrawValueAboveBar(true);
-
         mBarChart.setDescription("");
-
-        // if more than 60 entries are displayed in the chart, no values will be
-        // drawn
         mBarChart.setMaxVisibleValueCount(60);
-
-        // scaling can now only be done on x- and y-axis separately
         mBarChart.setPinchZoom(false);
-
+        mBarChart.animateXY(2000, 2000);
         mBarChart.setDrawGridBackground(false);
-        // mChart.setDrawYLabels(false);
 
         mTf = Typeface.createFromAsset(_mActivity.getAssets(), "OpenSans-Regular.ttf");
 
@@ -279,23 +382,19 @@ public class LaboratoryStatisticFragment extends BaseFragment implements DatePic
         xAxis.setDrawGridLines(false);
         xAxis.setSpaceBetweenLabels(2);
 
-        YAxisValueFormatter custom = new MyYAxisValueFormatter();
-
         YAxis leftAxis = mBarChart.getAxisLeft();
         leftAxis.setTypeface(mTf);
         leftAxis.setLabelCount(8, false);
-        leftAxis.setValueFormatter(custom);
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
         leftAxis.setSpaceTop(15f);
-        leftAxis.setAxisMinValue(0f); // this replaces setStartAtZero(true)
+        leftAxis.setAxisMinValue(0f);
 
         YAxis rightAxis = mBarChart.getAxisRight();
         rightAxis.setDrawGridLines(false);
         rightAxis.setTypeface(mTf);
         rightAxis.setLabelCount(8, false);
-        rightAxis.setValueFormatter(custom);
         rightAxis.setSpaceTop(15f);
-        rightAxis.setAxisMinValue(0f); // this replaces setStartAtZero(true)
+        rightAxis.setAxisMinValue(0f);
 
         Legend l = mBarChart.getLegend();
         l.setPosition(Legend.LegendPosition.BELOW_CHART_LEFT);
@@ -303,62 +402,8 @@ public class LaboratoryStatisticFragment extends BaseFragment implements DatePic
         l.setFormSize(9f);
         l.setTextSize(11f);
         l.setXEntrySpace(4f);
-        // l.setExtra(ColorTemplate.VORDIPLOM_COLORS, new String[] { "abc",
-        // "def", "ghj", "ikl", "mno" });
-        // l.setCustom(ColorTemplate.VORDIPLOM_COLORS, new String[] { "abc",
-        // "def", "ghj", "ikl", "mno" });
-
-
-        ArrayList<String> xVals = new ArrayList<String>();
-        for (int i = 0; i < count; i++) {
-            xVals.add(mMonths[i % 12]);
-        }
-
-        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
-
-        for (int i = 0; i < count; i++) {
-            float mult = (range + 1);
-            float val = (float) (Math.random() * mult);
-            yVals1.add(new BarEntry(val, i));
-        }
-
-        BarDataSet set1;
-
-        if (mBarChart.getData() != null && mBarChart.getData().getDataSetCount() > 0) {
-            set1 = (BarDataSet) mBarChart.getData().getDataSetByIndex(0);
-            set1.setYVals(yVals1);
-            mBarChart.getData().setXVals(xVals);
-            mBarChart.getData().notifyDataChanged();
-            mBarChart.notifyDataSetChanged();
-        } else {
-            set1 = new BarDataSet(yVals1, "DataSet");
-            set1.setBarSpacePercent(35f);
-            set1.setColors(ColorTemplate.MATERIAL_COLORS);
-
-            ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
-            dataSets.add(set1);
-
-            BarData data = new BarData(xVals, dataSets);
-            data.setValueTextSize(10f);
-            data.setValueTypeface(mTf);
-
-            mBarChart.setData(data);
-        }
     }
 
-    public class MyYAxisValueFormatter implements YAxisValueFormatter {
-
-        private DecimalFormat mFormat;
-
-        public MyYAxisValueFormatter() {
-            mFormat = new DecimalFormat("###,###,###,##0.0");
-        }
-
-        @Override
-        public String getFormattedValue(float value, YAxis yAxis) {
-            return mFormat.format(value) + " $";
-        }
-    }
 
     private void setStartDateTime() {
         isStartDateTime = true;
@@ -394,8 +439,10 @@ public class LaboratoryStatisticFragment extends BaseFragment implements DatePic
         String dateString = year + "-" + monthString + "-" + dayString + " ";
         if (isStartDateTime) {
             tv_start_date.setText(dateString);
+            mParametersData.startDateTime = dateString + " 00:00:00";
         } else {
             tv_end_date.setText(dateString);
+            mParametersData.endDateTime = dateString + " 00:00:00";
         }
     }
 }

@@ -2,16 +2,16 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fl_container_dialog_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#99b3e5fc">
+    android:background="@color/black_38_percent_alpha">
 
     <android.support.v7.widget.CardView
         android:layout_width="270dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:transitionName="@string/transition_dialog"
-        card_view:cardBackgroundColor="@color/colorAccent"
         card_view:cardCornerRadius="3dp"
         card_view:cardElevation="10dp"
         card_view:contentPadding="3dp">
@@ -19,6 +19,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="10dp">
@@ -37,8 +39,6 @@
                 android:id="@+id/start_date_time_dialog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 app:errorTextAppearance="@style/MaterialDialogTheme.TextAppearanceDialogError"
                 app:theme="@style/MaterialDialogTheme.TextAppearanceDialog">
 
@@ -72,9 +72,9 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:ms_alignLabels="true"
-                app:ms_arrowColor="@color/white"
+                app:ms_arrowColor="@color/black"
                 app:ms_arrowSize="16dp"
-                app:ms_baseColor="@color/white"
+                app:ms_baseColor="@color/black"
                 app:ms_enableErrorLabel="false"
                 app:ms_floatingLabelColor="@color/black"
                 app:ms_floatingLabelText="@string/select_equipment"
@@ -89,9 +89,9 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:ms_alignLabels="true"
-                app:ms_arrowColor="@color/white"
+                app:ms_arrowColor="@color/black"
                 app:ms_arrowSize="16dp"
-                app:ms_baseColor="@color/white"
+                app:ms_baseColor="@color/black"
                 app:ms_enableErrorLabel="false"
                 app:ms_floatingLabelColor="@color/black"
                 app:ms_floatingLabelText="@string/select_test_type"

@@ -9,12 +9,12 @@ import android.view.ViewGroup;
 
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.MainActivity;
-import com.shtoone.shtw.fragment.base.BaseFragment;
+import com.shtoone.shtw.fragment.base.BaseLazyFragment;
 
 /**
  * Created by leguang on 2016/5/31 0031.
  */
-public class AsphaltFragment extends BaseFragment {
+public class AsphaltFragment extends BaseLazyFragment {
     private static final String TAG = AsphaltFragment.class.getSimpleName();
 
     public static AsphaltFragment newInstance() {
@@ -34,5 +34,9 @@ public class AsphaltFragment extends BaseFragment {
         mToolbar.setTitle("XX高速 > 沥青拌合站");
         ((MainActivity) _mActivity).initToolBar(mToolbar);
         initToolbarMenu(mToolbar);
+    }
+
+    @Override
+    protected void initLazyView(@Nullable Bundle savedInstanceState) {
     }
 }

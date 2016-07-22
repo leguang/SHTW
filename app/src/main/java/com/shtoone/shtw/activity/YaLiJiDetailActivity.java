@@ -149,19 +149,13 @@ public class YaLiJiDetailActivity extends BaseActivity implements TimePickerDial
         iv_camera_select = (ImageView) findViewById(R.id.iv_camera_select_yaliji_detail_activity);
         iv_album_select = (ImageView) findViewById(R.id.iv_album_select_yaliji_detail_activity);
         ll_camera_album = (LinearLayout) findViewById(R.id.ll_camera_album_yaliji_detail_activity);
-
         et_handle_person = (TextInputLayout) findViewById(R.id.et_handle_person_yaliji_detail_activity);
         et_handle_time = (TextInputLayout) findViewById(R.id.et_handle_time_yaliji_detail_activity);
         et_handle_reason = (TextInputLayout) findViewById(R.id.et_handle_reason_yaliji_detail_activity);
         et_handle_way = (TextInputLayout) findViewById(R.id.et_handle_way_yaliji_detail_activity);
         et_handle_result = (TextInputLayout) findViewById(R.id.et_handle_result_yaliji_detail_activity);
-
         et_handle_person.getEditText().setInputType(InputType.TYPE_NULL);
         et_handle_time.getEditText().setInputType(InputType.TYPE_NULL);
-//        et_handle_reason.getEditText().setInputType(InputType.TYPE_NULL);
-//        et_handle_way.getEditText().setInputType(InputType.TYPE_NULL);
-//        et_handle_result.getEditText().setInputType(InputType.TYPE_NULL);
-
         bt_submit = (Button) findViewById(R.id.bt_submit_yaliji_detail_activity);
         bt_reset = (Button) findViewById(R.id.bt_reset_yaliji_detail_activity);
     }
@@ -176,11 +170,9 @@ public class YaLiJiDetailActivity extends BaseActivity implements TimePickerDial
             sb.append(getString(R.string.yaliji) + " > ");
             sb.append(getString(R.string.detail)).trimToSize();
             mToolbar.setTitle(sb.toString());
-
             et_handle_person.getEditText().setText(handlePerson = mUserInfoData.getUserFullName());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
             et_handle_time.getEditText().setText(sdf.format(Calendar.getInstance().getTime()));
-
         }
         initToolbarBackNavigation(mToolbar);
         setSupportActionBar(mToolbar);

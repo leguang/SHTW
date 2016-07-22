@@ -8,6 +8,7 @@ import com.shtoone.shtw.R;
 import com.shtoone.shtw.utils.ToastUtils;
 
 import me.yokeyword.fragmentation.SupportFragment;
+import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
 /**
  * Created by leguang on 16/5/4.
@@ -25,7 +26,6 @@ public abstract class BaseFragment extends SupportFragment {
         });
     }
 
-
     protected void initToolbarMenu(Toolbar toolbar) {
         toolbar.inflateMenu(R.menu.menu_hierarchy);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -39,5 +39,10 @@ public abstract class BaseFragment extends SupportFragment {
                 return true;
             }
         });
+    }
+
+    @Override
+    protected FragmentAnimator onCreateFragmentAnimator() {
+        return new FragmentAnimator(0, 0, 0, 0);
     }
 }

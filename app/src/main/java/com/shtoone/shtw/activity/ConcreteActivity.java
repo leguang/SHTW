@@ -8,38 +8,38 @@ import com.shtoone.shtw.BaseApplication;
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.base.BaseActivity;
 import com.shtoone.shtw.bean.EventData;
-import com.shtoone.shtw.fragment.laboratoryactivity.LaboratoryStatisticFragment;
-import com.shtoone.shtw.fragment.laboratoryactivity.WannengjiFragment;
-import com.shtoone.shtw.fragment.laboratoryactivity.YaLiJiFragment;
+import com.shtoone.shtw.fragment.concreteactivity.ConcreteStatisticFragment;
+import com.shtoone.shtw.fragment.concreteactivity.MaterialStatisticFragment;
+import com.shtoone.shtw.fragment.concreteactivity.OverproofFragment;
+import com.shtoone.shtw.fragment.concreteactivity.ProduceQueryFragment;
 
 import java.util.ArrayList;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
-public class LaboratoryActivity extends BaseActivity {
-    private static final String TAG = LaboratoryActivity.class.getSimpleName();
+public class ConcreteActivity extends BaseActivity {
+    private static final String TAG = ConcreteActivity.class.getSimpleName();
     private ArrayList<AHBottomNavigationItem> bottomNavigationItems = new ArrayList<>();
     private AHBottomNavigation bottomNavigation;
     private int bottomNavigationPreposition = 0;
-    private SupportFragment[] mFragments = new SupportFragment[3];
+    private SupportFragment[] mFragments = new SupportFragment[4];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_laboratory);
+        setContentView(R.layout.activity_concrete);
 
         if (savedInstanceState == null) {
-            mFragments[0] = YaLiJiFragment.newInstance();
-            mFragments[1] = WannengjiFragment.newInstance();
-            mFragments[2] = LaboratoryStatisticFragment.newInstance();
-
-            loadMultipleRootFragment(R.id.fl_container_laboratory_activity, 0, mFragments[0], mFragments[1], mFragments[2]);
+            mFragments[0] = ProduceQueryFragment.newInstance();
+            mFragments[1] = OverproofFragment.newInstance();
+            mFragments[2] = ConcreteStatisticFragment.newInstance();
+            mFragments[3] = MaterialStatisticFragment.newInstance();
+            loadMultipleRootFragment(R.id.fl_container_concrete_activity, 0, mFragments[0], mFragments[1], mFragments[2], mFragments[3]);
         } else {
-            // 这里库已经做了Fragment恢复,所有不需要额外的处理了, 不会出现重叠问题
-            // 这里我们需要拿到mFragments的引用,也可以通过getSupportFragmentManager.getFragments()自行进行判断查找(效率更高些),用下面的方法查找更方便些
-            mFragments[0] = findFragment(YaLiJiFragment.class);
-            mFragments[1] = findFragment(WannengjiFragment.class);
-            mFragments[2] = findFragment(LaboratoryStatisticFragment.class);
+            mFragments[0] = findFragment(ProduceQueryFragment.class);
+            mFragments[1] = findFragment(OverproofFragment.class);
+            mFragments[2] = findFragment(ConcreteStatisticFragment.class);
+            mFragments[3] = findFragment(MaterialStatisticFragment.class);
         }
 
         initView();
@@ -47,16 +47,18 @@ public class LaboratoryActivity extends BaseActivity {
     }
 
     private void initView() {
-        bottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation_laboratory_activity);
+        bottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation_concrete_activity);
     }
 
     public void initData() {
-        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.yaliji, R.drawable.ic_favorites, R.color.base_color);
-        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.wannengji, R.drawable.ic_nearby, R.color.base_color);
+        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.produce_query, R.drawable.ic_favorites, R.color.base_color);
+        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.overproof, R.drawable.ic_nearby, R.color.base_color);
         AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.statistic, R.drawable.ic_friends, R.color.base_color);
+        AHBottomNavigationItem item4 = new AHBottomNavigationItem(R.string.material_statistic, R.drawable.ic_friends, R.color.base_color);
         bottomNavigationItems.add(item1);
         bottomNavigationItems.add(item2);
         bottomNavigationItems.add(item3);
+        bottomNavigationItems.add(item4);
         bottomNavigation.addItems(bottomNavigationItems);
         bottomNavigation.setDefaultBackgroundColor(getResources().getColor(R.color.white));
         bottomNavigation.setBehaviorTranslationEnabled(false);
@@ -69,7 +71,6 @@ public class LaboratoryActivity extends BaseActivity {
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position, boolean wasSelected) {
-
                 showHideFragment(mFragments[position], mFragments[bottomNavigationPreposition]);
                 bottomNavigationPreposition = position;
                 if (wasSelected) {

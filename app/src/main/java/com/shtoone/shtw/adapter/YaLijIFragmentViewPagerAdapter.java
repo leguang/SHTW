@@ -16,8 +16,6 @@ import com.squareup.otto.Subscribe;
  */
 public class YaLiJiFragmentViewPagerAdapter extends FragmentPagerAdapter {
     private static final String TAG = YaLiJiFragmentViewPagerAdapter.class.getSimpleName();
-    private String[] yalijiName = {"全部", "", ""};
-    private String[] yalijiID = {"", "", ""};
     private String[] titleType = {"不合格", "合格", "有效", "无效", "已处置", "未处置"};
     private ParametersData mParametersData;
     private boolean isRegistered = false;
@@ -25,21 +23,11 @@ public class YaLiJiFragmentViewPagerAdapter extends FragmentPagerAdapter {
     public YaLiJiFragmentViewPagerAdapter(FragmentManager fm, ParametersData mParametersData) {
         super(fm);
         this.mParametersData = mParametersData;
-        int yalijiCount = 1;
-//        for (int i = 0; i < mEquipmentData.getData().size(); i++) {
-//            if (mEquipmentData.getData().get(i).getBanhezhanminchen().contains("压力机")) {
-//                yalijiName[yalijiCount] = mEquipmentData.getData().get(i).getBanhezhanminchen();
-//                yalijiID[yalijiCount] = mEquipmentData.getData().get(i).getGprsbianhao();
-//                yalijiCount++;
-//                KLog.e(TAG, mEquipmentData.getData().get(i).getGprsbianhao());
-//            }
-//        }
 
         if (!isRegistered) {
             BaseApplication.bus.register(this);
             isRegistered = true;
         }
-
     }
 
     @Override
@@ -71,9 +59,6 @@ public class YaLiJiFragmentViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-//        if (null != mEquipmentData && mEquipmentData.isSuccess()) {
-//            return yalijiName[position];
-//        }
         if (null != titleType) {
             return titleType[position];
         }

@@ -1,14 +1,20 @@
 package com.shtoone.shtw.activity;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -17,6 +23,7 @@ import com.google.gson.Gson;
 import com.shtoone.shtw.BaseApplication;
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.base.BaseActivity;
+import com.shtoone.shtw.bean.UserInfoData;
 import com.shtoone.shtw.bean.YalijiDetailData;
 import com.shtoone.shtw.ui.PageStateLayout;
 import com.shtoone.shtw.utils.ConstantsUtils;
@@ -52,6 +59,25 @@ public class WannengjiDetailActivity extends BaseActivity {
     private TextView tv_identifier;
     private TextView tv_diameter;
     private TextView tv_kind;
+    private String detaiID;
+    private ImageView iv_photo_select;
+    private ImageView iv_camera_select;
+    private ImageView iv_album_select;
+    private TextInputLayout et_handle_person;
+    private TextInputLayout et_handle_time;
+    private TextInputLayout et_handle_reason;
+    private TextInputLayout et_handle_way;
+    private TextInputLayout et_handle_result;
+    private Button bt_submit;
+    private Button bt_reset;
+    private LinearLayout ll_camera_album;
+    private UserInfoData mUserInfoData;
+    private String handlePerson;
+    private String handleTime;
+    private String handleReason;
+    private String handleWay;
+    private String handleResult;
+    private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +96,7 @@ public class WannengjiDetailActivity extends BaseActivity {
         mViewPager = (ViewPager) findViewById(R.id.vp_wannengji_detail_activity);
         ptrframe = (PtrFrameLayout) findViewById(R.id.ptr_wannengji_detail_activity);
         pageStateLayout = (PageStateLayout) findViewById(R.id.psl_wannengji_detail_activity);
-        tv_date = (TextView) findViewById(R.id.tv_date_wannengji_detail_activity);
+//        tv_date = (TextView) findViewById(R.id.tv_date_wannengji_detail_activity);
         tv_equipment = (TextView) findViewById(R.id.tv_equipment_wannengji_detail_activity);
         tv_project = (TextView) findViewById(R.id.tv_project_name_wannengji_detail_activity);
         tv_position = (TextView) findViewById(R.id.tv_position_wannengji_detail_activity);
@@ -78,6 +104,21 @@ public class WannengjiDetailActivity extends BaseActivity {
         tv_identifier = (TextView) findViewById(R.id.tv_identifier_wannengji_detail_activity);
         tv_diameter = (TextView) findViewById(R.id.tv_diameter_wannengji_detail_activity);
         tv_kind = (TextView) findViewById(R.id.tv_kind_wannengji_detail_activity);
+
+        //处置部分
+        iv_photo_select = (ImageView) findViewById(R.id.iv_photo_select_yaliji_detail_activity);
+        iv_camera_select = (ImageView) findViewById(R.id.iv_camera_select_yaliji_detail_activity);
+        iv_album_select = (ImageView) findViewById(R.id.iv_album_select_yaliji_detail_activity);
+        ll_camera_album = (LinearLayout) findViewById(R.id.ll_camera_album_yaliji_detail_activity);
+        et_handle_person = (TextInputLayout) findViewById(R.id.et_handle_person_yaliji_detail_activity);
+        et_handle_time = (TextInputLayout) findViewById(R.id.et_handle_time_yaliji_detail_activity);
+        et_handle_reason = (TextInputLayout) findViewById(R.id.et_handle_reason_yaliji_detail_activity);
+        et_handle_way = (TextInputLayout) findViewById(R.id.et_handle_way_yaliji_detail_activity);
+        et_handle_result = (TextInputLayout) findViewById(R.id.et_handle_result_yaliji_detail_activity);
+        et_handle_person.getEditText().setInputType(InputType.TYPE_NULL);
+        et_handle_time.getEditText().setInputType(InputType.TYPE_NULL);
+        bt_submit = (Button) findViewById(R.id.bt_submit_yaliji_detail_activity);
+        bt_reset = (Button) findViewById(R.id.bt_reset_yaliji_detail_activity);
     }
 
     private void initDate() {

@@ -67,7 +67,6 @@
                             android:layout_marginLeft="2dp"
                             android:layout_marginRight="2dp"
                             android:background="?android:attr/selectableItemBackground"
-
                             card_view:cardCornerRadius="@dimen/card_Corner_Radius">
 
                             <RelativeLayout

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/material_grey_50">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,9 +26,11 @@
                 app:titleTextAppearance="@style/ToolbarTextAppearance" />
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
             android:background="?android:attr/selectableItemBackground"
             card_view:cardElevation="3dp"
             card_view:contentPaddingBottom="1dp"
@@ -45,6 +48,13 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="2016-03-01" />
+
+                <View
+                    android:layout_width="1px"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/black_38_percent_alpha" />
 
                 <TextView
                     android:id="@+id/tv_end_date_laboratory_statistic_fragment"
@@ -90,37 +100,74 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical">
 
                         <android.support.v7.widget.CardView
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="3dp"
                             android:background="?android:attr/selectableItemBackground"
                             card_view:cardCornerRadius="@dimen/card_Corner_Radius">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/textview1"
-                                    android:layout_width="wrap_content"
+                                    android:id="@+id/textview0"
+                                    style="@style/DetailTextTheme"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="统计图" />
+                                    android:text="试验总数统计图" />
 
                                 <com.github.mikephil.charting.charts.BarChart
-                                    android:id="@+id/barchart_laboratory_statistic_fragment"
+                                    android:id="@+id/barchart0_laboratory_statistic_fragment"
                                     android:layout_width="match_parent"
-                                    android:layout_height="300dp" />
+                                    android:layout_height="300dp"
+                                    android:layout_below="@+id/textview0" />
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
 
                         <android.support.v7.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="160dp"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="10dp"
+                            android:background="?android:attr/selectableItemBackground"
+                            card_view:cardCornerRadius="@dimen/card_Corner_Radius">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/textview1"
+                                    style="@style/DetailTextTheme"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="不合格总数统计图" />
+
+                                <com.github.mikephil.charting.charts.BarChart
+                                    android:id="@+id/barchart1_laboratory_statistic_fragment"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="300dp"
+                                    android:layout_below="@+id/textview1" />
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="70dp"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="10dp"
                             card_view:cardCornerRadius="@dimen/card_Corner_Radius">
 
                             <LinearLayout
@@ -128,8 +175,8 @@
                                 android:layout_height="match_parent"
                                 android:orientation="vertical">
 
-
                                 <TextView
+                                    style="@style/DetailTextTheme"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="统计数" />
@@ -138,85 +185,55 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-
                                     android:layout_marginTop="10dp"
-                                    android:orientation="vertical">
+                                    android:orientation="horizontal">
 
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
+                                    <TextView
+                                        android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:orientation="horizontal"
-                                        android:paddingTop="5dp">
+                                        android:layout_weight="0.4"
+                                        android:gravity="left"
+                                        android:text="实验类型" />
 
-                                        <TextView
-                                            android:layout_width="0dp"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="5dp"
-                                            android:layout_weight="0.4"
-                                            android:gravity="left"
-                                            android:text="实验类型"
-                                            android:textColor="@color/blue"
-                                            android:textSize="16dp" />
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.18"
+                                        android:gravity="center_horizontal"
+                                        android:text="实验数" />
 
-                                        <TextView
-                                            android:layout_width="0dp"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="0.18"
-                                            android:gravity="center_horizontal"
-                                            android:text="实验数量"
-                                            android:textColor="@color/blue"
-                                            android:textSize="16dp" />
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.18"
+                                        android:gravity="center_horizontal"
+                                        android:text="合格" />
 
-                                        <TextView
-                                            android:layout_width="0dp"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="0.18"
-                                            android:gravity="center_horizontal"
-                                            android:text="合格"
-                                            android:textColor="@color/blue"
-                                            android:textSize="16dp" />
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.18"
+                                        android:gravity="center_horizontal"
+                                        android:text="有效" />
 
-                                        <TextView
-                                            android:layout_width="0dp"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="0.18"
-                                            android:gravity="center_horizontal"
-                                            android:text="有效"
-                                            android:textColor="@color/blue"
-                                            android:textSize="16dp" />
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.18"
+                                        android:gravity="center_horizontal"
+                                        android:text="不合格" />
 
-                                        <TextView
-                                            android:layout_width="0dp"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="0.18"
-                                            android:gravity="center_horizontal"
-                                            android:text="不合格数"
-                                            android:textColor="@color/blue"
-                                            android:textSize="16dp" />
-
-                                        <TextView
-                                            android:layout_width="0dp"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="0.18"
-                                            android:gravity="center_horizontal"
-                                            android:text="处置数"
-                                            android:textColor="@color/blue"
-                                            android:textSize="16dp"
-                                            android:visibility="gone" />
-
-                                        <TextView
-                                            android:layout_width="0dp"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="0.16"
-                                            android:gravity="center_horizontal"
-                                            android:text="合格率"
-                                            android:textColor="@color/blue"
-                                            android:textSize="16dp" />
-                                    </LinearLayout>
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.18"
+                                        android:gravity="center_horizontal"
+                                        android:text="合格率" />
                                 </LinearLayout>
 
+
                                 <!-- 分割线 -->
-                                <TextView
+                                <View
                                     android:layout_width="match_parent"
                                     android:layout_height="0.5dp"
                                     android:background="@color/black" />
@@ -225,19 +242,16 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:paddingTop="5dp">
+                                    android:layout_marginBottom="2dp"
+                                    android:orientation="horizontal">
 
                                     <TextView
                                         android:id="@+id/sys1"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginLeft="5dp"
                                         android:layout_weight="0.4"
                                         android:gravity="left"
-                                        android:text="混凝土强度"
-                                        android:textColor="@color/blue"
-                                        android:textStyle="bold" />
+                                        android:text="混凝土强度" />
 
                                     <TextView
                                         android:id="@+id/sysdh_item1_1"
@@ -258,38 +272,29 @@
                                         android:textStyle="bold" />
 
                                     <TextView
-                                        android:id="@+id/sysdh_item1_2_1"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="0.18"
-                                        android:gravity="center_horizontal"
-                                        android:textColor="@color/orange"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:id="@+id/sysdh_item1_2_2"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="0.18"
-                                        android:gravity="center_horizontal"
-                                        android:textColor="@color/orange"
-                                        android:textStyle="bold" />
-
-                                    <TextView
                                         android:id="@+id/sysdh_item1_3"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="0.18"
                                         android:gravity="center_horizontal"
-                                        android:textColor="@color/black"
-                                        android:textStyle="bold"
-                                        android:visibility="gone" />
+                                        android:textColor="@color/orange"
+                                        android:textStyle="bold" />
 
                                     <TextView
                                         android:id="@+id/sysdh_item1_4"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:layout_weight="0.16"
+                                        android:layout_weight="0.18"
+                                        android:gravity="center_horizontal"
+                                        android:textColor="@color/orange"
+                                        android:textStyle="bold" />
+
+
+                                    <TextView
+                                        android:id="@+id/sysdh_item1_5"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.18"
                                         android:gravity="center_horizontal"
                                         android:textColor="@color/black"
                                         android:textStyle="bold" />
@@ -299,19 +304,16 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:paddingTop="5dp">
+                                    android:layout_marginBottom="2dp"
+                                    android:orientation="horizontal">
 
                                     <TextView
                                         android:id="@+id/sys2"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginLeft="5dp"
                                         android:layout_weight="0.4"
                                         android:gravity="left"
-                                        android:text="钢筋试验"
-                                        android:textColor="@color/blue"
-                                        android:textStyle="bold" />
+                                        android:text="钢筋试验" />
 
                                     <TextView
                                         android:id="@+id/sysdh_item2_1"
@@ -332,38 +334,29 @@
                                         android:textStyle="bold" />
 
                                     <TextView
-                                        android:id="@+id/sysdh_item2_2_1"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="0.18"
-                                        android:gravity="center_horizontal"
-                                        android:textColor="@color/orange"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:id="@+id/sysdh_item2_2_2"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="0.18"
-                                        android:gravity="center_horizontal"
-                                        android:textColor="@color/orange"
-                                        android:textStyle="bold" />
-
-                                    <TextView
                                         android:id="@+id/sysdh_item2_3"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="0.18"
                                         android:gravity="center_horizontal"
-                                        android:textColor="@color/black"
-                                        android:textStyle="bold"
-                                        android:visibility="gone" />
+                                        android:textColor="@color/orange"
+                                        android:textStyle="bold" />
 
                                     <TextView
                                         android:id="@+id/sysdh_item2_4"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:layout_weight="0.16"
+                                        android:layout_weight="0.18"
+                                        android:gravity="center_horizontal"
+                                        android:textColor="@color/orange"
+                                        android:textStyle="bold" />
+
+
+                                    <TextView
+                                        android:id="@+id/sysdh_item2_5"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.18"
                                         android:gravity="center_horizontal"
                                         android:textColor="@color/black"
                                         android:textStyle="bold" />
@@ -373,19 +366,16 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:paddingTop="5dp">
+                                    android:layout_marginBottom="2dp"
+                                    android:orientation="horizontal">
 
                                     <TextView
                                         android:id="@+id/sys3"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginLeft="5dp"
                                         android:layout_weight="0.4"
                                         android:gravity="left"
-                                        android:text="焊接接头"
-                                        android:textColor="@color/blue"
-                                        android:textStyle="bold" />
+                                        android:text="焊接接头" />
 
                                     <TextView
                                         android:id="@+id/sysdh_item3_1"
@@ -406,38 +396,28 @@
                                         android:textStyle="bold" />
 
                                     <TextView
-                                        android:id="@+id/sysdh_item3_2_1"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="0.18"
-                                        android:gravity="center_horizontal"
-                                        android:textColor="@color/orange"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:id="@+id/sysdh_item3_2_2"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="0.18"
-                                        android:gravity="center_horizontal"
-                                        android:textColor="@color/orange"
-                                        android:textStyle="bold" />
-
-                                    <TextView
                                         android:id="@+id/sysdh_item3_3"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="0.18"
                                         android:gravity="center_horizontal"
-                                        android:textColor="@color/black"
-                                        android:textStyle="bold"
-                                        android:visibility="gone" />
+                                        android:textColor="@color/orange"
+                                        android:textStyle="bold" />
 
                                     <TextView
                                         android:id="@+id/sysdh_item3_4"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:layout_weight="0.16"
+                                        android:layout_weight="0.18"
+                                        android:gravity="center_horizontal"
+                                        android:textColor="@color/orange"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/sysdh_item3_5"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.18"
                                         android:gravity="center_horizontal"
                                         android:textColor="@color/black"
                                         android:textStyle="bold" />
@@ -447,19 +427,16 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:paddingTop="5dp">
+                                    android:layout_marginBottom="2dp"
+                                    android:orientation="horizontal">
 
                                     <TextView
                                         android:id="@+id/sys4"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginLeft="5dp"
                                         android:layout_weight="0.4"
                                         android:gravity="left"
-                                        android:text="钢筋接头"
-                                        android:textColor="@color/blue"
-                                        android:textStyle="bold" />
+                                        android:text="钢筋接头" />
 
                                     <TextView
                                         android:id="@+id/sysdh_item4_1"
@@ -480,38 +457,28 @@
                                         android:textStyle="bold" />
 
                                     <TextView
-                                        android:id="@+id/sysdh_item4_2_1"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="0.18"
-                                        android:gravity="center_horizontal"
-                                        android:textColor="@color/orange"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:id="@+id/sysdh_item4_2_2"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="0.18"
-                                        android:gravity="center_horizontal"
-                                        android:textColor="@color/orange"
-                                        android:textStyle="bold" />
-
-                                    <TextView
                                         android:id="@+id/sysdh_item4_3"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="0.18"
                                         android:gravity="center_horizontal"
-                                        android:textColor="@color/black"
-                                        android:textStyle="bold"
-                                        android:visibility="gone" />
+                                        android:textColor="@color/orange"
+                                        android:textStyle="bold" />
 
                                     <TextView
                                         android:id="@+id/sysdh_item4_4"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:layout_weight="0.16"
+                                        android:layout_weight="0.18"
+                                        android:gravity="center_horizontal"
+                                        android:textColor="@color/orange"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/sysdh_item4_5"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.18"
                                         android:gravity="center_horizontal"
                                         android:textColor="@color/black"
                                         android:textStyle="bold" />

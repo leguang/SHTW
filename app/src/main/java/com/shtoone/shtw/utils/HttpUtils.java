@@ -103,6 +103,4 @@ public class HttpUtils {
 
         void onFailed(VolleyError error);
     }
-
-
 }

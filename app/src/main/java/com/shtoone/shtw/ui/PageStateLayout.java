@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -169,5 +170,11 @@ public class PageStateLayout extends FrameLayout {
         isShowNetError = false;
         isShowLoading = false;
         isShowContent = true;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return false;
+
     }
 }

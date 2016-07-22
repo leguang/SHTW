@@ -20,11 +20,13 @@ public class LaboratoryFragmentRecyclerViewAdapter extends RecyclerView.Adapter<
     private Context context;
     private OnItemClickListener mOnItemClickListener;
     private LaboratoryFragmentRecyclerViewItemData itemData;
+    private Resources mResources;
 
     public LaboratoryFragmentRecyclerViewAdapter(Context context, LaboratoryFragmentRecyclerViewItemData itemData) {
         super();
         this.context = context;
         this.itemData = itemData;
+        this.mResources = context.getResources();
     }
 
     public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
@@ -33,24 +35,21 @@ public class LaboratoryFragmentRecyclerViewAdapter extends RecyclerView.Adapter<
 
     @Override
     public int getItemCount() {
-        if (itemData != null && itemData.isSuccess()) {
+        if (null != itemData && itemData.getData().size() > 0 && itemData.isSuccess()) {
             return itemData.getData().size();
         }
         return 0;
     }
 
-
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-
-
         if (itemData != null && itemData.isSuccess() && itemData.getData().size() > 0) {
 //            holder.cv.setCardBackgroundColor(position % 2 == 0 ? Color.argb(250, 78, 100, 132) : Color.argb(255, 66, 90, 126));
             //此处该优化，相同的部位应提取出来
             holder.tv_organization.setText(itemData.getData().get(position).get(0).getDepartName());
             holder.tv_laboratory_count.setText(itemData.getData().get(position).get(0).getSysCount());     //拌合站总数
-            holder.tv_machine_countll.setText(itemData.getData().get(position).get(0).getSyjCount());     //拌合机总数xx
-            Resources mResources = context.getResources();
+            holder.tv_machine_count.setText(itemData.getData().get(position).get(0).getSyjCount());     //拌合机总数xx
+
             for (int i = 0; i < itemData.getData().get(position).size(); i++) {
 
                 ItemInItemView itemInItem = new ItemInItemView(context);
@@ -102,7 +101,7 @@ public class LaboratoryFragmentRecyclerViewAdapter extends RecyclerView.Adapter<
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tv_organization;
         TextView tv_laboratory_count;
-        TextView tv_machine_countll;
+        TextView tv_machine_count;
         LinearLayout ll_content;
         CardView cv;
 
@@ -110,7 +109,7 @@ public class LaboratoryFragmentRecyclerViewAdapter extends RecyclerView.Adapter<
             super(view);
             tv_organization = (TextView) view.findViewById(R.id.tv_organization_item_recyclerview_laboratory_fragment);
             tv_laboratory_count = (TextView) view.findViewById(R.id.tv_laboratory_count_item_recyclerview_laboratory_fragment);
-            tv_machine_countll = (TextView) view.findViewById(R.id.tv_machine_countll_content_item_recyclerview_laboratory_fragment);
+            tv_machine_count = (TextView) view.findViewById(R.id.tv_machine_count_content_item_recyclerview_laboratory_fragment);
             ll_content = (LinearLayout) view.findViewById(R.id.ll_content_item_recyclerview_laboratory_fragment);
             cv = (CardView) view.findViewById(R.id.cv_item_recyclerview_laboratory_fragment);
         }

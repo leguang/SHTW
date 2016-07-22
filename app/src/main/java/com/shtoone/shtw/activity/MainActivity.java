@@ -1,7 +1,10 @@
 package com.shtoone.shtw.activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.graphics.RectF;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,8 +14,12 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
@@ -34,6 +41,9 @@ import zhy.com.highlight.HighLight;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = MainActivity.class.getSimpleName();
+    // 再点一次退出程序时间设置
+    private static final long WAIT_TIME = 2000L;
+    private long TOUCH_TIME = 0;
     private NavigationView mNavigationView;
     private DrawerLayout mDrawer;
     private ActionBarDrawerToggle toggle;
@@ -43,6 +53,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private int bottomNavigationPreposition = 0;
     private HighLight mHightLight;
     private TextView tv_username;
+    private FrameLayout fl_container;
     private TextView tv_phone_number;
 
     @Override
@@ -72,7 +83,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationView = (NavigationView) findViewById(R.id.navigationView_main_activity);
         mNavigationView.setNavigationItemSelectedListener(this);
-
+        fl_container = (FrameLayout) findViewById(R.id.fl_container_main_activity);
         LinearLayout llNavHeader = (LinearLayout) mNavigationView.getHeaderView(0);
         tv_username = (TextView) llNavHeader.findViewById(R.id.tv_username_nav_header_main);
         tv_phone_number = (TextView) llNavHeader.findViewById(R.id.tv_phone_number_nav_header_main);
@@ -129,10 +140,31 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             public void onTabSelected(int position, boolean wasSelected) {
                 showHideFragment(mFragments[position], mFragments[bottomNavigationPreposition]);
                 bottomNavigationPreposition = position;
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    int cx = (fl_container.getLeft() + fl_container.getRight()) / 2;
+//                    int cy = (fl_container.getTop() + fl_container.getBottom()) / 2;
+                    int cy = fl_container.getBottom();
+                    int radius = Math.max(fl_container.getWidth(), fl_container.getHeight());
+                    Animator mAnimator = ViewAnimationUtils.createCircularReveal(fl_container, cx, cy, 0, radius);
+                    mAnimator.setDuration(300);
+                    mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+                    mAnimator.addListener(new AnimatorListenerAdapter() {
+
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                            super.onAnimationStart(animation);
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                        }
+                    });
+                    mAnimator.start();
+                }
             }
         });
-
-//        showTipMask();
     }
 
     @Override
@@ -141,7 +173,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            finish();
+            if (System.currentTimeMillis() - TOUCH_TIME < WAIT_TIME) {
+                finish();
+            } else {
+                TOUCH_TIME = System.currentTimeMillis();
+                Toast.makeText(this, R.string.press_again_exit, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

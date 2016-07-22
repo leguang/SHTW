@@ -20,6 +20,10 @@ public class ConstantsUtils {
 
     public static final int LABORATORYFRAGMENT = 0;
     public static final int YALIJIFRAGMENT = 1;
+    public static final int WANNENGJIFRAGMENT = 2;
+    public static final int CONCRETEFRAGMENT = 3;
+    public static final int MATERIALSTATISTICFRAGMENT = 4;
+
     public static final int CAMERA = 1;
     public static final int ALBUM = 2;
 }

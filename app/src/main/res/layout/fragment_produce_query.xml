@@ -2,11 +2,9 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_laboratory_fragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.MainActivity">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +17,7 @@
             android:theme="@style/AppTheme.AppBarOverlay">
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar_laboratory_fragment"
+                android:id="@+id/toolbar_produce_query_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
@@ -30,7 +28,7 @@
         </android.support.design.widget.AppBarLayout>
 
         <in.srain.cube.views.ptr.PtrFrameLayout
-            android:id="@+id/ptr_laboratory_fragment"
+            android:id="@+id/ptr_produce_query_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/material_grey_50"
@@ -42,7 +40,7 @@
             cube_ptr:ptr_resistance="1.7">
 
             <com.shtoone.shtw.ui.PageStateLayout
-                android:id="@+id/psl_laboratory_fragment"
+                android:id="@+id/psl_produce_query_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:emptyView="@layout/page_state_empty_view"
@@ -51,7 +49,7 @@
                 app:netErrorView="@layout/page_state_net_error_view">
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_laboratory_fragment"
+                    android:id="@+id/rv_produce_query_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </com.shtoone.shtw.ui.PageStateLayout>
@@ -59,7 +57,7 @@
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_laboratory_fragment"
+        android:id="@+id/fab_produce_query_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

@@ -1,13 +1,19 @@
 package com.shtoone.shtw.activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.InputType;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.dd.CircularProgressButton;
@@ -41,6 +47,7 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
     private String startDateTime;
     private String endDateTime;
     private ParametersData mParametersData;
+    private FrameLayout fl_container;
     private String[] equipmentNames = {"1标压力机", "3标压力机"};
     private String[] equipmentIDs = {"sphntyl0101", "sphntyl0301"};
 
@@ -49,19 +56,20 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        setContentView(R.layout.activity_dialog);
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_dialog);
         initView();
         initData();
     }
 
     private void initView() {
         //获取传过来的参数对象
+        fl_container = (FrameLayout) findViewById(R.id.fl_container_dialog_activity);
         mParametersData = (ParametersData) getIntent().getSerializableExtra(ConstantsUtils.PARAMETERS);
         start_date_time = (TextInputLayout) findViewById(R.id.start_date_time_dialog);
         end_date_time = (TextInputLayout) findViewById(R.id.end_date_time_dialog);
+        start_date_time.getEditText().setText(mParametersData.startDateTime);
+        end_date_time.getEditText().setText(mParametersData.endDateTime);
         bt_search = (CircularProgressButton) findViewById(R.id.bt_search_dialog);
         iv_cancel = (ImageView) findViewById(R.id.iv_cancel_dialog);
         ms_select_equipment = (MaterialSpinner) findViewById(R.id.ms_select_equipment_dialog);
@@ -70,6 +78,7 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
         //设置哪些条件选择该显示，默认只有时间选择是显示的
         switch (mParametersData.fromTo) {
             case ConstantsUtils.LABORATORYFRAGMENT:
+            case ConstantsUtils.CONCRETEFRAGMENT:
                 //默认开始和结束时间是可见的
                 break;
             case ConstantsUtils.YALIJIFRAGMENT:
@@ -77,14 +86,21 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
                 ms_select_equipment.setVisibility(View.VISIBLE);
                 ms_select_test_type.setVisibility(View.VISIBLE);
                 break;
+            case ConstantsUtils.WANNENGJIFRAGMENT:
+                //设置设备和试验类型的下拉选择可见
+                ms_select_equipment.setVisibility(View.VISIBLE);
+                ms_select_test_type.setVisibility(View.VISIBLE);
+                break;
+            case ConstantsUtils.MATERIALSTATISTICFRAGMENT:
+                //设置设备和试验类型的下拉选择可见
+                ms_select_equipment.setVisibility(View.VISIBLE);
+                break;
         }
+        revealView();
     }
 
     private void initData() {
-
         //根据传过来的参数对象来设置这些选择框该显示的内容
-        start_date_time.getEditText().setText(mParametersData.startDateTime);
-        end_date_time.getEditText().setText(mParametersData.endDateTime);
 
         start_date_time.getEditText().setInputType(InputType.TYPE_NULL);
         end_date_time.getEditText().setInputType(InputType.TYPE_NULL);
@@ -156,7 +172,6 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
             }
         }
 
-
         ms_select_test_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -219,9 +234,42 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
         tpd.show(getFragmentManager(), "Timepickerdialog");
     }
 
+    private void revealView() {
+        fl_container.post(new Runnable() {
+            @Override
+            public void run() {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    KLog.e("*******************************************");
+//                  int cx = (fl_container.getLeft() + fl_container.getRight()) / 2;
+                    int cx = fl_container.getRight();
+//                  int cy = (fl_container.getTop() + fl_container.getBottom()) / 2;
+                    int cy = fl_container.getBottom();
+                    int radius = Math.max(fl_container.getWidth(), fl_container.getHeight());
+                    Animator mAnimator = ViewAnimationUtils.createCircularReveal(fl_container, cx, cy, 0, radius);
+                    mAnimator.setDuration(300);
+                    mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+                    mAnimator.addListener(new AnimatorListenerAdapter() {
+
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                            super.onAnimationStart(animation);
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                        }
+                    });
+                    mAnimator.start();
+                }
+            }
+        });
+    }
+
     @Override
     public void onResume() {
         super.onResume();
+//        revealView();
         TimePickerDialog tpd = (TimePickerDialog) getFragmentManager().findFragmentByTag("Timepickerdialog");
         DatePickerDialog dpd = (DatePickerDialog) getFragmentManager().findFragmentByTag("Datepickerdialog");
 
@@ -258,4 +306,6 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
         }
         showTimePicker();
     }
+
+
 }

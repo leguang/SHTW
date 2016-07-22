@@ -17,7 +17,7 @@ import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.DialogActivity;
 import com.shtoone.shtw.adapter.YaLiJiFragmentViewPagerAdapter;
 import com.shtoone.shtw.bean.ParametersData;
-import com.shtoone.shtw.fragment.base.BaseFragment;
+import com.shtoone.shtw.fragment.base.BaseLazyFragment;
 import com.shtoone.shtw.utils.ConstantsUtils;
 import com.socks.library.KLog;
 import com.squareup.otto.Subscribe;
@@ -27,7 +27,7 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
 /**
  * Created by leguang on 2016/6/9 0031.
  */
-public class YaLiJiFragment extends BaseFragment {
+public class YaLiJiFragment extends BaseLazyFragment {
     private static final String TAG = YaLiJiFragment.class.getSimpleName();
     private Toolbar mToolbar;
     private FloatingActionButton fab;
@@ -50,34 +50,40 @@ public class YaLiJiFragment extends BaseFragment {
             isRegistered = true;
         }
         initView(view);
-        initData();
         return view;
     }
 
 
     private void initView(View view) {
-        fab = (FloatingActionButton) view.findViewById(R.id.fab_yaliji_fragment);
         mAppBarLayout = (AppBarLayout) view.findViewById(R.id.appbar_yaliji_fragment);
+        fab = (FloatingActionButton) view.findViewById(R.id.fab_yaliji_fragment);
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar_yaliji_fragment);
         mTabLayout = (TabLayout) view.findViewById(R.id.tab_layout_yaliji_fragment);
         mViewPager = (ViewPager) view.findViewById(R.id.vp_yaliji_fragment);
-//        pageStateLayout = (PageStateLayout) view.findViewById(R.id.psl_yaliji_fragment);
-//        pageStateLayout.showLoading();
+    }
+
+    @Override
+    protected void initLazyView(@Nullable Bundle savedInstanceState) {
+        initData();
     }
 
     private void initData() {
         mParametersData = (ParametersData) BaseApplication.parametersData.clone();
         mParametersData.fromTo = ConstantsUtils.YALIJIFRAGMENT;
-        KLog.e(mParametersData.toString());
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fab.hide();
                 Intent intent = new Intent(_mActivity, DialogActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(ConstantsUtils.PARAMETERS, YaLiJiFragment.this.mParametersData);
+                bundle.putSerializable(ConstantsUtils.PARAMETERS, mParametersData);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                //Activity共享元素切换版本适配
+//                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+                    startActivity(intent);
+//                } else {
+//                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(_mActivity, fab, getString(R.string.transition_dialog));
+//                    startActivity(intent, options.toBundle());
+//                }
             }
         });
 
@@ -104,7 +110,6 @@ public class YaLiJiFragment extends BaseFragment {
     //还是不能这样搞，可能会内存泄漏，重复创建Adapyer对象。后面解决
     private void setAdapter() {
         mViewPager.setAdapter(new YaLiJiFragmentViewPagerAdapter(getChildFragmentManager(), mParametersData));
-//        mViewPager.getCurrentItem();
         mTabLayout.setupWithViewPager(mViewPager);
     }
 

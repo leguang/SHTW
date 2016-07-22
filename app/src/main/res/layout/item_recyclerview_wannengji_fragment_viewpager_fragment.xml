@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cv_item_recyclerview_wannengji_fragment_viewpager_fragment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="3dp"
-    android:layout_marginLeft="2dp"
-    android:layout_marginRight="2dp"
-    android:background="?android:attr/selectableItemBackground"
-    card_view:cardCornerRadius="@dimen/card_Corner_Radius"
-    card_view:cardElevation="4dp"
-    card_view:contentPadding="3dp">
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginTop="5dp"
+    app:cardCornerRadius="@dimen/card_Corner_Radius"
+    app:cardElevation="3dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -130,10 +130,30 @@
 
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/iv_qualified_item_recyclerview_wannengji_fragment_viewpager_fragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.shtoone.shtw.ui.SlantedTextView
+        android:id="@+id/stv_qualified_item_recyclerview_wannengji_fragment_viewpager_fragment"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_gravity="top|right"
-        android:src="@drawable/ic_qualified_tag_top_right" />
+        android:gravity="center"
+        app:slantedBackgroundColor="@color/material_green_300"
+        app:slantedLength="30dp"
+        app:slantedMode="right"
+        app:slantedText="合格"
+        app:slantedTextColor="@color/white"
+        app:slantedTextSize="13sp" />
+
+    <com.shtoone.shtw.ui.SlantedTextView
+        android:id="@+id/stv_handle_item_recyclerview_wannengji_fragment_viewpager_fragment"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|right"
+        android:gravity="center"
+        android:visibility="gone"
+        app:slantedBackgroundColor="@color/material_yellow_A700"
+        app:slantedLength="25dp"
+        app:slantedMode="right_bottom_triangle"
+        app:slantedText="已处置"
+        app:slantedTextColor="@color/material_red_400"
+        app:slantedTextSize="12sp" />
 </android.support.v7.widget.CardView>
