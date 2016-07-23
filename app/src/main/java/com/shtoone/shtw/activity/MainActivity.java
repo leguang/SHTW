@@ -229,7 +229,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void JumpToAboutActivity() {
-        Intent intent = new Intent(this, TestActivity.class);
+        Intent intent = new Intent(this, ProduceQueryDetailActivity.class);
         startActivity(intent);
     }
 

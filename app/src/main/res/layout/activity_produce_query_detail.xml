@@ -17,7 +17,7 @@
             android:theme="@style/AppTheme.AppBarOverlay">
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar_wannengji_detail_activity"
+                android:id="@+id/toolbar_produce_query_detail_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
@@ -27,7 +27,7 @@
         </android.support.design.widget.AppBarLayout>
 
         <in.srain.cube.views.ptr.PtrFrameLayout xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/ptr_wannengji_detail_activity"
+            android:id="@+id/ptr_produce_query_detail_activity"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/lightest_gray"
@@ -39,7 +39,7 @@
             cube_ptr:ptr_resistance="1.7">
 
             <com.shtoone.shtw.ui.PageStateLayout
-                android:id="@+id/psl_wannengji_detail_activity"
+                android:id="@+id/psl_produce_query_detail_activity"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:emptyView="@layout/page_state_empty_view"
@@ -48,7 +48,7 @@
                 app:netErrorView="@layout/page_state_net_error_view">
 
                 <android.support.v4.widget.NestedScrollView
-                    android:id="@+id/nsv_wannengji_detail_activity"
+                    android:id="@+id/nsv_produce_query_detail_activity"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -61,11 +61,11 @@
 
                         <!--详情数据部分-->
                         <android.support.v7.widget.CardView
-                            android:id="@+id/cv_wannengji_detail_activity"
+                            android:id="@+id/cv_produce_query_detail_activity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="2dp"
-                            android:layout_marginRight="2dp"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
                             android:background="?android:attr/selectableItemBackground"
                             card_view:cardCornerRadius="@dimen/card_Corner_Radius">
 
@@ -75,33 +75,23 @@
                                 android:padding="5dp">
 
                                 <TextView
-                                    android:id="@+id/tv_title_wannengji_detail_activity"
+                                    android:id="@+id/tv_title_produce_query_detail_activity"
                                     style="@style/DetailTextTheme"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="万能机试验详情" />
+                                    android:text="数据详情" />
 
-
-                                <TextView
-                                    android:id="@+id/tv_date_wannengji_detail_activity"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignBottom="@id/tv_title_wannengji_detail_activity"
-                                    android:layout_alignParentRight="true"
-                                    android:text="2016-06-01"
-                                    android:textColor="@color/orange"
-                                    android:textSize="16sp" />
 
                                 <TextView
                                     android:id="@+id/textview0"
                                     style="@style/YalijiDetailTextTheme"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_below="@+id/tv_title_wannengji_detail_activity"
-                                    android:text="设        备：" />
+                                    android:layout_below="@+id/tv_title_produce_query_detail_activity"
+                                    android:text="数    量：" />
 
                                 <TextView
-                                    android:id="@+id/tv_equipment_wannengji_detail_activity"
+                                    android:id="@+id/tv0_produce_query_detail_activity"
                                     style="@style/YalijiDetailTextTheme"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -113,11 +103,11 @@
                                     style="@style/YalijiDetailTextTheme"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_below="@+id/tv_equipment_wannengji_detail_activity"
-                                    android:text="工程名称：" />
+                                    android:layout_below="@+id/textview0"
+                                    android:text="拌合站：" />
 
                                 <TextView
-                                    android:id="@+id/tv_project_name_wannengji_detail_activity"
+                                    android:id="@+id/tv1_produce_query_detail_activity"
                                     style="@style/YalijiDetailTextTheme"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -130,10 +120,10 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_below="@+id/textview1"
-                                    android:text="施工部位：" />
+                                    android:text="工单号：" />
 
                                 <TextView
-                                    android:id="@+id/tv_position_wannengji_detail_activity"
+                                    android:id="@+id/tv2_produce_query_detail_activity"
                                     style="@style/YalijiDetailTextTheme"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -146,10 +136,10 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_below="@+id/textview2"
-                                    android:text="试验类型：" />
+                                    android:text="操作者：" />
 
                                 <TextView
-                                    android:id="@+id/tv_testtype_wannengji_detail_activity"
+                                    android:id="@+id/tv3_produce_query_detail_activity"
                                     style="@style/YalijiDetailTextTheme"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -162,10 +152,10 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_below="@+id/textview3"
-                                    android:text="试件编号：" />
+                                    android:text="出料时间：" />
 
                                 <TextView
-                                    android:id="@+id/tv_identifier_wannengji_detail_activity"
+                                    android:id="@+id/tv4_produce_query_detail_activity"
                                     style="@style/YalijiDetailTextTheme"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -178,10 +168,10 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_below="@+id/textview4"
-                                    android:text="工称直径：" />
+                                    android:text="搅拌时长：" />
 
                                 <TextView
-                                    android:id="@+id/tv_diameter_wannengji_detail_activity"
+                                    android:id="@+id/tv5_produce_query_detail_activity"
                                     style="@style/YalijiDetailTextTheme"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -194,62 +184,194 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_below="@+id/textview5"
-                                    android:text="品       种：" />
+                                    android:text="工程名称：" />
 
                                 <TextView
-                                    android:id="@+id/tv_kind_wannengji_detail_activity"
+                                    android:id="@+id/tv6_produce_query_detail_activity"
                                     style="@style/YalijiDetailTextTheme"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignBottom="@id/textview6"
-                                    android:layout_marginBottom="10dp"
                                     android:layout_toRightOf="@+id/textview6" />
 
+                                <TextView
+                                    android:id="@+id/textview7"
+                                    style="@style/YalijiDetailTextTheme"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/textview6"
+                                    android:text="地点里程：" />
+
+                                <TextView
+                                    android:id="@+id/tv7_produce_query_detail_activity"
+                                    style="@style/YalijiDetailTextTheme"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBottom="@id/textview7"
+                                    android:layout_toRightOf="@+id/textview7" />
+
+                                <TextView
+                                    android:id="@+id/textview8"
+                                    style="@style/YalijiDetailTextTheme"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/textview7"
+                                    android:text="浇筑部位：" />
+
+                                <TextView
+                                    android:id="@+id/tv8_produce_query_detail_activity"
+                                    style="@style/YalijiDetailTextTheme"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBottom="@id/textview8"
+                                    android:layout_toRightOf="@+id/textview8" />
+
+                                <TextView
+                                    android:id="@+id/textview9"
+                                    style="@style/YalijiDetailTextTheme"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/textview8"
+                                    android:text="水泥品牌：" />
+
+                                <TextView
+                                    android:id="@+id/tv9_produce_query_detail_activity"
+                                    style="@style/YalijiDetailTextTheme"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBottom="@id/textview9"
+                                    android:layout_toRightOf="@+id/textview9" />
+
+                                <TextView
+                                    android:id="@+id/textview10"
+                                    style="@style/YalijiDetailTextTheme"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/textview9"
+                                    android:text="强度等级：" />
+
+                                <TextView
+                                    android:id="@+id/tv10_produce_query_detail_activity"
+                                    style="@style/YalijiDetailTextTheme"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBottom="@id/textview10"
+                                    android:layout_toRightOf="@+id/textview10" />
+
+                                <TextView
+                                    android:id="@+id/textview11"
+                                    style="@style/YalijiDetailTextTheme"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/textview10"
+                                    android:text="外加剂品牌：" />
+
+                                <TextView
+                                    android:id="@+id/tv11_produce_query_detail_activity"
+                                    style="@style/YalijiDetailTextTheme"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBottom="@id/textview11"
+                                    android:layout_toRightOf="@+id/textview11" />
+
+                                <TextView
+                                    android:id="@+id/textview12"
+                                    style="@style/YalijiDetailTextTheme"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/textview11"
+                                    android:text="施工配比编号：" />
+
+                                <TextView
+                                    android:id="@+id/tv12_produce_query_detail_activity"
+                                    style="@style/YalijiDetailTextTheme"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBottom="@id/textview12"
+                                    android:layout_toRightOf="@+id/textview12" />
                             </RelativeLayout>
                         </android.support.v7.widget.CardView>
 
-                        <!--图表部分-->
+                        <!--表部分-->
                         <android.support.v7.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="2dp"
-                            android:layout_marginRight="2dp"
-                            android:layout_marginTop="30dp"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="10dp"
                             card_view:cardCornerRadius="@dimen/card_Corner_Radius">
 
                             <LinearLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:padding="3dp">
 
                                 <TextView
                                     style="@style/DetailTextTheme"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="力值曲线详情" />
+                                    android:text="核算表" />
 
-                                <android.support.design.widget.TabLayout
-                                    android:id="@+id/tab_layout_wannengji_detail_activity"
+                                <!-- 表头部分 -->
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    app:tabGravity="center" />
+                                    android:orientation="horizontal">
 
-                                <android.support.v4.view.ViewPager
-                                    android:id="@+id/vp_wannengji_detail_activity"
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:text="@string/material_name" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:text="@string/reality" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:text="@string/matching" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:text="@string/deviation" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:text="@string/deviation" />
+                                </LinearLayout>
+
+                                <android.support.v7.widget.RecyclerView
+                                    android:id="@+id/rv_produce_query_detail_activity"
                                     android:layout_width="match_parent"
-                                    android:layout_height="400dp" />
+                                    android:layout_height="500dp" />
+
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
 
                         <!--处置部分-->
                         <android.support.v7.widget.CardView
-                            android:id="@+id/cv_handle_wannengji_detail_activity"
+                            android:id="@+id/cv_handle_produce_query_detail_activity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="20dp"
-                            android:layout_marginLeft="2dp"
-                            android:layout_marginRight="2dp"
-                            android:layout_marginTop="30dp"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="10dp"
                             card_view:cardCornerRadius="@dimen/card_Corner_Radius"
                             card_view:contentPadding="3dp">
 
@@ -270,7 +392,7 @@
                                         android:layout_height="match_parent">
 
                                         <ImageView
-                                            android:id="@+id/iv_photo_select_wannengji_detail_activity"
+                                            android:id="@+id/iv_photo_select_produce_query_detail_activity"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
@@ -278,7 +400,7 @@
                                             android:src="@drawable/ic_camera" />
 
                                         <LinearLayout
-                                            android:id="@+id/ll_camera_album_wannengji_detail_activity"
+                                            android:id="@+id/ll_camera_album_produce_query_detail_activity"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:layout_gravity="center"
@@ -286,14 +408,14 @@
                                             android:visibility="gone">
 
                                             <ImageView
-                                                android:id="@+id/iv_camera_select_wannengji_detail_activity"
+                                                android:id="@+id/iv_camera_select_produce_query_detail_activity"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="match_parent"
                                                 android:layout_weight="1"
                                                 android:background="@color/gray" />
 
                                             <ImageView
-                                                android:id="@+id/iv_album_select_wannengji_detail_activity"
+                                                android:id="@+id/iv_album_select_produce_query_detail_activity"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="match_parent"
                                                 android:layout_weight="1"
@@ -309,7 +431,7 @@
                                         android:orientation="vertical">
 
                                         <android.support.design.widget.TextInputLayout
-                                            android:id="@+id/et_handle_person_wannengji_detail_activity"
+                                            android:id="@+id/et_handle_person_produce_query_detail_activity"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             app:errorTextAppearance="@style/MaterialLoginTheme.TextAppearanceLoginError"
@@ -324,7 +446,7 @@
                                         </android.support.design.widget.TextInputLayout>
 
                                         <android.support.design.widget.TextInputLayout
-                                            android:id="@+id/et_handle_time_wannengji_detail_activity"
+                                            android:id="@+id/et_handle_time_produce_query_detail_activity"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             app:errorTextAppearance="@style/MaterialLoginTheme.TextAppearanceLoginError"
@@ -339,7 +461,7 @@
                                         </android.support.design.widget.TextInputLayout>
 
                                         <android.support.design.widget.TextInputLayout
-                                            android:id="@+id/et_handle_reason_wannengji_detail_activity"
+                                            android:id="@+id/et_handle_reason_produce_query_detail_activity"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             app:errorTextAppearance="@style/MaterialLoginTheme.TextAppearanceLoginError"
@@ -354,7 +476,7 @@
                                         </android.support.design.widget.TextInputLayout>
 
                                         <android.support.design.widget.TextInputLayout
-                                            android:id="@+id/et_handle_way_wannengji_detail_activity"
+                                            android:id="@+id/et_handle_way_produce_query_detail_activity"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             app:errorTextAppearance="@style/MaterialLoginTheme.TextAppearanceLoginError"
@@ -369,7 +491,7 @@
                                         </android.support.design.widget.TextInputLayout>
 
                                         <android.support.design.widget.TextInputLayout
-                                            android:id="@+id/et_handle_result_wannengji_detail_activity"
+                                            android:id="@+id/et_handle_result_produce_query_detail_activity"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             app:errorTextAppearance="@style/MaterialLoginTheme.TextAppearanceLoginError"
@@ -393,7 +515,7 @@
                                     android:orientation="horizontal">
 
                                     <Button
-                                        android:id="@+id/bt_submit_wannengji_detail_activity"
+                                        android:id="@+id/bt_submit_produce_query_detail_activity"
                                         android:layout_width="120dp"
                                         android:layout_height="wrap_content"
                                         android:layout_marginRight="40dp"
@@ -401,7 +523,7 @@
                                         android:text="@string/submit" />
 
                                     <Button
-                                        android:id="@+id/bt_reset_wannengji_detail_activity"
+                                        android:id="@+id/bt_reset_produce_query_detail_activity"
                                         android:layout_width="120dp"
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
@@ -416,13 +538,13 @@
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_wannengji_detail_activity"
+        android:id="@+id/fab_produce_query_detail_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_dialog_info"
         android:visibility="gone"
-        app:layout_anchor="@id/cv_wannengji_detail_activity"
+        app:layout_anchor="@id/cv_produce_query_detail_activity"
         app:layout_anchorGravity="bottom|end" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -272,13 +272,11 @@ public class MaterialStatisticFragment extends BaseLazyFragment {
         ArrayList<String> x = new ArrayList<String>();
         ArrayList<BarEntry> y0 = new ArrayList<BarEntry>();
         ArrayList<BarEntry> y1 = new ArrayList<BarEntry>();
-        ArrayList<BarEntry> y2 = new ArrayList<BarEntry>();
         List<MaterialStatisticFragmentData.DataBean> mList = data.getData();
         for (int i = 0; i < mList.size(); i++) {
             x.add(mList.get(i).getName());
             y0.add(new BarEntry(Float.parseFloat(mList.get(i).getShiji()), i));
             y1.add(new BarEntry(Float.parseFloat(mList.get(i).getPeibi()), i));
-            y2.add(new BarEntry(Float.parseFloat(mList.get(i).getWuchazhi()), i));
         }
 
         setChart(mBarChart0);

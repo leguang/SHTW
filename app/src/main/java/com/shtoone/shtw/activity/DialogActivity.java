@@ -92,7 +92,8 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
                 ms_select_test_type.setVisibility(View.VISIBLE);
                 break;
             case ConstantsUtils.MATERIALSTATISTICFRAGMENT:
-                //设置设备和试验类型的下拉选择可见
+            case ConstantsUtils.PRODUCEQUERYFRAGMENT:
+                //设置设备的下拉选择可见
                 ms_select_equipment.setVisibility(View.VISIBLE);
                 break;
         }

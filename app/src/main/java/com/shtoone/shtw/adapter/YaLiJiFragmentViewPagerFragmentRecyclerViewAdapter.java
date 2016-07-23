@@ -55,7 +55,6 @@ public class YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter extends Recycler
     @Override
     public int getItemViewType(int position) {
         if (getItemCount() > 4 && position + 1 == getItemCount()) {
-
             return ITEM_TYPE.TYPE_FOOTER.ordinal();
         } else {
             return ITEM_TYPE.TYPE_ITEM.ordinal();
@@ -111,8 +110,7 @@ public class YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter extends Recycler
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == ITEM_TYPE.TYPE_ITEM.ordinal()) {
-            ItemViewHolder holder = new ItemViewHolder(LayoutInflater.from(context).inflate(R.layout.item_recyclerview_yaliji_fragment_viewpager_fragment, parent, false));
-            return holder;
+            return new ItemViewHolder(LayoutInflater.from(context).inflate(R.layout.item_recyclerview_yaliji_fragment_viewpager_fragment, parent, false));
         } else if (viewType == ITEM_TYPE.TYPE_FOOTER.ordinal()) {
             return new FootViewHolder(LayoutInflater.from(context).inflate(R.layout.recyclerview_item_foot, parent, false));
         }

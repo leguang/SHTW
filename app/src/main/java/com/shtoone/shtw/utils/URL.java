@@ -26,7 +26,7 @@ public class URL {
      */
     public static final String BaseURL = "http://120.27.146.66:8083/nxsy/";
 //    public static final String BaseURL = "http://192.168.11.102:8080/qms/";
-//    public static final String BaseURL = "http://192.168.11.108:8080/qms/";
+//    public static final String BaseURL = "http://192.168.11.108:8080/zgjjqms/";
 
 
     /**
@@ -214,7 +214,7 @@ public class URL {
     /**
      * 拌合站生产数据查询
      */
-    public static final String BHZ_SCDATA_URL = BaseURL + "app.do?AppHntXiangxiList&departId=%1&startTime=%2&endTime=%3&pageNo=%4&shebeibianhao=%5&maxPageItems=30";
+    public static final String BHZ_SCDATA_URL = BaseURL + "app.do?AppHntXiangxiList&departId=%1&startTime=%2&endTime=%3&pageNo=%4&shebeibianhao=%5&maxPageItems=10";
 
     /**
      * 拌合站生产数据查询

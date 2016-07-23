@@ -20,6 +20,7 @@
     <!--主页MainActivity模块-->
     <string name="laboratory">试验室</string>
     <string name="concrete">混凝土</string>
+    <string name="banhezhan">拌合站</string>
     <string name="asphalt">沥青</string>
     <string name="alarm_level">报警等级</string>
     <string name="zongpanshu">总盘数:</string>
@@ -49,9 +50,10 @@
     <string name="produce_query">生产查询</string>
     <string name="overproof">超标处置</string>
     <string name="material_statistic">材料核算</string>
-    <string name="deviation">误差值(kg)</string>
-    <string name="matching">配比值(kg)</string>
-    <string name="reality">实际值(kg)</string>
+    <string name="deviation">误差(kg)</string>
+    <string name="deviation_rate">误差率(%)</string>
+    <string name="matching">配比(kg)</string>
+    <string name="reality">实际(kg)</string>
     <string name="material_name">材料名称</string>
 
     <!--版本更新模块-->

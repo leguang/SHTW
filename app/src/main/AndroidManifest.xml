@@ -104,6 +104,10 @@
             android:name=".activity.WannengjiDetailActivity"
             android:theme="@style/AppTheme.Transparent" />
 
+        <activity
+            android:name=".activity.ProduceQueryDetailActivity"
+            android:theme="@style/AppTheme.Transparent" />
+
         <!-- 【必须】 信鸽receiver广播接收 -->
         <receiver
             android:name="com.tencent.android.tpush.XGPushReceiver"

@@ -23,10 +23,10 @@ import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.DialogActivity;
 import com.shtoone.shtw.activity.YaLiJiDetailActivity;
 import com.shtoone.shtw.adapter.OnItemClickListener;
-import com.shtoone.shtw.adapter.YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter;
+import com.shtoone.shtw.adapter.ProduceQueryFragmentRecyclerViewAdapter;
 import com.shtoone.shtw.bean.EventData;
 import com.shtoone.shtw.bean.ParametersData;
-import com.shtoone.shtw.bean.YalijiFragmentViewPagerFragmentRecyclerViewItemData;
+import com.shtoone.shtw.bean.ProduceQueryFragmentListData;
 import com.shtoone.shtw.fragment.base.BaseLazyFragment;
 import com.shtoone.shtw.fragment.mainactivity.LaboratoryFragment;
 import com.shtoone.shtw.ui.PageStateLayout;
@@ -60,14 +60,14 @@ public class ProduceQueryFragment extends BaseLazyFragment {
     private PtrFrameLayout ptrframe;
     private RecyclerView mRecyclerView;
     private StoreHouseHeader header;
-    private YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter mAdapter;
-    private YalijiFragmentViewPagerFragmentRecyclerViewItemData itemsData;
+    private ProduceQueryFragmentRecyclerViewAdapter mAdapter;
+    private ProduceQueryFragmentListData itemsData;
     private FloatingActionButton fab;
     private boolean isRegistered = false;
     private PageStateLayout pageStateLayout;
     private Gson mGson;
     private boolean isLoading;
-    private List<YalijiFragmentViewPagerFragmentRecyclerViewItemData.DataBean> listData;
+    private List<ProduceQueryFragmentListData.DataBean> listData;
     private ParametersData mParametersData;
     private View view;
     private LinearLayoutManager mLinearLayoutManager;
@@ -103,6 +103,7 @@ public class ProduceQueryFragment extends BaseLazyFragment {
         ptrframe = (PtrFrameLayout) view.findViewById(R.id.ptr_produce_query_fragment);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_produce_query_fragment);
         pageStateLayout = (PageStateLayout) view.findViewById(R.id.psl_produce_query_fragment);
+        pageStateLayout.showLoading();
     }
 
     @Override
@@ -112,7 +113,7 @@ public class ProduceQueryFragment extends BaseLazyFragment {
 
     private void initData() {
         mParametersData = (ParametersData) BaseApplication.parametersData.clone();
-        mParametersData.fromTo = ConstantsUtils.LABORATORYFRAGMENT;
+        mParametersData.fromTo = ConstantsUtils.PRODUCEQUERYFRAGMENT;
         mGson = new Gson();
         listData = new ArrayList<>();
         mLinearLayoutManager = new LinearLayoutManager(_mActivity);
@@ -143,7 +144,7 @@ public class ProduceQueryFragment extends BaseLazyFragment {
         });
 
         //设置动画与适配器
-        SlideInLeftAnimationAdapter mSlideInLeftAnimationAdapter = new SlideInLeftAnimationAdapter(mAdapter = new YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter(_mActivity, listData));
+        SlideInLeftAnimationAdapter mSlideInLeftAnimationAdapter = new SlideInLeftAnimationAdapter(mAdapter = new ProduceQueryFragmentRecyclerViewAdapter(_mActivity, listData));
         mSlideInLeftAnimationAdapter.setFirstOnly(true);
         mSlideInLeftAnimationAdapter.setDuration(500);
         mSlideInLeftAnimationAdapter.setInterpolator(new OvershootInterpolator(.5f));
@@ -266,7 +267,7 @@ public class ProduceQueryFragment extends BaseLazyFragment {
                             LinearLayoutManager lm = (LinearLayoutManager) mRecyclerView.getLayoutManager();
                             int position = lm.findFirstVisibleItemPosition();
                             if (position >= 0) {
-                                if (lm.findViewByPosition(position).getTop() > 0 && position == 0 && BaseApplication.isExpand) {
+                                if (lm.findViewByPosition(position).getTop() > 0 && position == 0) {
                                     return true;
                                 }
                             }
@@ -286,7 +287,8 @@ public class ProduceQueryFragment extends BaseLazyFragment {
                 if (null != listData) {
                     listData.clear();
                 }
-                getDataFromNetwork(mParametersData);
+//                getDataFromNetwork(mParametersData);
+                parseData("");
                 KLog.e("下拉刷新mParametersData.currentPage=" + mParametersData.currentPage);
                 frame.refreshComplete();
             }
@@ -301,9 +303,6 @@ public class ProduceQueryFragment extends BaseLazyFragment {
         String endDateTime = mParametersData.endDateTime;
         String currentPage = mParametersData.currentPage;
         String equipmentID = mParametersData.equipmentID;
-        String isQualified = mParametersData.isQualified;
-        String isReal = mParametersData.isReal;
-        String testType = mParametersData.testTypeID;
 
         //联网获取数据
         //还没有判断url，用户再判断
@@ -353,32 +352,138 @@ public class ProduceQueryFragment extends BaseLazyFragment {
     }
 
     protected void parseData(String response) {
-//        if (null != itemsData) {
-//            itemsData.getData().clear();
-//        }
-//        itemsData = mGson.fromJson(response, YalijiFragmentViewPagerFragmentRecyclerViewItemData.class);
-//        if (null != itemsData && itemsData.isSuccess()) {
-//            listData.addAll(itemsData.getData());
-//        }
-//
-//        if (null != listData) {
-//            if (listData.size() > 0) {
-//                pageStateLayout.showContent();
-//                if (!itemsData.isSuccess()) {
-//                    ToastUtils.showToast(_mActivity, "无更多数据");
-//                    mParametersData.currentPage = (Integer.parseInt(mParametersData.currentPage) - 1) + "";
-//                    mAdapter.notifyItemRemoved(mAdapter.getItemCount());
-//                } else {
-//                    mAdapter.notifyDataSetChanged();
-//                }
-//            } else {
-//                //提示数据为空，展示空状态
-//                pageStateLayout.showEmpty();
-//            }
-//        } else {
-//            //提示数据解析异常，展示错误页面
-//            pageStateLayout.showError();
-//        }
+        if (null != itemsData) {
+            itemsData.getData().clear();
+        }
+
+        response = "{\n" +
+                "data: [\n" +
+                "{\n" +
+                "chuliaoshijian: \"2016-07-15 17:10:24\",\n" +
+                "id: \"842771\",\n" +
+                "qiangdudengji: \"C50\",\n" +
+                "gujifangshu: \"1\",\n" +
+                "gongchengmingcheng: \"荒寨2#大桥左幅第14跨湿接缝及横隔板\",\n" +
+                "sigongdidian: \"中交二航局蒙文砚高速\",\n" +
+                "banhezhanminchen: \"二航局2分部2号站3号机\",\n" +
+                "jiaozuobuwei: \"\"\n" +
+                "},\n" +
+                "{\n" +
+                "chuliaoshijian: \"2016-07-15 17:09:50\",\n" +
+                "id: \"842769\",\n" +
+                "qiangdudengji: \"C30盖板\",\n" +
+                "gujifangshu: \"0.999\",\n" +
+                "gongchengmingcheng: \"预制盖板\",\n" +
+                "sigongdidian: \"中交二航局蒙文砚高速公路\",\n" +
+                "banhezhanminchen: \"二航局2分部2号站4号机\",\n" +
+                "jiaozuobuwei: \"\"\n" +
+                "},\n" +
+                "{\n" +
+                "chuliaoshijian: \"2016-07-15 17:08:40\",\n" +
+                "id: \"842767\",\n" +
+                "qiangdudengji: \"C50\",\n" +
+                "gujifangshu: \"1.001\",\n" +
+                "gongchengmingcheng: \"荒寨2#大桥左幅第14跨湿接缝及横隔板\",\n" +
+                "sigongdidian: \"中交二航局蒙文砚高速\",\n" +
+                "banhezhanminchen: \"二航局2分部2号站3号机\",\n" +
+                "jiaozuobuwei: \"\"\n" +
+                "},\n" +
+                "{\n" +
+                "chuliaoshijian: \"2016-07-15 17:06:54\",\n" +
+                "id: \"842764\",\n" +
+                "qiangdudengji: \"C50\",\n" +
+                "gujifangshu: \"0.995\",\n" +
+                "gongchengmingcheng: \"荒寨2#大桥左幅第14跨湿接缝及横隔板\",\n" +
+                "sigongdidian: \"中交二航局蒙文砚高速\",\n" +
+                "banhezhanminchen: \"二航局2分部2号站3号机\",\n" +
+                "jiaozuobuwei: \"\"\n" +
+                "},\n" +
+                "{\n" +
+                "chuliaoshijian: \"2016-07-15 17:04:58\",\n" +
+                "id: \"842757\",\n" +
+                "qiangdudengji: \"C50\",\n" +
+                "gujifangshu: \"0.998\",\n" +
+                "gongchengmingcheng: \"荒寨2#大桥左幅第14跨湿接缝及横隔板\",\n" +
+                "sigongdidian: \"中交二航局蒙文砚高速\",\n" +
+                "banhezhanminchen: \"二航局2分部2号站3号机\",\n" +
+                "jiaozuobuwei: \"\"\n" +
+                "},\n" +
+                "{\n" +
+                "chuliaoshijian: \"2016-07-15 17:04:05\",\n" +
+                "id: \"842770\",\n" +
+                "qiangdudengji: \"C20\",\n" +
+                "gujifangshu: \"1.425\",\n" +
+                "gongchengmingcheng: \"蒙文砚高速公路项目经理部四分部\",\n" +
+                "sigongdidian: \"项目部\",\n" +
+                "banhezhanminchen: \"三公局三公司3分部2号站1号机\",\n" +
+                "jiaozuobuwei: \"基础\"\n" +
+                "},\n" +
+                "{\n" +
+                "chuliaoshijian: \"2016-07-15 17:03:58\",\n" +
+                "id: \"842753\",\n" +
+                "qiangdudengji: \"C30二衬\",\n" +
+                "gujifangshu: \"0.997\",\n" +
+                "gongchengmingcheng: \"三角塘左洞二衬\",\n" +
+                "sigongdidian: \"中交二航局蒙文砚高速公路\",\n" +
+                "banhezhanminchen: \"二航局2分部2号站4号机\",\n" +
+                "jiaozuobuwei: \"\"\n" +
+                "},\n" +
+                "{\n" +
+                "chuliaoshijian: \"2016-07-15 17:03:36\",\n" +
+                "id: \"842755\",\n" +
+                "qiangdudengji: \"C25\",\n" +
+                "gujifangshu: \"1.248\",\n" +
+                "gongchengmingcheng: \"蒙文砚高速\",\n" +
+                "sigongdidian: \"梁场\",\n" +
+                "banhezhanminchen: \"四公局二分公司3分部1号站2号机\",\n" +
+                "jiaozuobuwei: \"抗滑桩.挡土板\"\n" +
+                "},\n" +
+                "{\n" +
+                "chuliaoshijian: \"2016-07-15 17:02:50\",\n" +
+                "id: \"842745\",\n" +
+                "qiangdudengji: \"C50\",\n" +
+                "gujifangshu: \"0.999\",\n" +
+                "gongchengmingcheng: \"荒寨2#大桥左幅第14跨湿接缝及横隔板\",\n" +
+                "sigongdidian: \"中交二航局蒙文砚高速\",\n" +
+                "banhezhanminchen: \"二航局2分部2号站3号机\",\n" +
+                "jiaozuobuwei: \"\"\n" +
+                "},\n" +
+                "{\n" +
+                "chuliaoshijian: \"2016-07-15 17:02:40\",\n" +
+                "id: \"842756\",\n" +
+                "qiangdudengji: \"C25\",\n" +
+                "gujifangshu: \"1.254\",\n" +
+                "gongchengmingcheng: \"蒙文砚高速\",\n" +
+                "sigongdidian: \"梁场\",\n" +
+                "banhezhanminchen: \"四公局二分公司3分部1号站2号机\",\n" +
+                "jiaozuobuwei: \"抗滑桩.挡土板\"\n" +
+                "}\n" +
+                "],\n" +
+                "success: true\n" +
+                "}";
+        itemsData = mGson.fromJson(response, ProduceQueryFragmentListData.class);
+        if (null != itemsData && itemsData.isSuccess()) {
+            listData.addAll(itemsData.getData());
+        }
+
+        if (null != listData) {
+            if (listData.size() > 0) {
+                pageStateLayout.showContent();
+                if (!itemsData.isSuccess()) {
+                    ToastUtils.showToast(_mActivity, "无更多数据");
+                    mParametersData.currentPage = (Integer.parseInt(mParametersData.currentPage) - 1) + "";
+                    mAdapter.notifyItemRemoved(mAdapter.getItemCount());
+                } else {
+                    mAdapter.notifyDataSetChanged();
+                }
+            } else {
+                //提示数据为空，展示空状态
+                pageStateLayout.showEmpty();
+            }
+        } else {
+            //提示数据解析异常，展示错误页面
+            pageStateLayout.showError();
+        }
     }
 
     private void changeReadedState(View view) {
@@ -388,35 +493,32 @@ public class ProduceQueryFragment extends BaseLazyFragment {
     //进入YaLiJiDetailActivity
     private void jump2OverproofDetailActivity(int position) {
         Intent intent = new Intent(_mActivity, YaLiJiDetailActivity.class);
-        intent.putExtra("detailID", listData.get(position).getSYJID());
+//        intent.putExtra("detailID", listData.get(position).getSYJID());
         startActivity(intent);
     }
 
     @Subscribe
     public void updateSearch(ParametersData mParametersData) {
-//        if (mParametersData != null) {
-//            if (mParametersData.fromTo == ConstantsUtils.YALIJIFRAGMENT) {
-//                ToastUtils.showToast(_mActivity, mParametersData.testTypeID);
-//                this.mParametersData.startDateTime = mParametersData.startDateTime;
-//                this.mParametersData.endDateTime = mParametersData.endDateTime;
-//                this.mParametersData.equipmentID = mParametersData.equipmentID;
-//                this.mParametersData.testTypeID = mParametersData.testTypeID;
-//                this.mParametersData.currentPage = "1";
-//                if (null != listData) {
-//                    listData.clear();
-//                }
-////                getDataFromNetwork(this.mParametersData);
-//
-//                mRecyclerView.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        mRecyclerView.smoothScrollToPosition(0);
-//                    }
-//                }, 300);
-//                ptrframe.autoRefresh(true);
-//                KLog.e("点击查询mParametersData.currentPage=" + mParametersData.currentPage);
-//            }
-//        }
+        if (mParametersData != null) {
+            if (mParametersData.fromTo == ConstantsUtils.PRODUCEQUERYFRAGMENT) {
+                //后期优化考虑的时候，看这里需不需要克隆，应该只要直接复制即可
+                this.mParametersData = (ParametersData) mParametersData.clone();
+                this.mParametersData.currentPage = "1";
+                if (null != listData) {
+                    listData.clear();
+                }
+//                getDataFromNetwork(this.mParametersData);
+
+                mRecyclerView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRecyclerView.smoothScrollToPosition(0);
+                    }
+                }, 300);
+                ptrframe.autoRefresh(true);
+                KLog.e("点击查询mParametersData.currentPage=" + mParametersData.currentPage);
+            }
+        }
     }
 
     @Subscribe
