@@ -66,7 +66,7 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
 
     public static YaLiJiFragmentViewPagerFragment newInstance(ParametersData mParametersData) {
         Bundle args = new Bundle();
-        args.putSerializable("ParametersData", mParametersData);
+        args.putSerializable(ConstantsUtils.PARAMETERS, mParametersData);
         YaLiJiFragmentViewPagerFragment fragment = new YaLiJiFragmentViewPagerFragment();
         fragment.setArguments(args);
         return fragment;
@@ -77,7 +77,7 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null) {
-            mParametersData = (ParametersData) args.getSerializable("ParametersData");
+            mParametersData = (ParametersData) args.getSerializable(ConstantsUtils.PARAMETERS);
         }
     }
 
@@ -314,9 +314,6 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
     }
 
     protected void parseData(String response) {
-        if (null != itemsData) {
-            itemsData.getData().clear();
-        }
         itemsData = mGson.fromJson(response, YalijiFragmentViewPagerFragmentRecyclerViewItemData.class);
         if (null != itemsData && itemsData.isSuccess()) {
             listData.addAll(itemsData.getData());
@@ -349,7 +346,9 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
     //进入YaLiJiDetailActivity
     private void jumpToYaLiJiDetailActivity(int position) {
         Intent intent = new Intent(_mActivity, YaLiJiDetailActivity.class);
-        intent.putExtra("detailID", listData.get(position).getSYJID());
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("yalijidetail", listData.get(position));
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 
@@ -357,11 +356,14 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
     public void updateSearch(ParametersData mParametersData) {
         if (mParametersData != null) {
             if (mParametersData.fromTo == ConstantsUtils.YALIJIFRAGMENT) {
-                ToastUtils.showToast(_mActivity, mParametersData.testTypeID);
                 this.mParametersData.startDateTime = mParametersData.startDateTime;
                 this.mParametersData.endDateTime = mParametersData.endDateTime;
                 this.mParametersData.equipmentID = mParametersData.equipmentID;
                 this.mParametersData.testTypeID = mParametersData.testTypeID;
+                KLog.e("mParametersData:" + mParametersData.startDateTime);
+                KLog.e("mParametersData:" + mParametersData.endDateTime);
+                KLog.e("mParametersData:" + mParametersData.equipmentID);
+                KLog.e("mParametersData:" + mParametersData.testTypeID);
                 this.mParametersData.currentPage = "1";
                 if (null != listData) {
                     listData.clear();
@@ -392,4 +394,6 @@ public class YaLiJiFragmentViewPagerFragment extends BaseFragment {
         super.onDestroy();
         BaseApplication.bus.unregister(this);
     }
+
+
 }

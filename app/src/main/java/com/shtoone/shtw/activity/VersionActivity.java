@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,12 +18,14 @@ import com.android.volley.VolleyError;
 import com.dd.CircularProgressButton;
 import com.dinuscxj.progressbar.CircleProgressBar;
 import com.google.gson.Gson;
+import com.shtoone.shtw.BaseApplication;
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.base.BaseActivity;
 import com.shtoone.shtw.bean.VersionInfoData;
 import com.shtoone.shtw.utils.AppUtils;
 import com.shtoone.shtw.utils.HttpUtils;
 import com.shtoone.shtw.utils.NetworkUtils;
+import com.socks.library.KLog;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -66,6 +67,9 @@ public class VersionActivity extends BaseActivity {
     }
 
     private void initDate() {
+        if (!TextUtils.isEmpty(BaseApplication.mUserInfoData.getXmmc())) {
+            tv_project_name.setText(BaseApplication.mUserInfoData.getXmmc());
+        }
         tv_version.setText(AppUtils.getVersionName(this));
         bt_update.setIndeterminateProgressMode(true);
         bt_update.setOnClickListener(new CheckUpdateOnClickListener());
@@ -144,11 +148,11 @@ public class VersionActivity extends BaseActivity {
             bt_update.setProgress(0);
             bt_update.setProgress(50);
             //检测
-            HttpUtils.getRequest("http://www.itsite.cn/json/update.json", new HttpUtils.HttpListener() {
+            HttpUtils.getRequest("http://192.168.11.119:8080/zgjjqms/update.json", new HttpUtils.HttpListener() {
                 @Override
                 public void onSuccess(String response) {
                     if (!TextUtils.isEmpty(response)) {
-                        Log.e(TAG, response);
+                        KLog.e(response);
                         mVersionInfoData = new Gson().fromJson(response, VersionInfoData.class);
                         if (null != mVersionInfoData) {
                             if (Integer.parseInt(mVersionInfoData.versionCode) > AppUtils.getVersionCode(VersionActivity.this)) {
@@ -238,13 +242,12 @@ public class VersionActivity extends BaseActivity {
             @Override
             public void run() {
                 bt_update.setProgress(50);
-
             }
         }, 500);
         bt_update.setVisibility(View.INVISIBLE);
         cpb_progress.setVisibility(View.VISIBLE);
         //bt_update本身自带进度。所以不需要cpb_progress，后期研究
-        Uri uri = Uri.parse("http://itsite.cn/app-debug.apk");
+        Uri uri = Uri.parse(mVersionInfoData.appURL);
         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).mkdirs();
         mDownloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         ID = mDownloadManager.enqueue(new DownloadManager.Request(uri)

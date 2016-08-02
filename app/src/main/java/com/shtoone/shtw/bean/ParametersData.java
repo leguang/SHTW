@@ -21,6 +21,8 @@ public class ParametersData implements Cloneable, Serializable {
     public String level = "";
     public String isQualified = "";
     public String equipmentID = "";
+    public String alarmLevel = "";
+    public String handleType = "";
     public String currentPage = "1";
     public String isReal = "";
     public String detailID = "";
@@ -44,24 +46,5 @@ public class ParametersData implements Cloneable, Serializable {
         } catch (CloneNotSupportedException e) {
             return null;
         }
-    }
-
-    @Override
-    public String toString() {
-        return "ParametersData{" +
-                "startDateTime='" + startDateTime + '\'' +
-                ", endDateTime='" + endDateTime + '\'' +
-                ", userGroupID='" + userGroupID + '\'' +
-                ", deviceType='" + deviceType + '\'' +
-                ", testTypeID='" + testTypeID + '\'' +
-                ", disposition='" + disposition + '\'' +
-                ", level='" + level + '\'' +
-                ", isQualified='" + isQualified + '\'' +
-                ", equipmentID='" + equipmentID + '\'' +
-                ", currentPage='" + currentPage + '\'' +
-                ", isReal='" + isReal + '\'' +
-                ", detailID='" + detailID + '\'' +
-                ", fromTo=" + fromTo +
-                '}';
     }
 }

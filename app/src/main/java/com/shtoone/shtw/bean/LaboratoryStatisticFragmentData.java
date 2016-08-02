@@ -6,21 +6,21 @@ import java.util.List;
  * Created by leguang on 2016/7/18 0018.
  */
 public class LaboratoryStatisticFragmentData {
-
     /**
-     * data : [{"qualifiedCount":"888","testType":"100014","notqualifiedCount":"3","testCount":"900","validCount":"9","userGroupId":"f89b12c254c7c0920154c7d2bce40013","qualifiedPer":"98.67"},{"qualifiedCount":"54","testType":"100047","notqualifiedCount":"3","testCount":"57","validCount":"0","userGroupId":"f89b12c254c7c0920154c7d2bce40013","qualifiedPer":"94.74"},{"qualifiedCount":"16","testType":"100048","notqualifiedCount":"0","testCount":"16","validCount":"0","userGroupId":"f89b12c254c7c0920154c7d2bce40013","qualifiedPer":"100.00"},{"qualifiedCount":"14","testType":"100049","notqualifiedCount":"1","testCount":"15","validCount":"0","userGroupId":"f89b12c254c7c0920154c7d2bce40013","qualifiedPer":"93.33"}]
+     * data : [{"qualifiedCount":"12381","testType":"100014","testName":"混凝土试件抗压强度试验","notqualifiedCount":"75","testCount":"12546","validCount":"8","userGroupId":"f89aff0750f942b60150fe99ff3f001f","qualifiedPer":"98.68"}]
      * success : true
      */
 
     private boolean success;
     /**
-     * qualifiedCount : 888
+     * qualifiedCount : 12381
      * testType : 100014
-     * notqualifiedCount : 3
-     * testCount : 900
-     * validCount : 9
-     * userGroupId : f89b12c254c7c0920154c7d2bce40013
-     * qualifiedPer : 98.67
+     * testName : 混凝土试件抗压强度试验
+     * notqualifiedCount : 75
+     * testCount : 12546
+     * validCount : 8
+     * userGroupId : f89aff0750f942b60150fe99ff3f001f
+     * qualifiedPer : 98.68
      */
 
     private List<DataBean> data;
@@ -44,6 +44,7 @@ public class LaboratoryStatisticFragmentData {
     public static class DataBean {
         private String qualifiedCount;
         private String testType;
+        private String testName;
         private String notqualifiedCount;
         private String testCount;
         private String validCount;
@@ -64,6 +65,14 @@ public class LaboratoryStatisticFragmentData {
 
         public void setTestType(String testType) {
             this.testType = testType;
+        }
+
+        public String getTestName() {
+            return testName;
+        }
+
+        public void setTestName(String testName) {
+            this.testName = testName;
         }
 
         public String getNotqualifiedCount() {

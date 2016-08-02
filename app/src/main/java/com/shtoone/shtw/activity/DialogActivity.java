@@ -15,19 +15,26 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 
 import com.dd.CircularProgressButton;
+import com.google.gson.Gson;
 import com.shtoone.shtw.BaseApplication;
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.base.BaseActivity;
+import com.shtoone.shtw.bean.BHZEquipment;
+import com.shtoone.shtw.bean.EquipmentAndTestTypeData;
 import com.shtoone.shtw.bean.ParametersData;
 import com.shtoone.shtw.utils.ConstantsUtils;
+import com.shtoone.shtw.utils.URL;
 import com.socks.library.KLog;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
 
@@ -48,18 +55,21 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
     private String endDateTime;
     private ParametersData mParametersData;
     private FrameLayout fl_container;
-    private String[] equipmentNames = {"1标压力机", "3标压力机"};
-    private String[] equipmentIDs = {"sphntyl0101", "sphntyl0301"};
-
-    private String[] testTypeNames = {"砼抗压强度", "钢筋拉力", "钢筋焊接接头", "钢筋机械连接接头"};
-    private String[] testTypeIDs = {"100014", "100047", "100048", "100049"};
+    private String url;
+    private EquipmentAndTestTypeData mEquipmentTestData;
+    private BHZEquipment mBHZEquipment;
+    private List<String> equipmentNames;
+    private List<String> equipmentIDs;
+    private List<String> testTypeNames;
+    private List<String> testTypeIDs;
+    private RadioGroup rg_handle;
+    private RadioGroup rg_examine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog);
         initView();
-        initData();
     }
 
     private void initView() {
@@ -74,35 +84,8 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
         iv_cancel = (ImageView) findViewById(R.id.iv_cancel_dialog);
         ms_select_equipment = (MaterialSpinner) findViewById(R.id.ms_select_equipment_dialog);
         ms_select_test_type = (MaterialSpinner) findViewById(R.id.ms_select_test_type_dialog);
-
-        //设置哪些条件选择该显示，默认只有时间选择是显示的
-        switch (mParametersData.fromTo) {
-            case ConstantsUtils.LABORATORYFRAGMENT:
-            case ConstantsUtils.CONCRETEFRAGMENT:
-                //默认开始和结束时间是可见的
-                break;
-            case ConstantsUtils.YALIJIFRAGMENT:
-                //设置设备和试验类型的下拉选择可见
-                ms_select_equipment.setVisibility(View.VISIBLE);
-                ms_select_test_type.setVisibility(View.VISIBLE);
-                break;
-            case ConstantsUtils.WANNENGJIFRAGMENT:
-                //设置设备和试验类型的下拉选择可见
-                ms_select_equipment.setVisibility(View.VISIBLE);
-                ms_select_test_type.setVisibility(View.VISIBLE);
-                break;
-            case ConstantsUtils.MATERIALSTATISTICFRAGMENT:
-            case ConstantsUtils.PRODUCEQUERYFRAGMENT:
-                //设置设备的下拉选择可见
-                ms_select_equipment.setVisibility(View.VISIBLE);
-                break;
-        }
-        revealView();
-    }
-
-    private void initData() {
-        //根据传过来的参数对象来设置这些选择框该显示的内容
-
+        rg_handle = (RadioGroup) findViewById(R.id.rg_handle_dialog);
+        rg_examine = (RadioGroup) findViewById(R.id.rg_examine_dialog);
         start_date_time.getEditText().setInputType(InputType.TYPE_NULL);
         end_date_time.getEditText().setInputType(InputType.TYPE_NULL);
         iv_cancel.setOnClickListener(this);
@@ -135,23 +118,14 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
             }
         });
 
-        ArrayAdapter<String> equipmentsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, equipmentNames);
-        equipmentsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        ms_select_equipment.setAdapter(equipmentsAdapter);
-        for (int i = 0; i < equipmentIDs.length; i++) {
-            if (mParametersData.equipmentID.equals(equipmentIDs[i])) {
-                ms_select_equipment.setSelection(i + 1);
-                KLog.e("默认：" + (i + 1) + "个");
-            }
-        }
 
         ms_select_equipment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                KLog.e("选择第：" + i + "个");
+                KLog.e("equipment选择第：" + i + "个");
                 if (i >= 0) {
-                    mParametersData.equipmentID = equipmentIDs[i];
-                    KLog.e("equipmentIDs[i]:" + equipmentNames[i]);
+                    mParametersData.equipmentID = equipmentIDs.get(i);
+                    KLog.e("equipmentIDs[i]:" + equipmentNames.get(i));
                 } else if (i == -1) {
                     mParametersData.equipmentID = "";
                 }
@@ -163,23 +137,13 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
             }
         });
 
-        ArrayAdapter<String> testTypessAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, testTypeNames);
-        testTypessAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        ms_select_test_type.setAdapter(testTypessAdapter);
-
-        for (int i = 0; i < testTypeIDs.length; i++) {
-            if (mParametersData.testTypeID.equals(testTypeIDs[i])) {
-                ms_select_test_type.setSelection(i + 1);
-            }
-        }
-
         ms_select_test_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                KLog.e("选择第：" + i + "个");
+                KLog.e("test_type选择第：" + i + "个");
                 if (i >= 0) {
-                    mParametersData.testTypeID = testTypeIDs[i];
-                    KLog.e("testTypeIDs[i]:" + testTypeNames[i]);
+                    mParametersData.testTypeID = testTypeIDs.get(i);
+                    KLog.e("testTypeIDs[i]:" + testTypeNames.get(i));
                 } else if (i == -1) {
                     mParametersData.testTypeID = "";
                 }
@@ -190,18 +154,225 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
 
             }
         });
+
+        rg_handle.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+
+                if (i == R.id.rb_all_handle_dialog) {
+                    rg_examine.setVisibility(View.INVISIBLE);
+                    mParametersData.handleType = "";
+                } else if (i == R.id.rb_not_handle_dialog) {
+                    rg_examine.setVisibility(View.INVISIBLE);
+                    rg_examine.check(R.id.rb_all_examine_dialog);
+                    mParametersData.handleType = "0";
+                } else if (i == R.id.rb_handled_dialog) {
+//                    AnimationUtils.show(rg_examine);//////////////////////////////////////////
+                    rg_examine.setVisibility(View.VISIBLE);
+                    mParametersData.handleType = "1";
+                }
+            }
+        });
+
+        rg_examine.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if (i == R.id.rb_all_examine_dialog) {
+                    mParametersData.handleType = "1";
+                } else if (i == R.id.rb_not_examine_dialog) {
+                    mParametersData.handleType = "2";
+                } else if (i == R.id.rb_examined_dialog) {
+                    mParametersData.handleType = "3";
+                }
+            }
+        });
+
+
+        //设置哪些条件选择该显示，默认只有时间选择是显示的
+        switch (mParametersData.fromTo) {
+            case ConstantsUtils.LABORATORYFRAGMENT:
+            case ConstantsUtils.CONCRETEFRAGMENT:
+                //默认开始和结束时间是可见的
+                break;
+            case ConstantsUtils.YALIJIFRAGMENT:
+            case ConstantsUtils.WANNENGJIFRAGMENT:
+                //设置设备和试验类型的下拉选择可见
+                ms_select_equipment.setVisibility(View.VISIBLE);
+                ms_select_test_type.setVisibility(View.VISIBLE);
+                url = URL.getLibEquipmentTest(mParametersData.userGroupID);
+                refresh();
+                break;
+            case ConstantsUtils.MATERIALSTATISTICFRAGMENT:
+            case ConstantsUtils.PRODUCEQUERYFRAGMENT:
+                //设置设备的下拉选择可见
+                ms_select_equipment.setVisibility(View.VISIBLE);
+                url = URL.getBHZEquipment(mParametersData.userGroupID);
+                refresh();
+                break;
+
+            case ConstantsUtils.OVERPROOFFRAGMENT:
+                //设置设备的下拉选择可见
+                ms_select_equipment.setVisibility(View.VISIBLE);
+                rg_handle.setVisibility(View.VISIBLE);
+                rg_examine.setVisibility(View.INVISIBLE);
+                url = URL.getBHZEquipment(mParametersData.userGroupID);
+                refresh();
+                break;
+        }
+
+        if (mParametersData.handleType.equals("")) {
+            rg_handle.check(R.id.rb_all_handle_dialog);
+        } else if (mParametersData.handleType.equals("0")) {
+            rg_handle.check(R.id.rb_not_handle_dialog);
+        } else if (mParametersData.handleType.equals("1")) {
+            rg_handle.check(R.id.rb_handled_dialog);
+            rg_examine.check(R.id.rb_all_examine_dialog);
+            rg_examine.setVisibility(View.VISIBLE);
+        } else if (mParametersData.handleType.equals("2")) {
+            rg_examine.check(R.id.rb_not_handle_dialog);
+        } else if (mParametersData.handleType.equals("3")) {
+            rg_examine.check(R.id.rb_handled_dialog);
+        }
     }
+
+    @Override
+    public void refreshSuccess(String response) {
+
+        switch (mParametersData.fromTo) {
+            case ConstantsUtils.LABORATORYFRAGMENT:
+            case ConstantsUtils.CONCRETEFRAGMENT:
+
+                break;
+
+            case ConstantsUtils.YALIJIFRAGMENT:
+                mEquipmentTestData = new Gson().fromJson(response, EquipmentAndTestTypeData.class);
+                setYalijiQueryView();
+                break;
+
+            case ConstantsUtils.WANNENGJIFRAGMENT:
+                mEquipmentTestData = new Gson().fromJson(response, EquipmentAndTestTypeData.class);
+                setWannengjiQueryView();
+                break;
+
+            case ConstantsUtils.MATERIALSTATISTICFRAGMENT:
+            case ConstantsUtils.PRODUCEQUERYFRAGMENT:
+            case ConstantsUtils.OVERPROOFFRAGMENT:
+                mBHZEquipment = new Gson().fromJson(response, BHZEquipment.class);
+                setBHZQueryView();
+                break;
+        }
+
+    }
+
+
+    private void setBHZQueryView() {
+        equipmentNames = new ArrayList<>();
+        equipmentIDs = new ArrayList<>();
+        for (BHZEquipment.DataBean temp : mBHZEquipment.getData()) {
+            equipmentNames.add(temp.getBanhezhanminchen());
+            equipmentIDs.add(temp.getGprsbianhao());
+        }
+
+        ArrayAdapter<String> equipmentsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, equipmentNames);
+        equipmentsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ms_select_equipment.setAdapter(equipmentsAdapter);
+
+        for (int i = 0; i < equipmentIDs.size(); i++) {
+            if (mParametersData.equipmentID.equals(equipmentIDs.get(i))) {
+                ms_select_equipment.setSelection(i + 1);
+                KLog.e("默认：" + (i + 1) + "个");
+            }
+        }
+    }
+
+    private void setWannengjiQueryView() {
+        equipmentNames = new ArrayList<>();
+        equipmentIDs = new ArrayList<>();
+        for (EquipmentAndTestTypeData.DataBean.WnjsbBean temp : mEquipmentTestData.getData().getWnjsb()) {
+            equipmentNames.add(temp.getBanhezhanminchen());
+            equipmentIDs.add(temp.getGprsbianhao());
+        }
+        ArrayAdapter<String> equipmentsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, equipmentNames);
+        equipmentsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ms_select_equipment.setAdapter(equipmentsAdapter);
+
+
+        testTypeNames = new ArrayList<>();
+        testTypeIDs = new ArrayList<>();
+        for (EquipmentAndTestTypeData.DataBean.WnjtpBean temp : mEquipmentTestData.getData().getWnjtp()) {
+            testTypeNames.add(temp.getTestName());
+            testTypeIDs.add(temp.getTestId());
+        }
+        ArrayAdapter<String> testTypessAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, testTypeNames);
+        testTypessAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ms_select_test_type.setAdapter(testTypessAdapter);
+
+        //根据传过来的参数对象来设置这些选择框该显示的内容
+        for (int i = 0; i < equipmentIDs.size(); i++) {
+            if (mParametersData.equipmentID.equals(equipmentIDs.get(i))) {
+                ms_select_equipment.setSelection(i + 1);
+                KLog.e("默认：" + (i + 1) + "个");
+            }
+        }
+
+        for (int i = 0; i < testTypeIDs.size(); i++) {
+            if (mParametersData.testTypeID.equals(testTypeIDs.get(i))) {
+                ms_select_test_type.setSelection(i + 1);
+            }
+        }
+    }
+
+    private void setYalijiQueryView() {
+        equipmentNames = new ArrayList<>();
+        equipmentIDs = new ArrayList<>();
+        for (EquipmentAndTestTypeData.DataBean.YljsbBean temp : mEquipmentTestData.getData().getYljsb()) {
+            equipmentNames.add(temp.getBanhezhanminchen());
+            equipmentIDs.add(temp.getGprsbianhao());
+        }
+        ArrayAdapter<String> equipmentsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, equipmentNames);
+        equipmentsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ms_select_equipment.setAdapter(equipmentsAdapter);
+
+
+        testTypeNames = new ArrayList<>();
+        testTypeIDs = new ArrayList<>();
+        for (EquipmentAndTestTypeData.DataBean.YljtpBean temp : mEquipmentTestData.getData().getYljtp()) {
+            testTypeNames.add(temp.getTestName());
+            testTypeIDs.add(temp.getTestId());
+        }
+        ArrayAdapter<String> testTypessAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, testTypeNames);
+        testTypessAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ms_select_test_type.setAdapter(testTypessAdapter);
+
+        //根据传过来的参数对象来设置这些选择框该显示的内容
+        for (int i = 0; i < equipmentIDs.size(); i++) {
+            if (mParametersData.equipmentID.equals(equipmentIDs.get(i))) {
+                ms_select_equipment.setSelection(i + 1);
+                KLog.e("默认：" + (i + 1) + "个");
+            }
+        }
+
+        KLog.e("mParametersData.testTypeID:" + mParametersData.testTypeID);
+        for (int i = 0; i < testTypeIDs.size(); i++) {
+            if (mParametersData.testTypeID.equals(testTypeIDs.get(i))) {
+                KLog.e("111111111testTypeID：" + (i + 1) + "个");
+                ms_select_test_type.setSelection(i + 1);
+                KLog.e("22222222222testTypeID：" + (i + 1) + "个");
+            }
+        }
+    }
+
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_cancel_dialog:
-                finish();
+                onBackPressed();
                 break;
 
             case R.id.bt_search_dialog:
                 BaseApplication.bus.post(mParametersData);
-                finish();
+                onBackPressed();
                 break;
         }
     }
@@ -219,6 +390,7 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
 
     private void showDatePicker() {
         Calendar now = Calendar.getInstance();
+        now.add(Calendar.MONTH, -3);
         DatePickerDialog dpd = DatePickerDialog.newInstance(this, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
         dpd.vibrate(true);
         dpd.dismissOnPause(false);
@@ -236,46 +408,61 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void revealView() {
-        fl_container.post(new Runnable() {
-            @Override
-            public void run() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    KLog.e("*******************************************");
-//                  int cx = (fl_container.getLeft() + fl_container.getRight()) / 2;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            fl_container.post(new Runnable() {
+                @Override
+                public void run() {
+
                     int cx = fl_container.getRight();
-//                  int cy = (fl_container.getTop() + fl_container.getBottom()) / 2;
                     int cy = fl_container.getBottom();
                     int radius = Math.max(fl_container.getWidth(), fl_container.getHeight());
                     Animator mAnimator = ViewAnimationUtils.createCircularReveal(fl_container, cx, cy, 0, radius);
                     mAnimator.setDuration(300);
                     mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-                    mAnimator.addListener(new AnimatorListenerAdapter() {
-
-                        @Override
-                        public void onAnimationStart(Animator animation) {
-                            super.onAnimationStart(animation);
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                        }
-                    });
                     mAnimator.start();
                 }
-            }
-        });
+            });
+        }
+    }
+
+    private void hideView() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int cx = fl_container.getRight();
+            int cy = fl_container.getBottom();
+            int radius = Math.max(fl_container.getWidth(), fl_container.getHeight());
+            Animator mAnimator = ViewAnimationUtils.createCircularReveal(fl_container, cx, cy, radius, 0);
+            mAnimator.setDuration(500);
+            mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+            mAnimator.addListener(new AnimatorListenerAdapter() {
+
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    super.onAnimationStart(animation);
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    fl_container.setVisibility(View.INVISIBLE);
+                    finish();
+                }
+            });
+            mAnimator.start();
+        } else {
+            finish();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-//        revealView();
         TimePickerDialog tpd = (TimePickerDialog) getFragmentManager().findFragmentByTag("Timepickerdialog");
         DatePickerDialog dpd = (DatePickerDialog) getFragmentManager().findFragmentByTag("Datepickerdialog");
 
         if (tpd != null) tpd.setOnTimeSetListener(this);
         if (dpd != null) dpd.setOnDateSetListener(this);
+
+        revealView();
     }
 
     @Override
@@ -308,5 +495,13 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
         showTimePicker();
     }
 
+    @Override
+    public void onBackPressed() {
+        hideView();
+    }
 
+    @Override
+    public String createRefreshULR() {
+        return url;
+    }
 }

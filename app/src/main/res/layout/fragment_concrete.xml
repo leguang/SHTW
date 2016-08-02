@@ -53,7 +53,7 @@
                     android:id="@+id/rv_concrete_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="70dp" />
+                    android:layout_marginBottom="40dp" />
             </com.shtoone.shtw.ui.PageStateLayout>
         </in.srain.cube.views.ptr.PtrFrameLayout>
 
@@ -64,7 +64,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="70dp"
+        android:layout_marginBottom="66dp"
         android:layout_marginRight="16dp"
         android:src="@drawable/ic_search_white_18dp"
         android:transitionName="@string/transition_dialog" />

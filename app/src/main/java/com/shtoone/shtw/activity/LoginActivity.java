@@ -1,6 +1,7 @@
 package com.shtoone.shtw.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
@@ -18,6 +19,7 @@ import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.base.BaseActivity;
 import com.shtoone.shtw.bean.UserInfoData;
 import com.shtoone.shtw.utils.AESCryptUtils;
+import com.shtoone.shtw.utils.AnimationUtils;
 import com.shtoone.shtw.utils.ConstantsUtils;
 import com.shtoone.shtw.utils.HttpUtils;
 import com.shtoone.shtw.utils.KeyBoardUtils;
@@ -160,13 +162,13 @@ public class LoginActivity extends BaseActivity {
                                             BaseApplication.mUserInfoData = userInfoData;
                                             SharedPreferencesUtils.put(LoginActivity.this, ConstantsUtils.USERNAME, usernameEncrypted);
                                             SharedPreferencesUtils.put(LoginActivity.this, ConstantsUtils.PASSWORD, passwordEncrypted);
-                                            SharedPreferencesUtils.put(LoginActivity.this, ConstantsUtils.LOGINCHECK, response);
+//                                            SharedPreferencesUtils.put(LoginActivity.this, ConstantsUtils.LOGINCHECK, response);
                                             initParametersData();
                                             login_button.setProgress(100);
                                             login_button.postDelayed(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    jumpTo();
+                                                    jumpToMain();
                                                 }
                                             }, 500);
                                         } else {
@@ -218,17 +220,35 @@ public class LoginActivity extends BaseActivity {
     }
 
     //进入MainActivity
-    private void jumpTo() {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+    private void jumpToMain() {
+        Intent intent = null;
+        if ("GL".equals(userInfoData.getType())) {
+            intent = new Intent(this, MainActivity.class);
+
+        } else if ("SG".equals(userInfoData.getType())) {
+
+            switch (userInfoData.getUserRole()) {
+                case "1":
+                    intent = new Intent(this, ConcreteMainActivity.class);
+                    break;
+                case "3":
+                    intent = new Intent(this, LaboratoryMainActivity.class);
+                    break;
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AnimationUtils.startActivityFinish(this, intent, login_button, R.color.login_reveal, 500);
+        } else {
             startActivity(intent);
             finish();
+        }
     }
 
     private void initParametersData() {
         BaseApplication.parametersData.userGroupID = userInfoData.getDepartId();
     }
 
-    //点击空白处隐藏键盘
 //    @Override
 //    public boolean dispatchTouchEvent(MotionEvent ev) {
 //        View v = this.getCurrentFocus();

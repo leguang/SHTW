@@ -40,7 +40,7 @@ public class YaLiJiFragmentViewPagerAdapter extends FragmentPagerAdapter {
         } else {
             mParametersData.isQualified = "0";
             if (position == 4) {
-                mParametersData.isReal = "0";
+                mParametersData.isReal = "2";
                 return YaLiJiFragmentViewPagerFragment.newInstance(mParametersData);
             } else {
                 mParametersData.isReal = "1";
@@ -69,8 +69,14 @@ public class YaLiJiFragmentViewPagerAdapter extends FragmentPagerAdapter {
     public void updateSearch(ParametersData mParametersData) {
         if (mParametersData != null) {
             if (mParametersData.fromTo == ConstantsUtils.YALIJIFRAGMENT) {
-                this.mParametersData = (ParametersData) mParametersData.clone();
-                KLog.e(mParametersData.toString());
+                this.mParametersData.startDateTime = mParametersData.startDateTime;
+                this.mParametersData.endDateTime = mParametersData.endDateTime;
+                this.mParametersData.equipmentID = mParametersData.equipmentID;
+                this.mParametersData.testTypeID = mParametersData.testTypeID;
+                KLog.e("mParametersData:" + mParametersData.startDateTime);
+                KLog.e("mParametersData:" + mParametersData.endDateTime);
+                KLog.e("mParametersData:" + mParametersData.equipmentID);
+                KLog.e("mParametersData:" + mParametersData.testTypeID);
             }
         }
     }

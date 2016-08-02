@@ -96,7 +96,7 @@ public class WannengjiFragment extends BaseLazyFragment {
         sb.append(getString(R.string.wannengji)).trimToSize();
         mToolbar.setTitle(sb.toString());
         initToolbarBackNavigation(mToolbar);
-        initToolbarMenu(mToolbar);
+//        initToolbarMenu(mToolbar);
         setAdapter();
     }
 
@@ -110,8 +110,14 @@ public class WannengjiFragment extends BaseLazyFragment {
     public void updateSearch(ParametersData mParametersData) {
         if (mParametersData != null) {
             if (mParametersData.fromTo == ConstantsUtils.WANNENGJIFRAGMENT) {
-                this.mParametersData = (ParametersData) mParametersData.clone();
-                KLog.e(mParametersData.toString());
+                this.mParametersData.startDateTime = mParametersData.startDateTime;
+                this.mParametersData.endDateTime = mParametersData.endDateTime;
+                this.mParametersData.equipmentID = mParametersData.equipmentID;
+                this.mParametersData.testTypeID = mParametersData.testTypeID;
+                KLog.e("mParametersData:" + mParametersData.startDateTime);
+                KLog.e("mParametersData:" + mParametersData.endDateTime);
+                KLog.e("mParametersData:" + mParametersData.equipmentID);
+                KLog.e("mParametersData:" + mParametersData.testTypeID);
             }
         }
     }

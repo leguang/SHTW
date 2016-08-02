@@ -1,5 +1,6 @@
 package com.shtoone.shtw.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,23 +8,24 @@ import java.util.List;
  */
 public class WannengjiFragmentViewPagerFragmentRecyclerViewItemData {
     /**
-     * data : [{"GCMC":"石银高速公路石嘴山至平罗联络线","SYJID":"A5F94CED-EF65-4F5A-B2C3-6CDB770587A4","SYRQ":"2016-06-23","testName":"钢筋试验","SGBW":"桩基","LZQD":"","shebeiname":"3标万能机","PDJG":"合格","QFLZ":"","SJBH":"YP-2016-GY-LJ3-035","PZBM":"HRB400E"},{"GCMC":"石银高速石嘴山至平罗联络线工程","SYJID":"474E3E33-4106-472B-B04C-EFC63FF31083","SYRQ":"2016-06-22","testName":"钢筋机械连接接头试验","SGBW":"桩基","LZQD":"","shebeiname":"3标万能机","PDJG":"合格","QFLZ":"","SJBH":"YP-2016-GL-LJ3-019","PZBM":"HRB400E"},{"GCMC":"石银高速石嘴山至平罗联络线工程","SYJID":"FAD90CE3-0B0E-458A-B992-5C85EC409248","SYRQ":"2016-06-22","testName":"钢筋机械连接接头试验","SGBW":"桩基","LZQD":"","shebeiname":"3标万能机","PDJG":"合格","QFLZ":"","SJBH":"YP-2016-GL-LJ3-020","PZBM":"HRB400E"},{"GCMC":"石银高速公路石嘴山至平罗联络线","SYJID":"6B27D39E-E116-473E-BB0A-CF04CF807C1D","SYRQ":"2016-06-22","testName":"钢筋试验","SGBW":"桩基","LZQD":"","shebeiname":"3标万能机","PDJG":"合格","QFLZ":"","SJBH":"YP-2016-GY-LJ3-033","PZBM":"HRB400E"},{"GCMC":"石银高速公路石嘴山至平罗联络线","SYJID":"17517F82-BC26-4486-82A8-6AC1CDE908D1","SYRQ":"2016-06-22","testName":"钢筋试验","SGBW":"桩基","LZQD":"","shebeiname":"3标万能机","PDJG":"合格","QFLZ":"","SJBH":"YP-2016-GY-LJ3-034","PZBM":"HRB400E"},{"GCMC":"石银高速公路石嘴山至平罗联络线","SYJID":"3059F97A-B896-4FC2-A512-1D99F758D748","SYRQ":"2016-06-21","testName":"钢筋试验","SGBW":"空心板","LZQD":"","shebeiname":"3标万能机","PDJG":"合格","QFLZ":"","SJBH":"YP-2016-GY-LJ3-032","PZBM":"HRB400E"},{"GCMC":"石银高速公路石嘴山至平罗联络线","SYJID":"955BA78C-0B75-4658-843E-163EC61259B1","SYRQ":"2016-06-20","testName":"钢筋试验","SGBW":"桩基","LZQD":"","shebeiname":"3标万能机","PDJG":"合格","QFLZ":"","SJBH":"YP-2016-GY-LJ3-026","PZBM":"HRB400E"},{"GCMC":"石银高速公路石嘴山至平罗联络线","SYJID":"66655FFE-0DD1-4B74-A2C6-633A1B7B2F56","SYRQ":"2016-06-20","testName":"钢筋试验","SGBW":"承台","LZQD":"","shebeiname":"3标万能机","PDJG":"合格","QFLZ":"","SJBH":"YP-2016-GY-LJ3-027","PZBM":"HRB400E"},{"GCMC":"石银高速公路石嘴山至平罗联络线","SYJID":"709AE8A9-DE57-4B05-B9FD-EB0978F4EBB4","SYRQ":"2016-06-20","testName":"钢筋试验","SGBW":"空心板","LZQD":"","shebeiname":"3标万能机","PDJG":"合格","QFLZ":"","SJBH":"YP-2016-GY-LJ3-028","PZBM":"HRB400E"},{"GCMC":"石银高速公路石嘴山至平罗联络线","SYJID":"D021BA11-33AA-4960-848A-A87CEB49994F","SYRQ":"2016-06-20","testName":"钢筋试验","SGBW":"空心板","LZQD":"","shebeiname":"3标万能机","PDJG":"合格","QFLZ":"","SJBH":"YP-2016-GY-LJ3-029","PZBM":"HPB300"},{"GCMC":"石银高速公路石嘴山至平罗联络线","SYJID":"5EDE0CD1-2599-4A5C-89E9-79879B10858C","SYRQ":"2016-06-20","testName":"钢筋试验","SGBW":"空心板","LZQD":"","shebeiname":"3标万能机","PDJG":"合格","QFLZ":"","SJBH":"YP-2016-GY-LJ3-030","PZBM":"HPB300"},{"GCMC":"石银高速公路石嘴山至平罗联络线","SYJID":"4D7C71D6-4344-4907-A291-952C05E99B8A","SYRQ":"2016-06-20","testName":"钢筋试验","SGBW":"承台","LZQD":"","shebeiname":"3标万能机","PDJG":"合格","QFLZ":"","SJBH":"YP-2016-GY-LJ3-031","PZBM":"HRB400E"},{"GCMC":"石银高速石嘴山至平罗联络线工程","SYJID":"A5A3B80F-55A4-47D2-9297-E9277FD6438A","SYRQ":"2016-06-20","testName":"钢筋机械连接接头试验","SGBW":"桩基","LZQD":"","shebeiname":"3标万能机","PDJG":"合格","QFLZ":"","SJBH":"YP-2016-GL-LJ3-016","PZBM":"HRB400E"},{"GCMC":"石银高速石嘴山至平罗联络线工程","SYJID":"07C88BB6-BFA7-4FFA-8B19-983026623A57","SYRQ":"2016-06-20","testName":"钢筋机械连接接头试验","SGBW":"桩基","LZQD":"","shebeiname":"3标万能机","PDJG":"合格","QFLZ":"","SJBH":"YP-2016-GL-LJ3-017","PZBM":"HRB400E"},{"GCMC":"石银高速石嘴山至平罗联络线工程","SYJID":"B4DBC5F9-A32E-448E-9296-944BE464F495","SYRQ":"2016-06-20","testName":"钢筋机械连接接头试验","SGBW":"桩基","LZQD":"","shebeiname":"3标万能机","PDJG":"合格","QFLZ":"","SJBH":"YP-2016-GL-LJ3-018","PZBM":"HRB400E"}]
+     * data : [{"GCMC":"桥梁工程","SYJID":"6E678FB6-333D-4F51-8A01-FF2ED3F01158","SYRQ":"2016-06-01","chuzhi":"0","testName":"钢筋试验","SGBW":"周家寨大桥右幅11空心墩4.5-9m","LZQD":"","shebeiname":"二航试验段分部1号压力机","PDJG":"合格","QFLZ":"","SJBH":"1","PZBM":""},{"GCMC":"桥梁工程","SYJID":"6D7CD53E-7DD3-4C0F-BBE6-B650D3C9B842","SYRQ":"2016-05-24","chuzhi":"0","testName":"钢筋试验","SGBW":"周家寨大桥左幅5空心墩63-65.25m","LZQD":"","shebeiname":"二航试验段分部1号压力机","PDJG":"合格","QFLZ":"","SJBH":"1","PZBM":""}]
      * success : true
      */
 
     private boolean success;
     /**
-     * GCMC : 石银高速公路石嘴山至平罗联络线
-     * SYJID : A5F94CED-EF65-4F5A-B2C3-6CDB770587A4
-     * SYRQ : 2016-06-23
+     * GCMC : 桥梁工程
+     * SYJID : 6E678FB6-333D-4F51-8A01-FF2ED3F01158
+     * SYRQ : 2016-06-01
+     * chuzhi : 0
      * testName : 钢筋试验
-     * SGBW : 桩基
+     * SGBW : 周家寨大桥右幅11空心墩4.5-9m
      * LZQD :
-     * shebeiname : 3标万能机
+     * shebeiname : 二航试验段分部1号压力机
      * PDJG : 合格
      * QFLZ :
-     * SJBH : YP-2016-GY-LJ3-035
-     * PZBM : HRB400E
+     * SJBH : 1
+     * PZBM :
      */
 
     private List<DataBean> data;
@@ -44,10 +46,11 @@ public class WannengjiFragmentViewPagerFragmentRecyclerViewItemData {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         private String GCMC;
         private String SYJID;
         private String SYRQ;
+        private String chuzhi;
         private String testName;
         private String SGBW;
         private String LZQD;
@@ -79,6 +82,14 @@ public class WannengjiFragmentViewPagerFragmentRecyclerViewItemData {
 
         public void setSYRQ(String SYRQ) {
             this.SYRQ = SYRQ;
+        }
+
+        public String getChuzhi() {
+            return chuzhi;
+        }
+
+        public void setChuzhi(String chuzhi) {
+            this.chuzhi = chuzhi;
         }
 
         public String getTestName() {

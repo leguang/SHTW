@@ -21,14 +21,13 @@ import com.google.gson.Gson;
 import com.shtoone.shtw.BaseApplication;
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.DialogActivity;
-import com.shtoone.shtw.activity.YaLiJiDetailActivity;
+import com.shtoone.shtw.activity.ProduceQueryDetailActivity;
 import com.shtoone.shtw.adapter.OnItemClickListener;
 import com.shtoone.shtw.adapter.ProduceQueryFragmentRecyclerViewAdapter;
 import com.shtoone.shtw.bean.EventData;
 import com.shtoone.shtw.bean.ParametersData;
 import com.shtoone.shtw.bean.ProduceQueryFragmentListData;
 import com.shtoone.shtw.fragment.base.BaseLazyFragment;
-import com.shtoone.shtw.fragment.mainactivity.LaboratoryFragment;
 import com.shtoone.shtw.ui.PageStateLayout;
 import com.shtoone.shtw.utils.ConstantsUtils;
 import com.shtoone.shtw.utils.DisplayUtils;
@@ -55,7 +54,7 @@ import jp.wasabeef.recyclerview.adapters.SlideInLeftAnimationAdapter;
  * Created by leguang on 2016/7/20 0020.
  */
 public class ProduceQueryFragment extends BaseLazyFragment {
-    private static final String TAG = LaboratoryFragment.class.getSimpleName();
+    private static final String TAG = ProduceQueryFragment.class.getSimpleName();
     private Toolbar mToolbar;
     private PtrFrameLayout ptrframe;
     private RecyclerView mRecyclerView;
@@ -124,7 +123,7 @@ public class ProduceQueryFragment extends BaseLazyFragment {
         sb.append(getString(R.string.produce_query)).trimToSize();
         mToolbar.setTitle(sb.toString());
         initToolbarBackNavigation(mToolbar);
-        initToolbarMenu(mToolbar);
+//        initToolbarMenu(mToolbar);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +155,7 @@ public class ProduceQueryFragment extends BaseLazyFragment {
             public void onItemClick(View view, int position) {
                 // 实现局部界面刷新, 这个view就是被点击的item布局对象
                 changeReadedState(view);
-                jump2OverproofDetailActivity(position);
+                jump2ProduceQueryDetailActivity(position);
             }
         });
 
@@ -206,7 +205,7 @@ public class ProduceQueryFragment extends BaseLazyFragment {
         pageStateLayout.setOnNetErrorClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pageStateLayout.showEmpty();
+                pageStateLayout.showNetError();
                 NetworkUtils.openSetting(_mActivity);
             }
         });
@@ -287,8 +286,7 @@ public class ProduceQueryFragment extends BaseLazyFragment {
                 if (null != listData) {
                     listData.clear();
                 }
-//                getDataFromNetwork(mParametersData);
-                parseData("");
+                getDataFromNetwork(mParametersData);
                 KLog.e("下拉刷新mParametersData.currentPage=" + mParametersData.currentPage);
                 frame.refreshComplete();
             }
@@ -309,7 +307,6 @@ public class ProduceQueryFragment extends BaseLazyFragment {
         HttpUtils.getRequest(URL.getProduceData(userGroupID, startDateTime, endDateTime, currentPage, equipmentID), new HttpUtils.HttpListener() {
             @Override
             public void onSuccess(String response) {
-                KLog.e("response:" + response);
                 KLog.json(response);
                 parseData(response);
             }
@@ -352,115 +349,6 @@ public class ProduceQueryFragment extends BaseLazyFragment {
     }
 
     protected void parseData(String response) {
-        if (null != itemsData) {
-            itemsData.getData().clear();
-        }
-
-        response = "{\n" +
-                "data: [\n" +
-                "{\n" +
-                "chuliaoshijian: \"2016-07-15 17:10:24\",\n" +
-                "id: \"842771\",\n" +
-                "qiangdudengji: \"C50\",\n" +
-                "gujifangshu: \"1\",\n" +
-                "gongchengmingcheng: \"荒寨2#大桥左幅第14跨湿接缝及横隔板\",\n" +
-                "sigongdidian: \"中交二航局蒙文砚高速\",\n" +
-                "banhezhanminchen: \"二航局2分部2号站3号机\",\n" +
-                "jiaozuobuwei: \"\"\n" +
-                "},\n" +
-                "{\n" +
-                "chuliaoshijian: \"2016-07-15 17:09:50\",\n" +
-                "id: \"842769\",\n" +
-                "qiangdudengji: \"C30盖板\",\n" +
-                "gujifangshu: \"0.999\",\n" +
-                "gongchengmingcheng: \"预制盖板\",\n" +
-                "sigongdidian: \"中交二航局蒙文砚高速公路\",\n" +
-                "banhezhanminchen: \"二航局2分部2号站4号机\",\n" +
-                "jiaozuobuwei: \"\"\n" +
-                "},\n" +
-                "{\n" +
-                "chuliaoshijian: \"2016-07-15 17:08:40\",\n" +
-                "id: \"842767\",\n" +
-                "qiangdudengji: \"C50\",\n" +
-                "gujifangshu: \"1.001\",\n" +
-                "gongchengmingcheng: \"荒寨2#大桥左幅第14跨湿接缝及横隔板\",\n" +
-                "sigongdidian: \"中交二航局蒙文砚高速\",\n" +
-                "banhezhanminchen: \"二航局2分部2号站3号机\",\n" +
-                "jiaozuobuwei: \"\"\n" +
-                "},\n" +
-                "{\n" +
-                "chuliaoshijian: \"2016-07-15 17:06:54\",\n" +
-                "id: \"842764\",\n" +
-                "qiangdudengji: \"C50\",\n" +
-                "gujifangshu: \"0.995\",\n" +
-                "gongchengmingcheng: \"荒寨2#大桥左幅第14跨湿接缝及横隔板\",\n" +
-                "sigongdidian: \"中交二航局蒙文砚高速\",\n" +
-                "banhezhanminchen: \"二航局2分部2号站3号机\",\n" +
-                "jiaozuobuwei: \"\"\n" +
-                "},\n" +
-                "{\n" +
-                "chuliaoshijian: \"2016-07-15 17:04:58\",\n" +
-                "id: \"842757\",\n" +
-                "qiangdudengji: \"C50\",\n" +
-                "gujifangshu: \"0.998\",\n" +
-                "gongchengmingcheng: \"荒寨2#大桥左幅第14跨湿接缝及横隔板\",\n" +
-                "sigongdidian: \"中交二航局蒙文砚高速\",\n" +
-                "banhezhanminchen: \"二航局2分部2号站3号机\",\n" +
-                "jiaozuobuwei: \"\"\n" +
-                "},\n" +
-                "{\n" +
-                "chuliaoshijian: \"2016-07-15 17:04:05\",\n" +
-                "id: \"842770\",\n" +
-                "qiangdudengji: \"C20\",\n" +
-                "gujifangshu: \"1.425\",\n" +
-                "gongchengmingcheng: \"蒙文砚高速公路项目经理部四分部\",\n" +
-                "sigongdidian: \"项目部\",\n" +
-                "banhezhanminchen: \"三公局三公司3分部2号站1号机\",\n" +
-                "jiaozuobuwei: \"基础\"\n" +
-                "},\n" +
-                "{\n" +
-                "chuliaoshijian: \"2016-07-15 17:03:58\",\n" +
-                "id: \"842753\",\n" +
-                "qiangdudengji: \"C30二衬\",\n" +
-                "gujifangshu: \"0.997\",\n" +
-                "gongchengmingcheng: \"三角塘左洞二衬\",\n" +
-                "sigongdidian: \"中交二航局蒙文砚高速公路\",\n" +
-                "banhezhanminchen: \"二航局2分部2号站4号机\",\n" +
-                "jiaozuobuwei: \"\"\n" +
-                "},\n" +
-                "{\n" +
-                "chuliaoshijian: \"2016-07-15 17:03:36\",\n" +
-                "id: \"842755\",\n" +
-                "qiangdudengji: \"C25\",\n" +
-                "gujifangshu: \"1.248\",\n" +
-                "gongchengmingcheng: \"蒙文砚高速\",\n" +
-                "sigongdidian: \"梁场\",\n" +
-                "banhezhanminchen: \"四公局二分公司3分部1号站2号机\",\n" +
-                "jiaozuobuwei: \"抗滑桩.挡土板\"\n" +
-                "},\n" +
-                "{\n" +
-                "chuliaoshijian: \"2016-07-15 17:02:50\",\n" +
-                "id: \"842745\",\n" +
-                "qiangdudengji: \"C50\",\n" +
-                "gujifangshu: \"0.999\",\n" +
-                "gongchengmingcheng: \"荒寨2#大桥左幅第14跨湿接缝及横隔板\",\n" +
-                "sigongdidian: \"中交二航局蒙文砚高速\",\n" +
-                "banhezhanminchen: \"二航局2分部2号站3号机\",\n" +
-                "jiaozuobuwei: \"\"\n" +
-                "},\n" +
-                "{\n" +
-                "chuliaoshijian: \"2016-07-15 17:02:40\",\n" +
-                "id: \"842756\",\n" +
-                "qiangdudengji: \"C25\",\n" +
-                "gujifangshu: \"1.254\",\n" +
-                "gongchengmingcheng: \"蒙文砚高速\",\n" +
-                "sigongdidian: \"梁场\",\n" +
-                "banhezhanminchen: \"四公局二分公司3分部1号站2号机\",\n" +
-                "jiaozuobuwei: \"抗滑桩.挡土板\"\n" +
-                "}\n" +
-                "],\n" +
-                "success: true\n" +
-                "}";
         itemsData = mGson.fromJson(response, ProduceQueryFragmentListData.class);
         if (null != itemsData && itemsData.isSuccess()) {
             listData.addAll(itemsData.getData());
@@ -490,10 +378,12 @@ public class ProduceQueryFragment extends BaseLazyFragment {
         //此处可以做一些修改点击过的item的样式，方便用户看出哪些已经点击查看过
     }
 
-    //进入YaLiJiDetailActivity
-    private void jump2OverproofDetailActivity(int position) {
-        Intent intent = new Intent(_mActivity, YaLiJiDetailActivity.class);
-//        intent.putExtra("detailID", listData.get(position).getSYJID());
+    //进入ProduceQueryDetailActivity
+    private void jump2ProduceQueryDetailActivity(int position) {
+        Intent intent = new Intent(_mActivity, ProduceQueryDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("producequerydetail", listData.get(position));
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 
@@ -526,6 +416,13 @@ public class ProduceQueryFragment extends BaseLazyFragment {
         if (event.position == 0) {
             mRecyclerView.smoothScrollToPosition(0);
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //防止屏幕旋转后重画时fab显示
+        fab.hide();
     }
 
     @Override

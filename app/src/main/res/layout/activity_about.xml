@@ -5,5 +5,13 @@
     android:background="@color/lightest_gray"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background="@color/black"
+        android:text="关于我们公司和关于软件"
+        android:textColor="@color/red"
+        android:textSize="25sp" />
 
 </LinearLayout>

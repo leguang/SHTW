@@ -1,5 +1,6 @@
 package com.shtoone.shtw.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -42,7 +43,7 @@ public class ProduceQueryFragmentListData {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         private String chuliaoshijian;
         private String id;
         private String qiangdudengji;

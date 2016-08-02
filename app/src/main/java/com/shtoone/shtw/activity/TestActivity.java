@@ -6,11 +6,13 @@ import android.support.design.widget.TextInputLayout;
 import android.view.View;
 
 import com.shtoone.shtw.R;
+import com.shtoone.shtw.utils.AnimationUtils;
 
 
 public class TestActivity extends Activity {
     private static final String TAG = TestActivity.class.getSimpleName();
     private TextInputLayout login_password;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +33,9 @@ public class TestActivity extends Activity {
             @Override
             public void onClick(View view) {
 
-                login_password.setErrorEnabled(false);
+                AnimationUtils.startActivity(TestActivity.this, Test1Activity.class, view, R.color.colorPrimary);
             }
         });
     }
+
 }

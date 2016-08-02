@@ -1,0 +1,42 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_container_organization_activity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/base_color"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_organization_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:fitsSystemWindows="true"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:titleTextAppearance="@style/ToolbarTextAppearance" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <com.shtoone.shtw.ui.PageStateLayout
+        android:id="@+id/psl_organization_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        app:emptyView="@layout/page_state_empty_view"
+        app:errorView="@layout/page_state_error_view"
+        app:loadingView="@layout/page_state_loading_view"
+        app:netErrorView="@layout/page_state_net_error_view">
+
+        <!-- 组织结构树 -->
+        <ListView
+            android:id="@+id/lv_tree_organization_activity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.shtoone.shtw.ui.PageStateLayout>
+
+</LinearLayout>

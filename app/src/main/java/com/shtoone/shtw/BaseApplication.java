@@ -15,11 +15,12 @@ import com.squareup.otto.Bus;
  */
 public class BaseApplication extends Application {
 
-    private static final String TAG = "BaseApplication";
+    private static final String TAG = BaseApplication.class.getSimpleName();
     public static BaseApplication application;
     public static Context context;
     public static final Bus bus = new Bus();
     public static ParametersData parametersData = new ParametersData();
+    public static ParametersData backupParametersData;
     public static RequestQueue requestQueue;
     public static UserInfoData mUserInfoData;
     public static boolean isExpand;

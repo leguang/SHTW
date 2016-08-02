@@ -75,6 +75,7 @@ public class YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter extends Recycler
             mItemViewHolder.tv_project_name.setText(item.getGCMC());
             mItemViewHolder.tv_position.setText(item.getSGBW());
             mItemViewHolder.tv_testtype.setText(item.getTestName());
+            mItemViewHolder.tv_equipment.setText(item.getShebeiname());
             if ("合格".equals(item.getPDJG())) {
                 //默认就是合格设置
             } else if ("有效".equals(item.getPDJG())) {
@@ -82,10 +83,10 @@ public class YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter extends Recycler
             } else {
                 //设置是否处置标签
                 mItemViewHolder.stv_handle.setVisibility(View.VISIBLE);
-                if (true) {
-//                holder.stv_handle.setText("已处置").setSlantedBackgroundColor(Color.RED);
+                if ("0".equals(item.getChuzhi())) {
+                    mItemViewHolder.stv_handle.setText("未处置").setSlantedBackgroundColor(Color.YELLOW);
                 } else {
-                    mItemViewHolder.stv_handle.setText("未处置").setSlantedBackgroundColor(Color.RED);
+                    mItemViewHolder.stv_handle.setText("已处置").setSlantedBackgroundColor(Color.GREEN);
                 }
 
                 if ("不合格".equals(item.getPDJG())) {
@@ -124,6 +125,7 @@ public class YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter extends Recycler
         TextView tv_central_value;
         TextView tv_project_name;
         TextView tv_position;
+        TextView tv_equipment;
         TextView tv_testtype;
         SlantedTextView stv_qualified;
         SlantedTextView stv_handle;
@@ -138,6 +140,7 @@ public class YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter extends Recycler
             tv_project_name = (TextView) view.findViewById(R.id.tv_project_name_item_recyclerview_yaliji_fragment_viewpager_fragment);
             tv_position = (TextView) view.findViewById(R.id.tv_position_item_recyclerview_yaliji_fragment_viewpager_fragment);
             tv_testtype = (TextView) view.findViewById(R.id.tv_testtype_item_recyclerview_yaliji_fragment_viewpager_fragment);
+            tv_equipment = (TextView) view.findViewById(R.id.tv_equipment_item_recyclerview_yaliji_fragment_viewpager_fragment);
             stv_qualified = (SlantedTextView) view.findViewById(R.id.stv_qualified_item_recyclerview_yaliji_fragment_viewpager_fragment);
             stv_handle = (SlantedTextView) view.findViewById(R.id.stv_handle_item_recyclerview_yaliji_fragment_viewpager_fragment);
             cv = (CardView) view.findViewById(R.id.cv_item_recyclerview_yaliji_fragment_viewpager_fragment);

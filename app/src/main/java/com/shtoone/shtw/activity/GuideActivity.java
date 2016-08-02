@@ -10,8 +10,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.base.BaseActivity;
@@ -23,8 +21,8 @@ public class GuideActivity extends BaseActivity {
     private static final String TAG = GuideActivity.class.getSimpleName();
     private Button bt_guide;
     private ViewPager mViewPager;
-    private RelativeLayout rl_container;
-    private int[] resouces = {R.drawable.welcome_1, R.drawable.welcome_2, R.drawable.welcome_3};
+    private FrameLayout fl_container;
+    private int[] resouces = {R.drawable.bg_welcome_0, R.drawable.bg_welcome_1};
     private ArgbEvaluator mArgbEvaluator = new ArgbEvaluator();
 
     @Override
@@ -37,7 +35,7 @@ public class GuideActivity extends BaseActivity {
 
     private void initView() {
         mViewPager = (ViewPager) findViewById(R.id.vp_guide_activity);
-        rl_container = (RelativeLayout) findViewById(R.id.rl_container_guide_activity);
+        fl_container = (FrameLayout) findViewById(R.id.fl_container_guide_activity);
         bt_guide = (Button) findViewById(R.id.bt_guide_activity);
     }
 
@@ -51,7 +49,7 @@ public class GuideActivity extends BaseActivity {
                 Intent intent = new Intent(GuideActivity.this, LoginActivity.class);
                 startActivity(intent);
                 // 结束自己
-                GuideActivity.this.finish();
+                finish();
             }
         });
 
@@ -62,15 +60,10 @@ public class GuideActivity extends BaseActivity {
                 switch (position) {
                     case 0:
                         bt_guide.setVisibility(View.GONE);
-                        evaluate = (Integer) mArgbEvaluator.evaluate(positionOffset, 0XFF8080FF, 0XFF80FF80);
-                        rl_container.setBackgroundColor(evaluate);
+                        evaluate = (Integer) mArgbEvaluator.evaluate(positionOffset, 0XFF76C5F0, 0XFFFFFFFF);
+                        fl_container.setBackgroundColor(evaluate);
                         break;
                     case 1:
-                        bt_guide.setVisibility(View.GONE);
-                        evaluate = (Integer) mArgbEvaluator.evaluate(positionOffset, 0XFF80FF80, 0XFFFF8080);
-                        rl_container.setBackgroundColor(evaluate);
-                        break;
-                    case 2:
                         bt_guide.setVisibility(View.VISIBLE);
                         break;
                 }
@@ -109,9 +102,7 @@ public class GuideActivity extends BaseActivity {
 
             View view = View.inflate(GuideActivity.this, R.layout.item_viewpager_guide_activity, null);
             FrameLayout fl_container = (FrameLayout) view.findViewById(R.id.fl_container_item_viewpager_guide_activity);
-            TextView tv = (TextView) view.findViewById(R.id.tv_item_viewpager_guide_activity);
-            tv.setText(position + "");
-//            fl_container.setBackgroundResource(resouces[position]);
+            fl_container.setBackgroundResource(resouces[position]);
             container.addView(view);
             return view;
         }

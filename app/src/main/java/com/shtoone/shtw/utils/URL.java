@@ -24,9 +24,9 @@ public class URL {
     /**
      * 基础地址
      */
-    public static final String BaseURL = "http://120.27.146.66:8083/nxsy/";
+//    public static final String BaseURL = "http://120.27.146.66:8083/nxsy/";
 //    public static final String BaseURL = "http://192.168.11.102:8080/qms/";
-//    public static final String BaseURL = "http://192.168.11.108:8080/zgjjqms/";
+    public static final String BaseURL = "http://192.168.10.87:8080/zgjjqms/";
 
 
     /**
@@ -53,7 +53,28 @@ public class URL {
     /**
      * 组织结构面板
      */
-    public static final String CommZuzhiJiegou = BaseURL + "app.do?AppDepartTree&updateDepartTime=%1&funtype=%2&userGroupId=%3&type=%4";
+    public static final String ORGANIZATION = BaseURL + "app.do?AppDepartTree&updateDepartTime=%1&funtype=%2&userGroupId=%3&type=%4";
+
+    /**
+     * 组织结构面板
+     *
+     * @param dateTime    时间
+     * @param type        部门类型（试验室或者拌合站）
+     * @param userGroupID 组织ID
+     * @param userRole    组织ID
+     * @return 返回拼凑后的url
+     */
+    public static String getOrganizationData(String dateTime, String type, String userGroupID, String userRole) {
+        dateTime = DateUtils.ChangeTimeToLong(dateTime);
+        //如果开始时间大于结束时间，返回null
+        String url = ORGANIZATION.replace("%1", dateTime).replace("%2", type).replace("%3", userGroupID).replace("%4", userRole);
+        KLog.e(TAG, "组织结构URL :" + url);
+        if (TextUtils.isEmpty(url)) {
+            return null;
+        }
+        return url;
+    }
+
 
     /**
      * 主界面地址 TODO
@@ -61,9 +82,24 @@ public class URL {
     public static final String Main_URL = BaseURL + "app.do?AppHntMain&departId=%1";
 
     /**
-     * 请求设备列表 1:水泥拌和站 2:沥青拌和站 3:万能机 4:压力机
+     * 拌合站设备列表
      */
-    public static final String COMM_DEVICE = BaseURL + "app.do?getShebeiList&userGroupId=%1&shebeiType=%2";
+    public static final String COMM_DEVICE = BaseURL + "app.do?getShebeiList&userGroupId=%1";
+
+    /**
+     * 拌合站设备列表
+     *
+     * @param userGroupID 用户组ID
+     * @return 返回拼凑后的url
+     */
+    public static String getBHZEquipment(String userGroupID) {
+        String url = COMM_DEVICE.replace("%1", userGroupID);
+        KLog.e(TAG, "拌合站设备列表:" + url);
+        if (TextUtils.isEmpty(url)) {
+            return null;
+        }
+        return url;
+    }
 
     /**
      * 按试验种类获取条目
@@ -172,14 +208,14 @@ public class URL {
     public static final String HNTXQ_URL = BaseURL + "sysController.do?hntkangyaDetail&SYJID=%1";
 
     /**
-     * 压力机详情页
+     * 压力试验详情
      *
      * @param detailID 详情ID
      * @return 返回拼凑后的url
      */
     public static String getYalijiDetailData(String detailID) {
         String url = HNTXQ_URL.replace("%1", detailID);
-        KLog.e(TAG, "压力机详情页 :" + url);
+        KLog.e(TAG, "压力试验详情 :" + url);
         if (TextUtils.isEmpty(url)) {
             return null;
         }
@@ -192,9 +228,24 @@ public class URL {
     public static final String GJLL_URL = BaseURL + "sysController.do?gangjin&userGroupId=%1&isQualified=%2&startTime=%3&endTime=%4&pageNo=%5&shebeibianhao=%6&isReal=%7&maxPageItems=15";
 
     /**
-     * 钢筋拉力详情地址
+     * 万能机试验详情
      */
     public static final String GJLLXQ_URL = BaseURL + "sysController.do?gangjinDetail&SYJID=%1";
+
+    /**
+     * 万能机试验详情
+     *
+     * @param detailID 详情ID
+     * @return 返回拼凑后的url
+     */
+    public static String getWannengjiDetailData(String detailID) {
+        String url = GJLLXQ_URL.replace("%1", detailID);
+        KLog.e(TAG, "万能机试验详情 :" + url);
+        if (TextUtils.isEmpty(url)) {
+            return null;
+        }
+        return url;
+    }
 
     /**
      * 钢筋焊接接头列表地址
@@ -248,14 +299,71 @@ public class URL {
     public static final String BHZ_SCDATA_DETAIL_URL = BaseURL + "app.do?AppHntXiangxiDetail&bianhao=%1";
 
     /**
-     * 拌合站待处置超标列表查询
+     * 拌合站生产数据详情查询
+     *
+     * @param detailID 详情ID
+     * @return 返回拼凑后的url
+     */
+    public static String getProduceDetailData(String detailID) {
+        String url = BHZ_SCDATA_DETAIL_URL.replace("%1", detailID);
+        KLog.e(TAG, "拌合站生产数据详情查询 :" + url);
+        if (TextUtils.isEmpty(url)) {
+            return null;
+        }
+        return url;
+    }
+
+
+    /**
+     * 拌合站待处置超标列表
      */
     public static final String BHZ_CHAOBIAO_LIST_URL = BaseURL + "app.do?AppHntChaobiaoList&departId=%1&startTime=%2&endTime=%3&dengji=%4&chuzhileixing=%5&pageNo=%6&shebeibianhao=%7&maxPageItems=30";
 
     /**
+     * 拌合站待处置超标列表
+     *
+     * @param userGroupID    组织结构ID
+     * @param startTime      开始时间
+     * @param endTime        结束时间
+     * @param current_PageNo 当前页码
+     * @param deviceNo       设备编号
+     * @return url
+     */
+    public static String getOverproofData(String userGroupID, String startTime, String endTime, String dengji, String chuzhileixing, String current_PageNo, String deviceNo) {
+        startTime = DateUtils.ChangeTimeToLong(startTime);
+        endTime = DateUtils.ChangeTimeToLong(endTime);
+        //如果开始时间大于结束时间，返回null
+        if (Integer.valueOf(startTime) <= Integer.valueOf(endTime)) {
+            String url = BHZ_CHAOBIAO_LIST_URL.replace("%1", userGroupID).replace("%2", startTime).replace("%3", endTime).replace("%4", dengji).replace("%5", chuzhileixing).replace("%6", current_PageNo).replace("%7", deviceNo);
+            KLog.e(TAG, "拌合站待处置超标列表:" + url);
+            if (TextUtils.isEmpty(url)) {
+                return null;
+            }
+            return url;
+        }
+        return null;
+    }
+
+
+    /**
      * 拌合站待处置超标详情
      */
-    public static final String BHZ_CHAOBIAO_DETAIL_URL = BaseURL + "app.do?AppHntChaobiaoDetail&bianhao=%1&shebeibianhao=%2";
+    public static final String BHZ_CHAOBIAO_DETAIL_URL = BaseURL + "app.do?AppHntChaobiaoDetail&bianhao=%1";
+
+    /**
+     * 拌合站待处置超标详情
+     *
+     * @param detailID 详情ID
+     * @return 返回拼凑后的url
+     */
+    public static String getOverproofDetailData(String detailID) {
+        String url = BHZ_CHAOBIAO_DETAIL_URL.replace("%1", detailID);
+        KLog.e(TAG, "拌合站待处置超标详情 :" + url);
+        if (TextUtils.isEmpty(url)) {
+            return null;
+        }
+        return url;
+    }
 
     /**
      * 混凝土超标处置
@@ -389,7 +497,7 @@ public class URL {
         //如果开始时间大于结束时间，返回null
         if (Integer.valueOf(startTime) <= Integer.valueOf(endTime)) {
             String url = GJ_URL.replace("%1", userGroupID).replace("%2", isQualified).replace("%3", startTime).replace("%4", endTime).replace("%5", current_PageNo).replace("%6", deviceNo).replace("%7", isReal).replace("%8", testType);
-            KLog.e(TAG, "万能机列表 :" + url);
+            KLog.e("万能机列表 :" + url);
             if (TextUtils.isEmpty(url)) {
                 return null;
             }
@@ -397,4 +505,25 @@ public class URL {
         }
         return null;
     }
+
+    /**
+     * 获取试验室设备和试验类型
+     */
+    public static final String EQUIPMENT_TESTTYPE_URL = BaseURL + "sysController.do?getSyTpAndMc&userGroupId=%1";
+
+    /**
+     * 获取试验室设备和试验类型
+     *
+     * @param userGroupID 用户组ID
+     * @return 返回拼凑后的url
+     */
+    public static String getLibEquipmentTest(String userGroupID) {
+        String url = EQUIPMENT_TESTTYPE_URL.replace("%1", userGroupID);
+        KLog.e(TAG, "试验室设备和试验类型:" + url);
+        if (TextUtils.isEmpty(url)) {
+            return null;
+        }
+        return url;
+    }
+
 }

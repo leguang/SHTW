@@ -18,6 +18,7 @@ import android.support.design.widget.TabLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
@@ -45,6 +46,7 @@ import com.shtoone.shtw.activity.base.BaseActivity;
 import com.shtoone.shtw.adapter.YaLiJiDetailActivityChartViewPagerAdapter;
 import com.shtoone.shtw.bean.UserInfoData;
 import com.shtoone.shtw.bean.YalijiDetailData;
+import com.shtoone.shtw.bean.YalijiFragmentViewPagerFragmentRecyclerViewItemData;
 import com.shtoone.shtw.ui.PageStateLayout;
 import com.shtoone.shtw.utils.ConstantsUtils;
 import com.shtoone.shtw.utils.DisplayUtils;
@@ -92,7 +94,6 @@ public class YaLiJiDetailActivity extends BaseActivity implements TimePickerDial
     private TextView tv_size;
     private TextView tv_age;
     private TextView tv_central_value;
-    private String detaiID;
     private ImageView iv_photo_select;
     private ImageView iv_camera_select;
     private ImageView iv_album_select;
@@ -110,8 +111,9 @@ public class YaLiJiDetailActivity extends BaseActivity implements TimePickerDial
     private String handleReason;
     private String handleWay;
     private String handleResult;
+    private CardView cv_handle;
     private Bitmap bitmap;
-    private MaterialDialog progressDialog;
+    private YalijiFragmentViewPagerFragmentRecyclerViewItemData.DataBean mDataBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +128,7 @@ public class YaLiJiDetailActivity extends BaseActivity implements TimePickerDial
     }
 
     private void initView() {
+        mDataBean = (YalijiFragmentViewPagerFragmentRecyclerViewItemData.DataBean) getIntent().getSerializableExtra("yalijidetail");
         fab = (FloatingActionButton) findViewById(R.id.fab_yaliji_detail_activity);
         mToolbar = (Toolbar) findViewById(R.id.toolbar_yaliji_detail_activity);
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout_yaliji_detail_activity);
@@ -145,6 +148,12 @@ public class YaLiJiDetailActivity extends BaseActivity implements TimePickerDial
         tv_central_value = (TextView) findViewById(R.id.tv_central_value_yaliji_detail_activity);
 
         //处置部分
+        cv_handle = (CardView) findViewById(R.id.cv_handle_yaliji_detail_activity);
+        if (BaseApplication.mUserInfoData.getQuanxian().isSyschaobiaoReal()) {
+            if ("不合格".equals(mDataBean.getPDJG()) || "无效".equals(mDataBean.getPDJG())) {
+                cv_handle.setVisibility(View.VISIBLE);
+            }
+        }
         iv_photo_select = (ImageView) findViewById(R.id.iv_photo_select_yaliji_detail_activity);
         iv_camera_select = (ImageView) findViewById(R.id.iv_camera_select_yaliji_detail_activity);
         iv_album_select = (ImageView) findViewById(R.id.iv_album_select_yaliji_detail_activity);
@@ -158,11 +167,11 @@ public class YaLiJiDetailActivity extends BaseActivity implements TimePickerDial
         et_handle_time.getEditText().setInputType(InputType.TYPE_NULL);
         bt_submit = (Button) findViewById(R.id.bt_submit_yaliji_detail_activity);
         bt_reset = (Button) findViewById(R.id.bt_reset_yaliji_detail_activity);
+
     }
 
     private void initDate() {
         mUserInfoData = BaseApplication.mUserInfoData;
-        detaiID = getIntent().getStringExtra("detailID");
 
         if (null != mUserInfoData) {
             StringBuffer sb = new StringBuffer(mUserInfoData.getDepartName() + " > ");
@@ -286,7 +295,7 @@ public class YaLiJiDetailActivity extends BaseActivity implements TimePickerDial
                     int cy = (ll_camera_album.getTop() + view.getBottom()) / 2;
                     int radius = Math.max(view.getWidth(), ll_camera_album.getHeight());
                     Animator mAnimator = ViewAnimationUtils.createCircularReveal(ll_camera_album, cx, cy, 0, radius);
-                    mAnimator.setDuration(2000);
+                    mAnimator.setDuration(500);
                     mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
                     mAnimator.addListener(new AnimatorListenerAdapter() {
 
@@ -400,7 +409,7 @@ public class YaLiJiDetailActivity extends BaseActivity implements TimePickerDial
                                     //提交到服务器
                                     ToastUtils.showToast(YaLiJiDetailActivity.this, "提交");
 
-                                    progressDialog = new MaterialDialog.Builder(YaLiJiDetailActivity.this)
+                                    new MaterialDialog.Builder(YaLiJiDetailActivity.this)
                                             .title("提交")
                                             .content("正在提交中，请稍等……")
                                             .progress(true, 0)
@@ -449,7 +458,7 @@ public class YaLiJiDetailActivity extends BaseActivity implements TimePickerDial
                                 et_handle_result.getEditText().setText("");
                                 handleResult = "";
                                 bitmap = null;
-                                iv_photo_select.setImageResource(R.drawable.ic_camera);
+                                iv_photo_select.setImageResource(R.drawable.ic_camera_album);
                             }
                         })
                         .negativeText("放弃")
@@ -507,7 +516,7 @@ public class YaLiJiDetailActivity extends BaseActivity implements TimePickerDial
 
     private void getDataFromNetwork() {
         //联网获取数据
-        HttpUtils.getRequest(URL.getYalijiDetailData(detaiID), new HttpUtils.HttpListener() {
+        HttpUtils.getRequest(URL.getYalijiDetailData(mDataBean.getSYJID()), new HttpUtils.HttpListener() {
             @Override
             public void onSuccess(String response) {
                 KLog.json(TAG, response);
@@ -569,6 +578,9 @@ public class YaLiJiDetailActivity extends BaseActivity implements TimePickerDial
         tv_central_value.setText(mYalijiDetailData.getData().getQDDBZ());
         mViewPager.setAdapter(new YaLiJiDetailActivityChartViewPagerAdapter(getSupportFragmentManager(), mYalijiDetailData));
         mTabLayout.setupWithViewPager(mViewPager);
+        if (!TextUtils.isEmpty(mYalijiDetailData.getData().getChuli())) {
+            et_handle_reason.getEditText().setText(mYalijiDetailData.getData().getChuli());
+        }
     }
 
     private void showDatePicker() {

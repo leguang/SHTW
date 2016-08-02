@@ -44,7 +44,7 @@
     <application
         android:name=".BaseApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
@@ -81,6 +81,7 @@
             android:theme="@style/AppTheme.Dialog" />
 
         <activity android:name=".activity.TestActivity" />
+        <activity android:name=".activity.Test1Activity" />
 
         <activity
             android:name=".activity.AboutActivity"
@@ -99,14 +100,35 @@
             android:theme="@style/AppTheme.Transparent" />
         <activity
             android:name=".activity.YaLiJiDetailActivity"
-            android:theme="@style/AppTheme.Transparent" />
+            android:theme="@style/AppTheme.Transparent"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.WannengjiDetailActivity"
-            android:theme="@style/AppTheme.Transparent" />
-
+            android:theme="@style/AppTheme.Transparent"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.ProduceQueryDetailActivity"
-            android:theme="@style/AppTheme.Transparent" />
+            android:theme="@style/AppTheme.Transparent"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".activity.OrganizationActivity"
+            android:launchMode="singleTop" />
+
+        <activity
+            android:name=".activity.OverproofDetailActivity"
+            android:theme="@style/AppTheme.Transparent"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".activity.LaboratoryMainActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".activity.ConcreteMainActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- 【必须】 信鸽receiver广播接收 -->
         <receiver

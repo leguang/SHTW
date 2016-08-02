@@ -22,8 +22,6 @@ import com.shtoone.shtw.utils.ConstantsUtils;
 import com.socks.library.KLog;
 import com.squareup.otto.Subscribe;
 
-import me.yokeyword.fragmentation.anim.FragmentAnimator;
-
 /**
  * Created by leguang on 2016/6/9 0031.
  */
@@ -79,7 +77,7 @@ public class YaLiJiFragment extends BaseLazyFragment {
                 intent.putExtras(bundle);
                 //Activity共享元素切换版本适配
 //                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-                    startActivity(intent);
+                startActivity(intent);
 //                } else {
 //                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(_mActivity, fab, getString(R.string.transition_dialog));
 //                    startActivity(intent, options.toBundle());
@@ -103,7 +101,7 @@ public class YaLiJiFragment extends BaseLazyFragment {
         sb.append(getString(R.string.yaliji)).trimToSize();
         mToolbar.setTitle(sb.toString());
         initToolbarBackNavigation(mToolbar);
-        initToolbarMenu(mToolbar);
+//        initToolbarMenu(mToolbar);
         setAdapter();
     }
 
@@ -117,8 +115,14 @@ public class YaLiJiFragment extends BaseLazyFragment {
     public void updateSearch(ParametersData mParametersData) {
         if (mParametersData != null) {
             if (mParametersData.fromTo == ConstantsUtils.YALIJIFRAGMENT) {
-                this.mParametersData = (ParametersData) mParametersData.clone();
-                KLog.e(mParametersData.toString());
+                this.mParametersData.startDateTime = mParametersData.startDateTime;
+                this.mParametersData.endDateTime = mParametersData.endDateTime;
+                this.mParametersData.equipmentID = mParametersData.equipmentID;
+                this.mParametersData.testTypeID = mParametersData.testTypeID;
+                KLog.e("mParametersData:" + mParametersData.startDateTime);
+                KLog.e("mParametersData:" + mParametersData.endDateTime);
+                KLog.e("mParametersData:" + mParametersData.equipmentID);
+                KLog.e("mParametersData:" + mParametersData.testTypeID);
             }
         }
     }
@@ -141,10 +145,5 @@ public class YaLiJiFragment extends BaseLazyFragment {
     public void onDestroy() {
         super.onDestroy();
         BaseApplication.bus.unregister(this);
-    }
-
-    @Override
-    protected FragmentAnimator onCreateFragmentAnimator() {
-        return new FragmentAnimator(0, 0, 0, 0);
     }
 }

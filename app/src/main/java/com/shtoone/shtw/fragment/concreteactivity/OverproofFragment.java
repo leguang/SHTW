@@ -1,22 +1,150 @@
 package com.shtoone.shtw.fragment.concreteactivity;
 
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
+import com.shtoone.shtw.BaseApplication;
+import com.shtoone.shtw.R;
+import com.shtoone.shtw.activity.DialogActivity;
+import com.shtoone.shtw.adapter.OverproofFragmentViewPagerAdapter;
+import com.shtoone.shtw.bean.ParametersData;
 import com.shtoone.shtw.fragment.base.BaseLazyFragment;
+import com.shtoone.shtw.utils.ConstantsUtils;
+import com.socks.library.KLog;
+import com.squareup.otto.Subscribe;
 
 /**
  * Created by leguang on 2016/7/20 0020.
  */
 public class OverproofFragment extends BaseLazyFragment {
+    private static final String TAG = OverproofFragment.class.getSimpleName();
+    private Toolbar mToolbar;
+    private AppBarLayout mAppBarLayout;
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
+    private FloatingActionButton fab;
+    private boolean isRegistered = false;
+    private ParametersData mParametersData;
+    private View view;
 
     public static OverproofFragment newInstance() {
         return new OverproofFragment();
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (!isRegistered) {
+            BaseApplication.bus.register(this);
+            isRegistered = true;
+        }
+        view = inflater.inflate(R.layout.fragment_overproof, container, false);
+        initView(view);
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //返回到看见此fragment时，fab显示
+        fab.show();
+    }
+
+    private void initView(View view) {
+        mAppBarLayout = (AppBarLayout) view.findViewById(R.id.appbar_overproof_fragment);
+        fab = (FloatingActionButton) view.findViewById(R.id.fab_overproof_fragment);
+        mToolbar = (Toolbar) view.findViewById(R.id.toolbar_overproof_fragment);
+        mTabLayout = (TabLayout) view.findViewById(R.id.tablayout_overproof_fragment);
+        mViewPager = (ViewPager) view.findViewById(R.id.vp_overproof_fragment);
+    }
+
     @Override
     protected void initLazyView(@Nullable Bundle savedInstanceState) {
-//        initData();
+        initData();
+    }
+
+    private void initData() {
+        mParametersData = (ParametersData) BaseApplication.parametersData.clone();
+        mParametersData.fromTo = ConstantsUtils.OVERPROOFFRAGMENT;
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(_mActivity, DialogActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(ConstantsUtils.PARAMETERS, mParametersData);
+                intent.putExtras(bundle);
+                //Activity共享元素切换版本适配
+//                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+                startActivity(intent);
+//                } else {
+//                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(_mActivity, fab, getString(R.string.transition_dialog));
+//                    startActivity(intent, options.toBundle());
+//                }
+            }
+        });
+
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (0 == verticalOffset) {
+                    BaseApplication.isExpand = true;
+                } else {
+                    BaseApplication.isExpand = false;
+                }
+            }
+        });
+
+        StringBuffer sb = new StringBuffer(BaseApplication.mUserInfoData.getDepartName() + " > ");
+        sb.append(getString(R.string.concrete) + " > ");
+        sb.append(getString(R.string.overproof)).trimToSize();
+        mToolbar.setTitle(sb.toString());
+        initToolbarBackNavigation(mToolbar);
+//        initToolbarMenu(mToolbar);
+        setAdapter();
+    }
+
+    //还是不能这样搞，可能会内存泄漏，重复创建Adapyer对象。后面解决
+    private void setAdapter() {
+        mViewPager.setAdapter(new OverproofFragmentViewPagerAdapter(getChildFragmentManager(), mParametersData));
+        mTabLayout.setupWithViewPager(mViewPager);
+    }
+
+    @Subscribe
+    public void updateSearch(ParametersData mParametersData) {
+        if (mParametersData != null) {
+            if (mParametersData.fromTo == ConstantsUtils.OVERPROOFFRAGMENT) {
+                //这里不能用克隆，因为会重置掉dengji这个参数
+                this.mParametersData.startDateTime = mParametersData.startDateTime;
+                this.mParametersData.endDateTime = mParametersData.endDateTime;
+                this.mParametersData.equipmentID = mParametersData.equipmentID;
+                this.mParametersData.handleType = mParametersData.handleType;
+                KLog.e("mParametersData:" + mParametersData.startDateTime);
+                KLog.e("mParametersData:" + mParametersData.endDateTime);
+                KLog.e("mParametersData:" + mParametersData.equipmentID);
+                KLog.e("mParametersData:" + mParametersData.handleType);
+            }
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //防止屏幕旋转后重画时fab显示
+        fab.hide();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        BaseApplication.bus.unregister(this);
     }
 }

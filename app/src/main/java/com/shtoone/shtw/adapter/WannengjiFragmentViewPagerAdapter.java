@@ -16,7 +16,7 @@ import com.squareup.otto.Subscribe;
  */
 public class WannengjiFragmentViewPagerAdapter extends FragmentPagerAdapter {
     private static final String TAG = WannengjiFragmentViewPagerAdapter.class.getSimpleName();
-    private String[] titleType = {"不合格", "合格", "有效", "无效", "已处置", "未处置"};
+    private String[] titleType = {"不合格", "合格", "未处置", "已处置"};
     private ParametersData mParametersData;
     private boolean isRegistered = false;
 
@@ -33,20 +33,26 @@ public class WannengjiFragmentViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         ParametersData mParametersData = (ParametersData) this.mParametersData.clone();
-        if (position <= 3) {
-            mParametersData.isQualified = position + "";
-            mParametersData.isReal = "";
-            return WannengjiFragmentViewPagerFragment.newInstance(mParametersData);
-        } else {
-            mParametersData.isQualified = "0";
-            if (position == 4) {
+
+        switch (position) {
+            case 0:
+                mParametersData.isQualified = "0";
                 mParametersData.isReal = "0";
-                return WannengjiFragmentViewPagerFragment.newInstance(mParametersData);
-            } else {
+                break;
+            case 1:
+                mParametersData.isQualified = "1";
+                mParametersData.isReal = "0";
+                break;
+            case 2:
+                mParametersData.isQualified = position + "0";
                 mParametersData.isReal = "1";
-                return WannengjiFragmentViewPagerFragment.newInstance(mParametersData);
-            }
+                break;
+            case 3:
+                mParametersData.isQualified = position + "0";
+                mParametersData.isReal = "2";
+                break;
         }
+        return WannengjiFragmentViewPagerFragment.newInstance(mParametersData);
     }
 
     @Override
@@ -69,8 +75,14 @@ public class WannengjiFragmentViewPagerAdapter extends FragmentPagerAdapter {
     public void updateSearch(ParametersData mParametersData) {
         if (mParametersData != null) {
             if (mParametersData.fromTo == ConstantsUtils.WANNENGJIFRAGMENT) {
-                this.mParametersData = (ParametersData) mParametersData.clone();
-                KLog.e(mParametersData.toString());
+                this.mParametersData.startDateTime = mParametersData.startDateTime;
+                this.mParametersData.endDateTime = mParametersData.endDateTime;
+                this.mParametersData.equipmentID = mParametersData.equipmentID;
+                this.mParametersData.testTypeID = mParametersData.testTypeID;
+                KLog.e("mParametersData:" + mParametersData.startDateTime);
+                KLog.e("mParametersData:" + mParametersData.endDateTime);
+                KLog.e("mParametersData:" + mParametersData.equipmentID);
+                KLog.e("mParametersData:" + mParametersData.testTypeID);
             }
         }
     }

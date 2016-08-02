@@ -78,21 +78,15 @@ public class WannengjiFragmentViewPagerFragmentRecyclerViewAdapter extends Recyc
 
             if ("合格".equals(item.getPDJG())) {
                 //默认就是合格设置
-            } else if ("有效".equals(item.getPDJG())) {
-                mItemViewHolder.stv_qualified.setText("有效");
             } else {
+                mItemViewHolder.stv_qualified.setText("不合格");
                 //设置是否处置标签
                 mItemViewHolder.stv_handle.setVisibility(View.VISIBLE);
-                if (true) {
-//                holder.stv_handle.setText("已处置").setSlantedBackgroundColor(Color.RED);
-                } else {
-                    mItemViewHolder.stv_handle.setText("未处置").setSlantedBackgroundColor(Color.RED);
-                }
 
-                if ("不合格".equals(item.getPDJG())) {
-                    mItemViewHolder.stv_qualified.setText("不合格").setSlantedBackgroundColor(Color.RED);
-                } else if ("无效".equals(item.getPDJG())) {
-                    mItemViewHolder.stv_qualified.setText("无效").setSlantedBackgroundColor(Color.RED);
+                if ("1".equals(item.getChuzhi())) {
+                    //默认就是已处置
+                } else {
+                    mItemViewHolder.stv_handle.setText("未处置").setSlantedBackgroundColor(Color.YELLOW);
                 }
             }
 

@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/textview0"
                 android:layout_toRightOf="@+id/textview0"
-                android:text="XX高速" />
+                android:text="@string/system_name" />
 
             <TextView
                 android:id="@+id/textview1"
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/textview1"
                 android:layout_toRightOf="@+id/textview1"
-                android:text="试验室拌合站系统" />
+                android:text="@string/system_name" />
 
             <TextView
                 android:id="@+id/textview2"
@@ -115,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/textview3"
                 android:layout_toRightOf="@+id/textview3"
-                android:text="上海同望" />
+                android:text="@string/company" />
 
             <FrameLayout
                 android:id="@+id/fl_version_activity"

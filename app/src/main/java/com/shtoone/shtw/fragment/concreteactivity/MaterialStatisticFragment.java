@@ -118,7 +118,7 @@ public class MaterialStatisticFragment extends BaseLazyFragment {
         sb.append(getString(R.string.material_statistic)).trimToSize();
         mToolbar.setTitle(sb.toString());
         initToolbarBackNavigation(mToolbar);
-        initToolbarMenu(mToolbar);
+//        initToolbarMenu(mToolbar);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

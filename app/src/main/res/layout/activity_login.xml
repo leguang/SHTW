@@ -21,14 +21,13 @@
 
         <ImageView
             android:id="@+id/iv_login_register_activity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_logo" />
+            android:layout_width="250dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_logo_login" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:text="@string/system_name"
             android:textColor="@color/base_color"
             android:textSize="18sp" />
@@ -39,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="50dp"
             app:errorTextAppearance="@style/MaterialLoginTheme.TextAppearanceLoginError"
             app:theme="@style/MaterialLoginTheme.TextAppearanceLogin">
 
@@ -78,7 +77,7 @@
             android:layout_width="200dp"
             android:layout_height="45dp"
             android:layout_marginBottom="40dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:textColor="@color/cpb_white"
             android:textSize="15sp"
             app:cpb_cornerRadius="40dp"

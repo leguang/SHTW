@@ -1,7 +1,6 @@
 package com.shtoone.shtw.activity;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.graphics.RectF;
 import android.os.Build;
@@ -26,17 +25,15 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.shtoone.shtw.BaseApplication;
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.base.BaseActivity;
-import com.shtoone.shtw.fragment.mainactivity.AsphaltFragment;
+import com.shtoone.shtw.bean.ParametersData;
 import com.shtoone.shtw.fragment.mainactivity.ConcreteFragment;
 import com.shtoone.shtw.fragment.mainactivity.LaboratoryFragment;
 import com.shtoone.shtw.utils.ConstantsUtils;
 import com.shtoone.shtw.utils.SharedPreferencesUtils;
-import com.shtoone.shtw.utils.ToastUtils;
 
 import java.util.ArrayList;
 
 import me.yokeyword.fragmentation.SupportFragment;
-import me.yokeyword.fragmentation.anim.FragmentAnimator;
 import zhy.com.highlight.HighLight;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -64,15 +61,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (savedInstanceState == null) {
             mFragments[0] = LaboratoryFragment.newInstance();
             mFragments[1] = ConcreteFragment.newInstance();
-            mFragments[2] = AsphaltFragment.newInstance();
 
-            loadMultipleRootFragment(R.id.fl_container_main_activity, 0, mFragments[0], mFragments[1], mFragments[2]);
+            loadMultipleRootFragment(R.id.fl_container_main_activity, 0, mFragments[0], mFragments[1]);
         } else {
             // 这里库已经做了Fragment恢复,所有不需要额外的处理了, 不会出现重叠问题
             // 这里我们需要拿到mFragments的引用,也可以通过getSupportFragmentManager.getFragments()自行进行判断查找(效率更高些),用下面的方法查找更方便些
             mFragments[0] = findFragment(LaboratoryFragment.class);
             mFragments[1] = findFragment(ConcreteFragment.class);
-            mFragments[2] = findFragment(AsphaltFragment.class);
         }
 
         initView();
@@ -91,14 +86,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             @Override
             public void onClick(View v) {
                 mDrawer.closeDrawer(GravityCompat.START);
-
                 mDrawer.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-//                        goLogin();
-                        ToastUtils.showToast(MainActivity.this, "点击……");
+//                        ToastUtils.showToast(MainActivity.this, "点击……");
                     }
-                }, 3000);
+                }, 500);
             }
         });
         bottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation_main_activity);
@@ -111,6 +104,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void initData() {
+        BaseApplication.backupParametersData = (ParametersData) BaseApplication.parametersData.clone();
         if (null != BaseApplication.mUserInfoData) {
             if (!TextUtils.isEmpty(BaseApplication.mUserInfoData.getUserFullName())) {
                 tv_username.setText("用户：" + BaseApplication.mUserInfoData.getUserFullName());
@@ -120,51 +114,37 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
         }
 
-        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.laboratory, R.drawable.ic_favorites, R.color.base_color);
-        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.concrete, R.drawable.ic_nearby, R.color.base_color);
-        AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.asphalt, R.drawable.ic_friends, R.color.base_color);
+        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.laboratory, R.drawable.ic_lab, R.color.base_color);
+        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.concrete, R.drawable.ic_bhz, R.color.base_color);
         bottomNavigationItems.add(item1);
         bottomNavigationItems.add(item2);
-        bottomNavigationItems.add(item3);
         bottomNavigation.addItems(bottomNavigationItems);
         bottomNavigation.setDefaultBackgroundColor(getResources().getColor(R.color.white));
 //        bottomNavigation.setBehaviorTranslationEnabled(false);
-        bottomNavigation.setAccentColor(getResources().getColor(R.color.base_color));
-        bottomNavigation.setInactiveColor(getResources().getColor(R.color.gray));
 //        bottomNavigation.setColored(true);
 //        bottomNavigation.setForceTint(true);
-//        bottomNavigation.setForceTitlesDisplay(true);
-        bottomNavigation.setCurrentItem(0);
+        bottomNavigation.setAccentColor(getResources().getColor(R.color.base_color));
+        bottomNavigation.setInactiveColor(getResources().getColor(R.color.gray));
+        bottomNavigation.setForceTitlesDisplay(true);
+
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position, boolean wasSelected) {
                 showHideFragment(mFragments[position], mFragments[bottomNavigationPreposition]);
                 bottomNavigationPreposition = position;
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (!wasSelected && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     int cx = (fl_container.getLeft() + fl_container.getRight()) / 2;
-//                    int cy = (fl_container.getTop() + fl_container.getBottom()) / 2;
                     int cy = fl_container.getBottom();
                     int radius = Math.max(fl_container.getWidth(), fl_container.getHeight());
                     Animator mAnimator = ViewAnimationUtils.createCircularReveal(fl_container, cx, cy, 0, radius);
                     mAnimator.setDuration(300);
                     mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-                    mAnimator.addListener(new AnimatorListenerAdapter() {
-
-                        @Override
-                        public void onAnimationStart(Animator animation) {
-                            super.onAnimationStart(animation);
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                        }
-                    });
                     mAnimator.start();
                 }
             }
         });
+        bottomNavigation.setCurrentItem(0);
     }
 
     @Override
@@ -181,12 +161,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
         }
     }
-
-    @Override
-    protected FragmentAnimator onCreateFragmentAnimator() {
-        return new FragmentAnimator(0, 0, 0, 0);
-    }
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -217,7 +191,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         //清除已存的用户信息
         SharedPreferencesUtils.put(this, ConstantsUtils.USERNAME, "");
         SharedPreferencesUtils.put(this, ConstantsUtils.PASSWORD, "");
-        SharedPreferencesUtils.put(this, ConstantsUtils.LOGINCHECK, "");
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
@@ -229,7 +202,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void JumpToAboutActivity() {
-        Intent intent = new Intent(this, ProduceQueryDetailActivity.class);
+        Intent intent = new Intent(this, AboutActivity.class);
         startActivity(intent);
     }
 
@@ -240,7 +213,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     protected void onResume() {
-        if ((Boolean) SharedPreferencesUtils.get(MainActivity.this, "isFirstGuide", true)) {
+        if ((Boolean) SharedPreferencesUtils.get(MainActivity.this, ConstantsUtils.ISFIRSTGUIDE, true)) {
             showTipMask();
         }
         super.onResume();
@@ -267,7 +240,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         }).setClickCallback(new HighLight.OnClickCallback() {
                             @Override
                             public void onClick() {
-                                SharedPreferencesUtils.put(MainActivity.this, "isFirstGuide", false);
+                                SharedPreferencesUtils.put(MainActivity.this, ConstantsUtils.ISFIRSTGUIDE, false);
                             }
                         }).show();
                     }

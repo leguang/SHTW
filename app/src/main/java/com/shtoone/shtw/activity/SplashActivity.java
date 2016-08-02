@@ -39,7 +39,7 @@ public class SplashActivity extends BaseActivity {
         Context context = getApplicationContext();
         XGPushManager.registerPush(context);
 
-// 2.36（不包括）之前的版本需要调用以下2行代码
+        // 2.36（不包括）之前的版本需要调用以下2行代码
         Intent service = new Intent(context, XGPushService.class);
         context.startService(service);
 
@@ -47,7 +47,6 @@ public class SplashActivity extends BaseActivity {
         //延迟执行，尽量看到闪屏页
         new Handler().postDelayed(new Runnable() {
             public void run() {
-                //execute the task
                 initView();
                 initData();
             }
@@ -60,7 +59,7 @@ public class SplashActivity extends BaseActivity {
     private void initData() {
         String usernameEncrypted = (String) SharedPreferencesUtils.get(this, ConstantsUtils.USERNAME, "");
         String passwordEncrypted = (String) SharedPreferencesUtils.get(this, ConstantsUtils.PASSWORD, "");
-        String loginCheck = (String) SharedPreferencesUtils.get(this, ConstantsUtils.LOGINCHECK, "");
+//        String loginCheck = (String) SharedPreferencesUtils.get(this, ConstantsUtils.LOGINCHECK, "");
         KLog.e("username加密从sp中:" + usernameEncrypted);
         KLog.e("password加密从sp中:" + passwordEncrypted);
         //进行解密
@@ -78,9 +77,9 @@ public class SplashActivity extends BaseActivity {
         KLog.e("username解密:" + username);
         KLog.e("password解密:" + password);
 
-        if (!TextUtils.isEmpty(loginCheck)) {
-            userInfoData = new Gson().fromJson(loginCheck, UserInfoData.class);
-        }
+//        if (!TextUtils.isEmpty(loginCheck)) {
+//            userInfoData = new Gson().fromJson(loginCheck, UserInfoData.class);
+//        }
         if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
             //联网校对密码正确后保存
             HttpUtils.getRequest(URL.loginCheck(username, password), new HttpUtils.HttpListener() {
@@ -92,7 +91,7 @@ public class SplashActivity extends BaseActivity {
                         if (null != userInfoData) {
                             if (userInfoData.isSuccess()) {
                                 BaseApplication.mUserInfoData = userInfoData;
-                                SharedPreferencesUtils.put(SplashActivity.this, "loginCheck", response);
+//                                SharedPreferencesUtils.put(SplashActivity.this, ConstantsUtils.LOGINCHECK, response);
                                 initParametersData();
                                 //在跳转之前判断是否按了返回键返回桌面了，这代表用户不想进应用了
                                 if (!isBackPressed) {
@@ -152,15 +151,29 @@ public class SplashActivity extends BaseActivity {
     //进入MainActivity
     private void jumpToMain() {
 
-        Boolean isFirstentry = (Boolean) SharedPreferencesUtils.get(this, "isFirstEntry", true);
-        Intent intent;
+        Boolean isFirstentry = (Boolean) SharedPreferencesUtils.get(this, ConstantsUtils.ISFIRSTENTRY, true);
+        Intent intent = null;
         if (isFirstentry) {
             intent = new Intent(this, GuideActivity.class);
 
         } else {
-            intent = new Intent(this, MainActivity.class);
+            if ("GL".equals(userInfoData.getType())) {
+                intent = new Intent(this, MainActivity.class);
+
+            } else if ("SG".equals(userInfoData.getType())) {
+
+                switch (userInfoData.getUserRole()) {
+                    case "1":
+                        intent = new Intent(this, ConcreteMainActivity.class);
+                        break;
+                    case "3":
+                        intent = new Intent(this, LaboratoryMainActivity.class);
+                        break;
+                }
+            }
         }
         startActivity(intent);
+
         finish();
     }
 

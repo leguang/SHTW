@@ -100,6 +100,68 @@
                 app:ms_hintColor="@color/black"
                 app:ms_multiline="true" />
 
+            <RadioGroup
+                android:id="@+id/rg_handle_dialog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <RadioButton
+                    android:id="@+id/rb_all_handle_dialog"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="全部" />
+
+                <RadioButton
+                    android:id="@+id/rb_not_handle_dialog"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="未处置" />
+
+                <RadioButton
+                    android:id="@+id/rb_handled_dialog"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="已处置" />
+            </RadioGroup>
+
+            <RadioGroup
+                android:id="@+id/rg_examine_dialog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <RadioButton
+                    android:id="@+id/rb_all_examine_dialog"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="全部" />
+
+                <RadioButton
+                    android:id="@+id/rb_not_examine_dialog"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="未审批" />
+
+                <RadioButton
+                    android:id="@+id/rb_examined_dialog"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="已审批" />
+            </RadioGroup>
+
             <com.dd.CircularProgressButton
                 android:id="@+id/bt_search_dialog"
                 android:layout_width="100dp"

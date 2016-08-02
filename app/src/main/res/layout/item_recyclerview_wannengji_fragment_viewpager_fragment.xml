@@ -150,7 +150,7 @@
         android:layout_gravity="bottom|right"
         android:gravity="center"
         android:visibility="gone"
-        app:slantedBackgroundColor="@color/material_yellow_A700"
+        app:slantedBackgroundColor="@color/material_green_300"
         app:slantedLength="25dp"
         app:slantedMode="right_bottom_triangle"
         app:slantedText="已处置"

@@ -12,6 +12,7 @@ public class ConstantsUtils {
     public static final String DOMAIN_1 = "shtoone.com";
     public static final String DOMAIN_2 = "sh-toone";
     public static final String ISFIRSTENTRY = "isfirstentry";
+    public static final String ISFIRSTGUIDE = "isfirstguide";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
     public static final String LOGINCHECK = "logincheck";
@@ -24,6 +25,7 @@ public class ConstantsUtils {
     public static final int CONCRETEFRAGMENT = 3;
     public static final int MATERIALSTATISTICFRAGMENT = 4;
     public static final int PRODUCEQUERYFRAGMENT = 5;
+    public static final int OVERPROOFFRAGMENT = 6;
 
     public static final int CAMERA = 1;
     public static final int ALBUM = 2;

@@ -1,9 +1,7 @@
 package com.shtoone.shtw.fragment.mainactivity;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
@@ -24,17 +23,19 @@ import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.ConcreteActivity;
 import com.shtoone.shtw.activity.DialogActivity;
 import com.shtoone.shtw.activity.MainActivity;
+import com.shtoone.shtw.activity.OrganizationActivity;
 import com.shtoone.shtw.adapter.ConcreteFragmentRecyclerViewAdapter;
 import com.shtoone.shtw.adapter.OnItemClickListener;
 import com.shtoone.shtw.bean.ConcreteFragmentData;
 import com.shtoone.shtw.bean.ParametersData;
 import com.shtoone.shtw.fragment.base.BaseLazyFragment;
 import com.shtoone.shtw.ui.PageStateLayout;
+import com.shtoone.shtw.ui.treeview.Node;
+import com.shtoone.shtw.utils.AnimationUtils;
 import com.shtoone.shtw.utils.ConstantsUtils;
 import com.shtoone.shtw.utils.DisplayUtils;
 import com.shtoone.shtw.utils.HttpUtils;
 import com.shtoone.shtw.utils.NetworkUtils;
-import com.shtoone.shtw.utils.ToastUtils;
 import com.shtoone.shtw.utils.URL;
 import com.socks.library.KLog;
 import com.squareup.otto.Subscribe;
@@ -84,12 +85,16 @@ public class ConcreteFragment extends BaseLazyFragment {
         fab.show();
     }
 
+    //对于启用懒加载的fragment，最好把全局变量中的所有变量在此方法中初始化
     private void initView(View view) {
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar_concrete_fragment);
         fab = (FloatingActionButton) view.findViewById(R.id.fab_concrete_fragment);
         ptrframe = (PtrFrameLayout) view.findViewById(R.id.ptr_concrete_fragment);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_concrete_fragment);
         pageStateLayout = (PageStateLayout) view.findViewById(R.id.psl_concrete_fragment);
+        pageStateLayout.showLoading();
+        mParametersData = (ParametersData) BaseApplication.parametersData.clone();
+        mParametersData.fromTo = ConstantsUtils.CONCRETEFRAGMENT;
     }
 
     @Override
@@ -98,36 +103,40 @@ public class ConcreteFragment extends BaseLazyFragment {
     }
 
     private void initData() {
-        mParametersData = (ParametersData) BaseApplication.parametersData.clone();
-        mParametersData.fromTo = ConstantsUtils.CONCRETEFRAGMENT;
 
-        //做健壮性判断
-        StringBuffer sb = new StringBuffer(BaseApplication.mUserInfoData.getDepartName() + " > ");
-        sb.append(getString(R.string.concrete)).trimToSize();
-        mToolbar.setTitle(sb.toString());
+        setToolbar();
 
         ((MainActivity) _mActivity).initToolBar(mToolbar);
-        initToolbarMenu(mToolbar);
+
+        mToolbar.inflateMenu(R.menu.menu_hierarchy);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_hierarchy:
+                        Intent intent = new Intent(getActivity(), OrganizationActivity.class);
+                        intent.putExtra("type", "1");
+                        AnimationUtils.startActivity(_mActivity, intent, mToolbar.findViewById(R.id.action_hierarchy), R.color.base_color, 500);
+                        break;
+                }
+                return true;
+            }
+        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Activity共享元素切换版本适配
-                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-                    fab.hide();
-                    Intent intent = new Intent(_mActivity, DialogActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(ConstantsUtils.PARAMETERS, mParametersData);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(_mActivity, DialogActivity.class);
-                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(_mActivity, fab, getString(R.string.transition_dialog));
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(ConstantsUtils.PARAMETERS, mParametersData);
-                    intent.putExtras(bundle);
-                    startActivity(intent, options.toBundle());
-                }
+                Intent intent = new Intent(_mActivity, DialogActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(ConstantsUtils.PARAMETERS, mParametersData);
+                intent.putExtras(bundle);
+//                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+                startActivity(intent);
+//                } else {
+//                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(_mActivity, fab, getString(R.string.transition_dialog));
+//                    startActivity(intent, options.toBundle());
+//                }
             }
         });
 
@@ -221,6 +230,7 @@ public class ConcreteFragment extends BaseLazyFragment {
 
     //联网获取数据
     private void getDataFromNetwork(ParametersData mParametersData) {
+        pageStateLayout.showLoading();
         //从全局参数类中取出参数，避免太长了，看起来不方便
         String userGroupID = mParametersData.userGroupID;
         String startDateTime = mParametersData.startDateTime;
@@ -288,7 +298,6 @@ public class ConcreteFragment extends BaseLazyFragment {
             @Override
             public void onItemClick(View view, int position) {
 
-                ToastUtils.showToast(_mActivity, "点击第：" + position);
                 // 实现局部界面刷新, 这个view就是被点击的item布局对象
                 changeReadedState(view);
                 // 跳转到详情页
@@ -312,13 +321,31 @@ public class ConcreteFragment extends BaseLazyFragment {
         if (mParametersData != null) {
             if (mParametersData.fromTo == ConstantsUtils.CONCRETEFRAGMENT) {
                 fab.show();
-                ToastUtils.showToast(_mActivity, "刷新");
                 this.mParametersData = mParametersData;
                 getDataFromNetwork(mParametersData);
                 KLog.e(TAG, "fromto:" + mParametersData.fromTo);
             }
         }
     }
+
+    @Subscribe
+    public void updateUserGroup(Node node) {
+        if (null != node && null != mParametersData) {
+            mParametersData.userGroupID = node.getId();
+            getDataFromNetwork(mParametersData);
+            setToolbar();
+        }
+    }
+
+    private void setToolbar() {
+        if (null != mToolbar && null != BaseApplication.mUserInfoData && !TextUtils.isEmpty(BaseApplication.mUserInfoData.getDepartName())) {
+            //做健壮性判断
+            StringBuffer sb = new StringBuffer(BaseApplication.mUserInfoData.getDepartName() + " > ");
+            sb.append(getString(R.string.concrete)).trimToSize();
+            mToolbar.setTitle(sb.toString());
+        }
+    }
+
 
     @Override
     public void onPause() {

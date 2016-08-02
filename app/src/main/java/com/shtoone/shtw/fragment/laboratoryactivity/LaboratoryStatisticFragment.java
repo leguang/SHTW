@@ -5,6 +5,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -27,6 +29,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.gson.Gson;
 import com.shtoone.shtw.BaseApplication;
 import com.shtoone.shtw.R;
+import com.shtoone.shtw.adapter.LaboratoryStatisticFragmentRecyclerViewAdapter;
 import com.shtoone.shtw.bean.LaboratoryStatisticFragmentData;
 import com.shtoone.shtw.bean.ParametersData;
 import com.shtoone.shtw.fragment.base.BaseLazyFragment;
@@ -62,13 +65,13 @@ public class LaboratoryStatisticFragment extends BaseLazyFragment implements Dat
     private Typeface mTf;
     private TextView tv_start_date;
     private TextView tv_end_date;
+    private LaboratoryStatisticFragmentRecyclerViewAdapter mAdapter;
     private Button bt_search;
     private boolean isStartDateTime;
     private ParametersData mParametersData;
     private Gson mGson;
     private LaboratoryStatisticFragmentData data;
-    private TextView sysdh_item1_1, sysdh_item1_2, sysdh_item1_3, sysdh_item1_4, sysdh_item1_5, sysdh_item2_1, sysdh_item2_2, sysdh_item2_3, sysdh_item2_4, sysdh_item2_5, sysdh_item3_1, sysdh_item3_2, sysdh_item3_3, sysdh_item3_4, sysdh_item3_5, sysdh_item4_1, sysdh_item4_2, sysdh_item4_3, sysdh_item4_4, sysdh_item4_5;
-    private String[] testTypes = new String[]{"砼抗压强度", "钢筋拉力", "钢筋焊接接头", "钢筋机械连接"};
+    private RecyclerView mRecyclerView;
 
     public static LaboratoryStatisticFragment newInstance() {
         return new LaboratoryStatisticFragment();
@@ -95,26 +98,7 @@ public class LaboratoryStatisticFragment extends BaseLazyFragment implements Dat
         mBarChart1 = (BarChart) view.findViewById(R.id.barchart1_laboratory_statistic_fragment);
 
         //底部表格部分
-        sysdh_item1_1 = (TextView) view.findViewById(R.id.sysdh_item1_1);
-        sysdh_item1_2 = (TextView) view.findViewById(R.id.sysdh_item1_2);
-        sysdh_item1_3 = (TextView) view.findViewById(R.id.sysdh_item1_3);
-        sysdh_item1_4 = (TextView) view.findViewById(R.id.sysdh_item1_4);
-        sysdh_item1_5 = (TextView) view.findViewById(R.id.sysdh_item1_5);
-        sysdh_item2_1 = (TextView) view.findViewById(R.id.sysdh_item2_1);
-        sysdh_item2_2 = (TextView) view.findViewById(R.id.sysdh_item2_2);
-        sysdh_item2_3 = (TextView) view.findViewById(R.id.sysdh_item2_3);
-        sysdh_item2_4 = (TextView) view.findViewById(R.id.sysdh_item2_4);
-        sysdh_item2_5 = (TextView) view.findViewById(R.id.sysdh_item2_5);
-        sysdh_item3_1 = (TextView) view.findViewById(R.id.sysdh_item3_1);
-        sysdh_item3_2 = (TextView) view.findViewById(R.id.sysdh_item3_2);
-        sysdh_item3_3 = (TextView) view.findViewById(R.id.sysdh_item3_3);
-        sysdh_item3_4 = (TextView) view.findViewById(R.id.sysdh_item3_4);
-        sysdh_item3_5 = (TextView) view.findViewById(R.id.sysdh_item3_5);
-        sysdh_item4_1 = (TextView) view.findViewById(R.id.sysdh_item4_1);
-        sysdh_item4_2 = (TextView) view.findViewById(R.id.sysdh_item4_2);
-        sysdh_item4_3 = (TextView) view.findViewById(R.id.sysdh_item4_3);
-        sysdh_item4_4 = (TextView) view.findViewById(R.id.sysdh_item4_4);
-        sysdh_item4_5 = (TextView) view.findViewById(R.id.sysdh_item4_5);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_laboratory_statistic_fragment);
     }
 
     @Override
@@ -130,7 +114,7 @@ public class LaboratoryStatisticFragment extends BaseLazyFragment implements Dat
         sb.append(getString(R.string.statistic)).trimToSize();
         mToolbar.setTitle(sb.toString());
         initToolbarBackNavigation(mToolbar);
-        initToolbarMenu(mToolbar);
+//        initToolbarMenu(mToolbar);
 
         tv_start_date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -297,35 +281,16 @@ public class LaboratoryStatisticFragment extends BaseLazyFragment implements Dat
         setChartData0(mBarChart0);
         setChartData1(mBarChart1);
 
-        sysdh_item1_1.setText(data.getData().get(0).getTestCount());
-        sysdh_item1_2.setText(data.getData().get(0).getQualifiedCount());
-        sysdh_item1_3.setText(data.getData().get(0).getValidCount());
-        sysdh_item1_4.setText(data.getData().get(0).getNotqualifiedCount());
-        sysdh_item1_5.setText(data.getData().get(0).getQualifiedPer());
-        sysdh_item2_1.setText(data.getData().get(1).getTestCount());
-        sysdh_item2_2.setText(data.getData().get(1).getQualifiedCount());
-        sysdh_item2_3.setText(data.getData().get(1).getValidCount());
-        sysdh_item2_4.setText(data.getData().get(1).getNotqualifiedCount());
-        sysdh_item2_5.setText(data.getData().get(1).getQualifiedPer());
-        sysdh_item3_1.setText(data.getData().get(2).getTestCount());
-        sysdh_item3_2.setText(data.getData().get(2).getQualifiedCount());
-        sysdh_item3_3.setText(data.getData().get(2).getValidCount());
-        sysdh_item3_4.setText(data.getData().get(2).getNotqualifiedCount());
-        sysdh_item3_5.setText(data.getData().get(2).getQualifiedPer());
-        sysdh_item4_1.setText(data.getData().get(3).getTestCount());
-        sysdh_item4_2.setText(data.getData().get(3).getQualifiedCount());
-        sysdh_item4_3.setText(data.getData().get(3).getValidCount());
-        sysdh_item4_4.setText(data.getData().get(3).getNotqualifiedCount());
-        sysdh_item4_5.setText(data.getData().get(3).getQualifiedPer());
-
-
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(_mActivity));
+        mAdapter = new LaboratoryStatisticFragmentRecyclerViewAdapter(_mActivity, data.getData());
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     private void setChartData0(BarChart mBarChart) {
         ArrayList<String> xVals = new ArrayList<String>();
         ArrayList<BarEntry> yVals = new ArrayList<BarEntry>();
         for (int i = 0; i < data.getData().size(); i++) {
-            xVals.add(testTypes[i]);
+            xVals.add(data.getData().get(i).getTestName());
             yVals.add(new BarEntry(Float.parseFloat(data.getData().get(i).getTestCount()), i));
         }
 
@@ -340,14 +305,13 @@ public class LaboratoryStatisticFragment extends BaseLazyFragment implements Dat
         data.setValueTextSize(10f);
         data.setValueTypeface(mTf);
         mBarChart.setData(data);
-
     }
 
     private void setChartData1(BarChart mBarChart) {
         ArrayList<String> xVals = new ArrayList<String>();
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
         for (int i = 0; i < data.getData().size(); i++) {
-            xVals.add(testTypes[i]);
+            xVals.add(data.getData().get(i).getTestName());
             yVals1.add(new BarEntry(Float.parseFloat(data.getData().get(i).getNotqualifiedCount()), i));
         }
 
@@ -362,7 +326,6 @@ public class LaboratoryStatisticFragment extends BaseLazyFragment implements Dat
         data.setValueTextSize(10f);
         data.setValueTypeface(mTf);
         mBarChart.setData(data);
-
     }
 
     private void setChart(BarChart mBarChart) {
