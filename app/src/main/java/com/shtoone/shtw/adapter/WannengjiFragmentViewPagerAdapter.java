@@ -44,11 +44,11 @@ public class WannengjiFragmentViewPagerAdapter extends FragmentPagerAdapter {
                 mParametersData.isReal = "0";
                 break;
             case 2:
-                mParametersData.isQualified = position + "0";
+                mParametersData.isQualified = "0";
                 mParametersData.isReal = "1";
                 break;
             case 3:
-                mParametersData.isQualified = position + "0";
+                mParametersData.isQualified = "0";
                 mParametersData.isReal = "2";
                 break;
         }

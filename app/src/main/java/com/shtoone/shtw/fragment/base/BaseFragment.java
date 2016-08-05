@@ -60,7 +60,7 @@ public abstract class BaseFragment extends SupportFragment {
         return new FragmentAnimator(0, 0, 0, 0);
     }
 
-    public void setPageStateLayout(final PageStateLayout mPageStateLayout) {
+    public void initPageStateLayout(final PageStateLayout mPageStateLayout) {
         if (null == mPageStateLayout) return;
 
         mPageStateLayout.setOnRetryClickListener(new View.OnClickListener() {
@@ -80,7 +80,7 @@ public abstract class BaseFragment extends SupportFragment {
         });
     }
 
-    public void setPtrFrameLayout(final PtrFrameLayout mPtrFrameLayout) {
+    public void initPtrFrameLayout(final PtrFrameLayout mPtrFrameLayout) {
         if (null == mPtrFrameLayout) return;
 
         // 下拉刷新头部
@@ -151,21 +151,21 @@ public abstract class BaseFragment extends SupportFragment {
             @Override
             public void onSuccess(String response) {
                 KLog.json(response);
-                refreshSuccess(response);
+                onRefreshSuccess(response);
             }
 
             @Override
             public void onFailed(VolleyError error) {
                 KLog.d(error);
-                refreshFailed(error);
+                onRefreshFailed(error);
             }
         });
     }
 
-    public void refreshSuccess(String response) {
+    public void onRefreshSuccess(String response) {
     }
 
-    public void refreshFailed(VolleyError error) {
+    public void onRefreshFailed(VolleyError error) {
     }
 
     public void loadMore() {
@@ -192,6 +192,7 @@ public abstract class BaseFragment extends SupportFragment {
     }
 
     public void loadMoreFailed(VolleyError error) {
+        error.printStackTrace();
         if (!NetworkUtils.isConnected(_mActivity)) {
             //提示网络异常,让用户点击设置网络，
             View view = _mActivity.getWindow().getDecorView();

@@ -112,11 +112,9 @@ public class MaterialStatisticFragment extends BaseLazyFragment {
     private void initData() {
         mGson = new Gson();
         mParametersData = (ParametersData) BaseApplication.parametersData.clone();
+        mParametersData.userGroupID = BaseApplication.mDepartmentData.departmentID;
         mParametersData.fromTo = ConstantsUtils.MATERIALSTATISTICFRAGMENT;
-        StringBuffer sb = new StringBuffer(BaseApplication.mUserInfoData.getDepartName() + " > ");
-        sb.append(getString(R.string.concrete) + " > ");
-        sb.append(getString(R.string.material_statistic)).trimToSize();
-        mToolbar.setTitle(sb.toString());
+        setToolbarTitle();
         initToolbarBackNavigation(mToolbar);
 //        initToolbarMenu(mToolbar);
 
@@ -127,13 +125,7 @@ public class MaterialStatisticFragment extends BaseLazyFragment {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(ConstantsUtils.PARAMETERS, mParametersData);
                 intent.putExtras(bundle);
-                //Activity共享元素切换版本适配
-//                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
                 startActivity(intent);
-//                } else {
-//                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(_mActivity, fab, getString(R.string.transition_dialog));
-//                    startActivity(intent, options.toBundle());
-//                }
             }
         });
 
@@ -385,4 +377,12 @@ public class MaterialStatisticFragment extends BaseLazyFragment {
         BaseApplication.bus.unregister(this);
     }
 
+    private void setToolbarTitle() {
+        if (null != mToolbar && null != BaseApplication.mDepartmentData && !TextUtils.isEmpty(BaseApplication.mDepartmentData.departmentName)) {
+            StringBuffer sb = new StringBuffer(BaseApplication.mDepartmentData.departmentName + " > ");
+            sb.append(getString(R.string.concrete) + " > ");
+            sb.append(getString(R.string.material_statistic)).trimToSize();
+            mToolbar.setTitle(sb.toString());
+        }
+    }
 }

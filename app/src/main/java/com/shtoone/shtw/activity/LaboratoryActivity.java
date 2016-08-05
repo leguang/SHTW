@@ -91,7 +91,6 @@ public class LaboratoryActivity extends BaseActivity {
 //        bottomNavigation.setForceTint(true);
         bottomNavigation.setForceTitlesDisplay(true);
 
-
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position, final boolean wasSelected) {

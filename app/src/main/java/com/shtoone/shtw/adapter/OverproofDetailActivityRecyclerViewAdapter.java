@@ -48,7 +48,7 @@ public class OverproofDetailActivityRecyclerViewAdapter extends RecyclerView.Ada
             mItemViewHolder.tv_reality.setText(item.getShiji());
             mItemViewHolder.tv_matching.setText(item.getPeibi());
             mItemViewHolder.tv_deviation.setText(item.getWuchazhi());
-            mItemViewHolder.tv_deviation_rate.setText(item.getWuchazhi());
+            mItemViewHolder.tv_deviation_rate.setText(item.getWuchalv());
         }
     }
 

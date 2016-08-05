@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +67,7 @@ public class WannengjiFragment extends BaseLazyFragment {
 
     private void initData() {
         mParametersData = (ParametersData) BaseApplication.parametersData.clone();
+        mParametersData.userGroupID = BaseApplication.mDepartmentData.departmentID;
         mParametersData.fromTo = ConstantsUtils.WANNENGJIFRAGMENT;
         KLog.e(mParametersData.toString());
         fab.setOnClickListener(new View.OnClickListener() {
@@ -91,14 +93,21 @@ public class WannengjiFragment extends BaseLazyFragment {
             }
         });
 
-        StringBuffer sb = new StringBuffer(BaseApplication.mUserInfoData.getDepartName() + " > ");
-        sb.append(getString(R.string.laboratory) + " > ");
-        sb.append(getString(R.string.wannengji)).trimToSize();
-        mToolbar.setTitle(sb.toString());
+        setToolbarTitle();
         initToolbarBackNavigation(mToolbar);
 //        initToolbarMenu(mToolbar);
         setAdapter();
     }
+
+    private void setToolbarTitle() {
+        if (null != mToolbar && null != BaseApplication.mDepartmentData && !TextUtils.isEmpty(BaseApplication.mDepartmentData.departmentName)) {
+            StringBuffer sb = new StringBuffer(BaseApplication.mDepartmentData.departmentName + " > ");
+            sb.append(getString(R.string.laboratory) + " > ");
+            sb.append(getString(R.string.wannengji)).trimToSize();
+            mToolbar.setTitle(sb.toString());
+        }
+    }
+
 
     //还是不能这样搞，可能会内存泄漏，重复创建Adapyer对象。后面解决
     private void setAdapter() {

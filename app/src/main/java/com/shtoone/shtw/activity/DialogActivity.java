@@ -236,7 +236,7 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    public void refreshSuccess(String response) {
+    public void onRefreshSuccess(String response) {
 
         switch (mParametersData.fromTo) {
             case ConstantsUtils.LABORATORYFRAGMENT:
@@ -390,7 +390,9 @@ public class DialogActivity extends BaseActivity implements View.OnClickListener
 
     private void showDatePicker() {
         Calendar now = Calendar.getInstance();
-        now.add(Calendar.MONTH, -3);
+        if (isStartDateTime) {
+            now.add(Calendar.MONTH, -3);
+        }
         DatePickerDialog dpd = DatePickerDialog.newInstance(this, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
         dpd.vibrate(true);
         dpd.dismissOnPause(false);

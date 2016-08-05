@@ -109,13 +109,12 @@ public class LaboratoryStatisticFragment extends BaseLazyFragment implements Dat
     private void initData() {
         mGson = new Gson();
         mParametersData = (ParametersData) BaseApplication.parametersData.clone();
-        StringBuffer sb = new StringBuffer(BaseApplication.mUserInfoData.getDepartName() + " > ");
-        sb.append(getString(R.string.laboratory) + " > ");
-        sb.append(getString(R.string.statistic)).trimToSize();
-        mToolbar.setTitle(sb.toString());
+        mParametersData.userGroupID = BaseApplication.mDepartmentData.departmentID;
+        setToolbarTitle();
         initToolbarBackNavigation(mToolbar);
 //        initToolbarMenu(mToolbar);
 
+        tv_start_date.setText(mParametersData.startDateTime);
         tv_start_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,6 +122,7 @@ public class LaboratoryStatisticFragment extends BaseLazyFragment implements Dat
             }
         });
 
+        tv_end_date.setText(mParametersData.endDateTime);
         tv_end_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -273,6 +273,15 @@ public class LaboratoryStatisticFragment extends BaseLazyFragment implements Dat
 
     }
 
+    private void setToolbarTitle() {
+        if (null != mToolbar && null != BaseApplication.mDepartmentData && !TextUtils.isEmpty(BaseApplication.mDepartmentData.departmentName)) {
+            StringBuffer sb = new StringBuffer(BaseApplication.mDepartmentData.departmentName + " > ");
+            sb.append(getString(R.string.laboratory) + " > ");
+            sb.append(getString(R.string.statistic)).trimToSize();
+            mToolbar.setTitle(sb.toString());
+        }
+    }
+
     private void setViewData() {
 
         setChart(mBarChart0);
@@ -381,6 +390,9 @@ public class LaboratoryStatisticFragment extends BaseLazyFragment implements Dat
 
     private void showDatePicker() {
         Calendar now = Calendar.getInstance();
+        if (isStartDateTime) {
+            now.add(Calendar.MONTH, -3);
+        }
         DatePickerDialog dpd = DatePickerDialog.newInstance(this, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
         dpd.vibrate(true);
         dpd.dismissOnPause(false);

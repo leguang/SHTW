@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.shtoone.shtw.bean.DepartmentData;
 import com.shtoone.shtw.bean.ParametersData;
 import com.shtoone.shtw.bean.UserInfoData;
 import com.socks.library.KLog;
@@ -20,9 +21,10 @@ public class BaseApplication extends Application {
     public static Context context;
     public static final Bus bus = new Bus();
     public static ParametersData parametersData = new ParametersData();
-    public static ParametersData backupParametersData;
+    //    public static ParametersData backupParametersData;
     public static RequestQueue requestQueue;
     public static UserInfoData mUserInfoData;
+    public static DepartmentData mDepartmentData = new DepartmentData();
     public static boolean isExpand;
 
     @Override

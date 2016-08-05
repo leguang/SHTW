@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.shtoone.shtw.bean.YaLiJiDetailActivityChartFragmentData;
 import com.shtoone.shtw.bean.YalijiDetailData;
 import com.shtoone.shtw.fragment.laboratoryactivity.YaLiJiDetailActivityChartFragment;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +28,6 @@ public class YaLiJiDetailActivityChartViewPagerAdapter extends FragmentPagerAdap
         String[] arry = mYalijiDetailData.getData().getF_LZ().split("&");
         listDatas = new ArrayList<YaLiJiDetailActivityChartFragmentData>();
         mTitles = new String[arrx.length];
-        KLog.e("arrx.length=" + arrx.length);
         for (int i = 0; i < arrx.length; i++) {
             mTitles[i] = "曲线图" + (i + 1);
             String hz = arr_hz[i];

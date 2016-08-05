@@ -99,11 +99,9 @@ public class OverproofFragmentViewPagerFragment extends BaseFragment {
 
         //设置动画与适配器
         SlideInLeftAnimationAdapter mSlideInLeftAnimationAdapter = new SlideInLeftAnimationAdapter(mAdapter = new OverproofFragmentViewPagerFragmentRecyclerViewAdapter(_mActivity, listData));
-        mSlideInLeftAnimationAdapter.setFirstOnly(true);
         mSlideInLeftAnimationAdapter.setDuration(500);
         mSlideInLeftAnimationAdapter.setInterpolator(new OvershootInterpolator(.5f));
         mScaleInAnimationAdapter = new ScaleInAnimationAdapter(mSlideInLeftAnimationAdapter);
-        mScaleInAnimationAdapter.setFirstOnly(true);
         mRecyclerView.setAdapter(mScaleInAnimationAdapter);
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -142,8 +140,8 @@ public class OverproofFragmentViewPagerFragment extends BaseFragment {
                 lastVisibleItemPosition = mLinearLayoutManager.findLastVisibleItemPosition();
             }
         });
-        setPageStateLayout(mPageStateLayout);
-        setPtrFrameLayout(mPtrFrameLayout);
+        initPageStateLayout(mPageStateLayout);
+        initPtrFrameLayout(mPtrFrameLayout);
     }
 
     @Override
@@ -203,12 +201,13 @@ public class OverproofFragmentViewPagerFragment extends BaseFragment {
 
     @Override
     public String createRefreshULR() {
+        mPageStateLayout.showLoading();
         String userGroupID = "";
         String startDateTime = "";
         String endDateTime = "";
         String alarmLevel = "";
         String handleType = "";
-        String currentPage = "";//默认都是第一页
+        String currentPage = "";
         String equipmentID = "";
         if (null != mParametersData) {
             userGroupID = mParametersData.userGroupID;
@@ -216,7 +215,7 @@ public class OverproofFragmentViewPagerFragment extends BaseFragment {
             endDateTime = mParametersData.endDateTime;
             alarmLevel = mParametersData.alarmLevel;
             handleType = mParametersData.handleType;
-            mParametersData.currentPage = "1";
+            mParametersData.currentPage = "1";//默认都是第一页
             currentPage = mParametersData.currentPage;
             equipmentID = mParametersData.equipmentID;
         }
@@ -234,7 +233,7 @@ public class OverproofFragmentViewPagerFragment extends BaseFragment {
         String endDateTime = "";
         String alarmLevel = "";
         String handleType = "";
-        String currentPage = "";//默认都是第一页
+        String currentPage = "";
         String equipmentID = "";
         if (null != mParametersData) {
             userGroupID = mParametersData.userGroupID;
@@ -242,7 +241,7 @@ public class OverproofFragmentViewPagerFragment extends BaseFragment {
             endDateTime = mParametersData.endDateTime;
             alarmLevel = mParametersData.alarmLevel;
             handleType = mParametersData.handleType;
-            mParametersData.currentPage = (Integer.parseInt(mParametersData.currentPage) + 1) + "";
+            mParametersData.currentPage = (Integer.parseInt(mParametersData.currentPage) + 1) + "";//默认都是第一页
             currentPage = mParametersData.currentPage;
             equipmentID = mParametersData.equipmentID;
         }
@@ -251,7 +250,7 @@ public class OverproofFragmentViewPagerFragment extends BaseFragment {
     }
 
     @Override
-    public void refreshSuccess(String response) {
+    public void onRefreshSuccess(String response) {
         itemsData = mGson.fromJson(response, OverproofFragmentViewPagerFragmentListData.class);
         if (null != itemsData && itemsData.isSuccess() && itemsData.getData().size() > 0) {
             listData.addAll(itemsData.getData());
@@ -272,7 +271,7 @@ public class OverproofFragmentViewPagerFragment extends BaseFragment {
     }
 
     @Override
-    public void refreshFailed(VolleyError error) {
+    public void onRefreshFailed(VolleyError error) {
         //提示网络数据异常，展示网络错误页面。此时：1.可能是本机网络有问题，2.可能是服务器问题
         if (!NetworkUtils.isConnected(_mActivity)) {
             //提示网络异常,让用户点击设置网络
@@ -321,6 +320,13 @@ public class OverproofFragmentViewPagerFragment extends BaseFragment {
     public void go2TopOrRefresh(EventData event) {
         if (event.position == 1) {
             mRecyclerView.smoothScrollToPosition(0);
+        }
+    }
+
+    @Subscribe
+    public void handleRefresh(EventData event) {
+        if (event.position == ConstantsUtils.REFRESH) {
+            mPtrFrameLayout.autoRefresh(true);
         }
     }
 

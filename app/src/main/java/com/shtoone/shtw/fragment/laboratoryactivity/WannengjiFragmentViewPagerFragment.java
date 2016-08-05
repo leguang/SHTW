@@ -119,7 +119,6 @@ public class WannengjiFragmentViewPagerFragment extends BaseFragment {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                ToastUtils.showToast(_mActivity, "点击第：" + position);
                 // 实现局部界面刷新, 这个view就是被点击的item布局对象
                 changeReadedState(view);
                 jumpToWannengjiDetailActivity(position);
@@ -278,6 +277,7 @@ public class WannengjiFragmentViewPagerFragment extends BaseFragment {
         String currentPage = mParametersData.currentPage;
         String equipmentID = mParametersData.equipmentID;
         String isQualified = mParametersData.isQualified;
+        KLog.e("isQualified:" + isQualified);
         String isReal = mParametersData.isReal;
         String testType = mParametersData.testTypeID;
 

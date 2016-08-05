@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +68,7 @@ public class YaLiJiFragment extends BaseLazyFragment {
 
     private void initData() {
         mParametersData = (ParametersData) BaseApplication.parametersData.clone();
+        mParametersData.userGroupID = BaseApplication.mDepartmentData.departmentID;
         mParametersData.fromTo = ConstantsUtils.YALIJIFRAGMENT;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,13 +77,7 @@ public class YaLiJiFragment extends BaseLazyFragment {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(ConstantsUtils.PARAMETERS, mParametersData);
                 intent.putExtras(bundle);
-                //Activity共享元素切换版本适配
-//                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
                 startActivity(intent);
-//                } else {
-//                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(_mActivity, fab, getString(R.string.transition_dialog));
-//                    startActivity(intent, options.toBundle());
-//                }
             }
         });
 
@@ -96,13 +92,19 @@ public class YaLiJiFragment extends BaseLazyFragment {
             }
         });
 
-        StringBuffer sb = new StringBuffer(BaseApplication.mUserInfoData.getDepartName() + " > ");
-        sb.append(getString(R.string.laboratory) + " > ");
-        sb.append(getString(R.string.yaliji)).trimToSize();
-        mToolbar.setTitle(sb.toString());
+        setToolbarTitle();
         initToolbarBackNavigation(mToolbar);
 //        initToolbarMenu(mToolbar);
         setAdapter();
+    }
+
+    private void setToolbarTitle() {
+        if (null != mToolbar && null != BaseApplication.mDepartmentData && !TextUtils.isEmpty(BaseApplication.mDepartmentData.departmentName)) {
+            StringBuffer sb = new StringBuffer(BaseApplication.mDepartmentData.departmentName + " > ");
+            sb.append(getString(R.string.laboratory) + " > ");
+            sb.append(getString(R.string.yaliji)).trimToSize();
+            mToolbar.setTitle(sb.toString());
+        }
     }
 
     //还是不能这样搞，可能会内存泄漏，重复创建Adapyer对象。后面解决

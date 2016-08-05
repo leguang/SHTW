@@ -1,7 +1,6 @@
 package com.shtoone.shtw.fragment.mainactivity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -33,19 +32,14 @@ import com.shtoone.shtw.ui.PageStateLayout;
 import com.shtoone.shtw.ui.treeview.Node;
 import com.shtoone.shtw.utils.AnimationUtils;
 import com.shtoone.shtw.utils.ConstantsUtils;
-import com.shtoone.shtw.utils.DisplayUtils;
-import com.shtoone.shtw.utils.HttpUtils;
 import com.shtoone.shtw.utils.NetworkUtils;
 import com.shtoone.shtw.utils.URL;
-import com.socks.library.KLog;
 import com.squareup.otto.Subscribe;
 
-import in.srain.cube.views.ptr.PtrDefaultHandler;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import in.srain.cube.views.ptr.PtrFrameLayout;
-import in.srain.cube.views.ptr.PtrHandler;
-import in.srain.cube.views.ptr.PtrUIHandler;
-import in.srain.cube.views.ptr.header.StoreHouseHeader;
-import in.srain.cube.views.ptr.indicator.PtrIndicator;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.SlideInLeftAnimationAdapter;
 
@@ -56,15 +50,14 @@ import jp.wasabeef.recyclerview.adapters.SlideInLeftAnimationAdapter;
 public class LaboratoryFragment extends BaseLazyFragment {
     private static final String TAG = LaboratoryFragment.class.getSimpleName();
     private Toolbar mToolbar;
-    private PtrFrameLayout ptrframe;
+    private PtrFrameLayout mPtrFrameLayout;
     private RecyclerView mRecyclerView;
-    private StoreHouseHeader header;
     private LaboratoryFragmentRecyclerViewAdapter mAdapter;
-    private LaboratoryFragmentRecyclerViewItemData itemData;
+    private LaboratoryFragmentRecyclerViewItemData itemsData;
     private FloatingActionButton fab;
-    private PageStateLayout pageStateLayout;
+    private PageStateLayout mPageStateLayout;
     private ParametersData mParametersData;
-    private View view;
+    private Gson mGson;
 
     public static LaboratoryFragment newInstance() {
         return new LaboratoryFragment();
@@ -74,7 +67,7 @@ public class LaboratoryFragment extends BaseLazyFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         BaseApplication.bus.register(this);
-        view = inflater.inflate(R.layout.fragment_laboratory, container, false);
+        View view = inflater.inflate(R.layout.fragment_laboratory, container, false);
         initView(view);
         return view;
     }
@@ -89,10 +82,9 @@ public class LaboratoryFragment extends BaseLazyFragment {
     private void initView(View view) {
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar_laboratory_fragment);
         fab = (FloatingActionButton) view.findViewById(R.id.fab_laboratory_fragment);
-        ptrframe = (PtrFrameLayout) view.findViewById(R.id.ptr_laboratory_fragment);
+        mPtrFrameLayout = (PtrFrameLayout) view.findViewById(R.id.ptr_laboratory_fragment);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_laboratory_fragment);
-        pageStateLayout = (PageStateLayout) view.findViewById(R.id.psl_laboratory_fragment);
-        pageStateLayout.showLoading();
+        mPageStateLayout = (PageStateLayout) view.findViewById(R.id.psl_laboratory_fragment);
         mParametersData = (ParametersData) BaseApplication.parametersData.clone();
         mParametersData.fromTo = ConstantsUtils.LABORATORYFRAGMENT;
     }
@@ -103,7 +95,7 @@ public class LaboratoryFragment extends BaseLazyFragment {
     }
 
     private void initData() {
-        setToolbar();
+        setToolbarTitle();
         ((MainActivity) _mActivity).initToolBar(mToolbar);
 
         mToolbar.inflateMenu(R.menu.menu_hierarchy);
@@ -128,190 +120,109 @@ public class LaboratoryFragment extends BaseLazyFragment {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(ConstantsUtils.PARAMETERS, mParametersData);
                 intent.putExtras(bundle);
-                //Activity共享元素切换版本适配
-//                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
                 startActivity(intent);
-//                } else {
-//                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(_mActivity, fab, getString(R.string.transition_dialog));
-//                    startActivity(intent, options.toBundle());
-//                }
             }
         });
+        mGson = new Gson();
+        initPageStateLayout(mPageStateLayout);
+        initPtrFrameLayout(mPtrFrameLayout);
+    }
 
-        pageStateLayout.setOnRetryClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pageStateLayout.showLoading();
-                getDataFromNetwork(mParametersData);
-            }
-        });
 
-        pageStateLayout.setOnNetErrorClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pageStateLayout.showEmpty();
-                NetworkUtils.openSetting(_mActivity);
-            }
-        });
-
-        header = new StoreHouseHeader(_mActivity);
-        final String[] mStringList = {ConstantsUtils.DOMAIN_1, ConstantsUtils.DOMAIN_2};
-
-        // 下拉刷新头部
-        header.setTextColor(Color.BLACK);
-        header.setPadding(0, DisplayUtils.dp2px(15), 0, 0);
-
-        header.initWithString(mStringList[0]);
-        // for changing string
-        ptrframe.addPtrUIHandler(new PtrUIHandler() {
-
-            private int mLoadTime = 0;
-
-            @Override
-            public void onUIReset(PtrFrameLayout frame) {
-                mLoadTime++;
-                String string = mStringList[mLoadTime % mStringList.length];
-                header.initWithString(string);
-            }
-
-            @Override
-            public void onUIRefreshPrepare(PtrFrameLayout frame) {
-                String string = mStringList[mLoadTime % mStringList.length];
-            }
-
-            @Override
-            public void onUIRefreshBegin(PtrFrameLayout frame) {
-
-            }
-
-            @Override
-            public void onUIRefreshComplete(PtrFrameLayout frame) {
-
-            }
-
-            @Override
-            public void onUIPositionChange(PtrFrameLayout frame, boolean isUnderTouch, byte status, PtrIndicator ptrIndicator) {
-
-            }
-        });
-        ptrframe.setHeaderView(header);
-        ptrframe.addPtrUIHandler(header);
-        ptrframe.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ptrframe.autoRefresh(true);
-            }
-        }, 100);
-        ptrframe.setPtrHandler(new PtrHandler() {
-            @Override
-            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                if (null != mRecyclerView) {
-                    if (mRecyclerView.getLayoutManager() instanceof LinearLayoutManager) {
-                        LinearLayoutManager lm = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-                        if (lm.findViewByPosition(lm.findFirstVisibleItemPosition()).getTop() > 0 && lm.findFirstVisibleItemPosition() == 0) {
+    @Override
+    public boolean isCanDoRefresh() {
+        //判断是哪种状态的页面，都让其可下拉
+        if (mPageStateLayout.isShowContent) {
+            //判断RecyclerView是否在在顶部，在顶部则允许滑动下拉刷新
+            if (null != mRecyclerView) {
+                if (mRecyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+                    LinearLayoutManager lm = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+                    int position = lm.findFirstVisibleItemPosition();
+                    if (position >= 0) {
+                        if (lm.findViewByPosition(position).getTop() > 0 && position == 0) {
                             return true;
                         }
                     }
-                } else {
-                    return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
-                }
-                return false;
-            }
-
-            @Override
-            public void onRefreshBegin(final PtrFrameLayout frame) {
-                getDataFromNetwork(mParametersData);
-                frame.refreshComplete();
-            }
-        });
-
-//        showTipMask();
-    }
-
-    //联网获取数据
-    private void getDataFromNetwork(ParametersData mParametersData) {
-        pageStateLayout.showLoading();
-        //从全局参数类中取出参数，避免太长了，看起来不方便
-        String userGroupID = mParametersData.userGroupID;
-        String startDateTime = mParametersData.startDateTime;
-        String endDateTime = mParametersData.endDateTime;
-
-        HttpUtils.getRequest(URL.getSYSLingdaoData(userGroupID, startDateTime, endDateTime), new HttpUtils.HttpListener() {
-            @Override
-            public void onSuccess(String response) {
-                KLog.e(TAG, response);
-                parseData(response);
-            }
-
-            @Override
-            public void onFailed(VolleyError error) {
-                //提示网络数据异常，展示网络错误页面。此时：1.可能是本机网络有问题，2.可能是服务器问题
-                if (!NetworkUtils.isConnected(_mActivity)) {
-                    //提示网络异常,让用户点击设置网络
-                    pageStateLayout.showNetError();
-                } else {
-                    //服务器异常，展示错误页面，点击刷新
-                    pageStateLayout.showError();
-                }
-            }
-        });
-    }
-
-    protected void parseData(String response) {
-        if (!TextUtils.isEmpty(response)) {
-            itemData = new Gson().fromJson(response, LaboratoryFragmentRecyclerViewItemData.class);
-            if (null != itemData) {
-                if (itemData.isSuccess()) {
-                    pageStateLayout.showContent();
-                    setAdapter();
-                } else {
-                    //提示数据为空，展示空状态
-                    pageStateLayout.showEmpty();
                 }
             } else {
-                //提示数据解析异常，展示错误页面
-                pageStateLayout.showError();
+                return true;
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public String createRefreshULR() {
+        mPageStateLayout.showLoading();
+        String userGroupID = "";
+        String startDateTime = "";
+        String endDateTime = "";
+        if (null != mParametersData) {
+            userGroupID = mParametersData.userGroupID;
+            startDateTime = mParametersData.startDateTime;
+            endDateTime = mParametersData.endDateTime;
+        }
+        return URL.getSYSLingdaoData(userGroupID, startDateTime, endDateTime);
+    }
+
+    @Override
+    public void onRefreshSuccess(String response) {
+        if (!TextUtils.isEmpty(response)) {
+            JSONObject jsonObject = null;
+            try {
+                jsonObject = new JSONObject(response);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                mPageStateLayout.showError();
+            }
+            if (jsonObject.optBoolean("success")) {
+                itemsData = mGson.fromJson(response, LaboratoryFragmentRecyclerViewItemData.class);
+                if (null != itemsData) {
+                    if (itemsData.isSuccess() && itemsData.getData().size() > 0) {
+                        mPageStateLayout.showContent();
+                        setAdapter();
+
+                    } else {
+                        //提示数据为空，展示空状态
+                        mPageStateLayout.showEmpty();
+                    }
+                } else {
+                    //提示数据解析异常，展示错误页面
+                    mPageStateLayout.showError();
+                }
+            } else {
+                //提示数据为空，展示空状态
+                mPageStateLayout.showEmpty();
             }
         } else {
             //提示返回数据异常，展示错误页面
-            pageStateLayout.showError();
+            mPageStateLayout.showError();
         }
-
     }
 
-    //还是不能这样搞，可能会内存泄漏，重复创建Adapyer对象。后面解决
-    private void setAdapter() {
-        // 设置显示形式
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(_mActivity));
-
-        //设置动画
-        SlideInLeftAnimationAdapter mSlideInLeftAnimationAdapter = new SlideInLeftAnimationAdapter(mAdapter = new LaboratoryFragmentRecyclerViewAdapter(_mActivity, itemData));
-        mSlideInLeftAnimationAdapter.setDuration(500);
-        mSlideInLeftAnimationAdapter.setInterpolator(new OvershootInterpolator(.5f));
-        ScaleInAnimationAdapter mScaleInAnimationAdapter = new ScaleInAnimationAdapter(mSlideInLeftAnimationAdapter);
-        mRecyclerView.setAdapter(mScaleInAnimationAdapter);
-
-        // 设置item动画
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public void onItemClick(View view, int position) {
-
-                // 实现局部界面刷新, 这个view就是被点击的item布局对象
-                changeReadedState(view);
-                // 跳转到详情页
-                jumpToLaboratoryActivity();
-            }
-        });
+    @Override
+    public void onRefreshFailed(VolleyError error) {
+        //提示网络数据异常，展示网络错误页面。此时：1.可能是本机网络有问题，2.可能是服务器问题
+        if (!NetworkUtils.isConnected(_mActivity)) {
+            //提示网络异常,让用户点击设置网络
+            mPageStateLayout.showNetError();
+        } else {
+            //服务器异常，展示错误页面，点击刷新
+            mPageStateLayout.showError();
+        }
     }
 
     private void changeReadedState(View view) {
         //此处可以做一些修改点击过的item的样式，方便用户看出哪些已经点击查看过
     }
 
-    private void jumpToLaboratoryActivity() {
+    private void jumpToLaboratoryActivity(int position) {
         Intent intent = new Intent(_mActivity, LaboratoryActivity.class);
+        //这里不需要做健壮性判断，因为能走到这一步，itemsData必然有数据
+        BaseApplication.mDepartmentData.departmentID = itemsData.getData().get(position).get(0).getUserGroupId();
+        BaseApplication.mDepartmentData.departmentName = itemsData.getData().get(position).get(0).getDepartName();
         startActivity(intent);
     }
 
@@ -322,24 +233,23 @@ public class LaboratoryFragment extends BaseLazyFragment {
             if (mParametersData.fromTo == ConstantsUtils.LABORATORYFRAGMENT) {
                 fab.show();
                 this.mParametersData = mParametersData;
-                getDataFromNetwork(mParametersData);
-                KLog.e(TAG, "fromto:" + mParametersData.fromTo);
+                mPtrFrameLayout.autoRefresh(true);
             }
         }
     }
 
     @Subscribe
-    public void updateUserGroup(Node node) {
+    public void updateDepartment(Node node) {
         if (null != node) {
             mParametersData.userGroupID = node.getId();
-            getDataFromNetwork(mParametersData);
-            setToolbar();
+            mPtrFrameLayout.autoRefresh(true);
+            setToolbarTitle();
         }
     }
 
-    private void setToolbar() {
-        if (null != mToolbar && null != BaseApplication.mUserInfoData && !TextUtils.isEmpty(BaseApplication.mUserInfoData.getDepartName())) {
-            StringBuffer sb = new StringBuffer(BaseApplication.mUserInfoData.getDepartName() + " > ");
+    private void setToolbarTitle() {
+        if (null != mToolbar && null != BaseApplication.mDepartmentData && !TextUtils.isEmpty(BaseApplication.mDepartmentData.departmentName)) {
+            StringBuffer sb = new StringBuffer(BaseApplication.mDepartmentData.departmentName + " > ");
             sb.append(getString(R.string.laboratory)).trimToSize();
             mToolbar.setTitle(sb.toString());
         }
@@ -356,5 +266,31 @@ public class LaboratoryFragment extends BaseLazyFragment {
     public void onDestroy() {
         super.onDestroy();
         BaseApplication.bus.unregister(this);
+    }
+
+    private void setAdapter() {
+        // 设置显示形式
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(_mActivity));
+
+        //设置动画
+        SlideInLeftAnimationAdapter mSlideInLeftAnimationAdapter = new SlideInLeftAnimationAdapter(mAdapter = new LaboratoryFragmentRecyclerViewAdapter(_mActivity, itemsData));
+        mSlideInLeftAnimationAdapter.setDuration(500);
+        mSlideInLeftAnimationAdapter.setInterpolator(new OvershootInterpolator(.5f));
+        ScaleInAnimationAdapter mScaleInAnimationAdapter = new ScaleInAnimationAdapter(mSlideInLeftAnimationAdapter);
+        mRecyclerView.setAdapter(mScaleInAnimationAdapter);
+
+        // 设置item动画
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public void onItemClick(View view, int position) {
+
+                // 实现局部界面刷新, 这个view就是被点击的item布局对象
+                changeReadedState(view);
+                // 跳转到详情页
+                jumpToLaboratoryActivity(position);
+            }
+        });
     }
 }

@@ -179,6 +179,8 @@ public class SplashActivity extends BaseActivity {
 
     private void initParametersData() {
         BaseApplication.parametersData.userGroupID = userInfoData.getDepartId();
+        BaseApplication.mDepartmentData.departmentID = userInfoData.getDepartId();
+        BaseApplication.mDepartmentData.departmentName = userInfoData.getDepartName();
     }
 
     @Override

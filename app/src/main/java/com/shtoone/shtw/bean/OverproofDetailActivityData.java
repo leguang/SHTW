@@ -6,6 +6,7 @@ import java.util.List;
  * Created by leguang on 2016/7/29 0029.
  */
 public class OverproofDetailActivityData {
+
     /**
      * jianlishenpi :
      * confirmdate :
@@ -14,40 +15,42 @@ public class OverproofDetailActivityData {
      * shenpiren :
      * id :
      * chulifangshi :
-     * gongdanhao : 17
+     * gongdanhao : 20150320-001
      * jianliresult :
      * chulijieguo :
      * jiaobanshijian : 50
      * wentiyuanyin :
-     * chuliaoshijian : 2016-03-11 19:56:54
-     * peifanghao : TJ2-B-HNT-21
+     * chuliaoshijian : 2016-07-15 17:02:37
+     * peifanghao : 1
+     * xinxibianhao :
      * chulishijian :
-     * qiangdudengji : C30防水砼
+     * qiangdudengji : C20
      * shenhe :
-     * gongchengmingcheng : 云南省蒙自至文山至砚山高速公路第2合同段
-     * chaozuozhe : 马耀先
-     * gujifangshu : 0.980141667922338
-     * waijiajipingzhong : 1
-     * sigongdidian : 老鹰山隧道进口 隧道二队
-     * banhezhanminchen : 一航局二分部2号站1号机
-     * shuinipingzhong : 160311195101
+     * gongchengmingcheng : 蒙文砚高速公路项目经理部四分部
+     * chaozuozhe : 邢云华
+     * gujifangshu : 1.422
+     * waijiajipingzhong : 1.42
+     * sigongdidian : 项目部
+     * shuinipingzhong : 14287|5
+     * banhezhanminchen : 三公局三公司3分部2号站1号机
      * shenpidate :
-     * jiaozuobuwei : 老进右洞K15+425-437二衬
+     * jiaozuobuwei : 基础
      */
 
     private HeadMsgBean headMsg;
     /**
-     * headMsg : {"jianlishenpi":"","confirmdate":"","chuliren":"","chuli":"","shenpiren":"","id":"","chulifangshi":"","gongdanhao":"17","jianliresult":"","chulijieguo":"","jiaobanshijian":"50","wentiyuanyin":"","chuliaoshijian":"2016-03-11 19:56:54","peifanghao":"TJ2-B-HNT-21","chulishijian":"","qiangdudengji":"C30防水砼","shenhe":"","gongchengmingcheng":"云南省蒙自至文山至砚山高速公路第2合同段","chaozuozhe":"马耀先","gujifangshu":"0.980141667922338","waijiajipingzhong":"1","sigongdidian":"老鹰山隧道进口 隧道二队","banhezhanminchen":"一航局二分部2号站1号机","shuinipingzhong":"160311195101","shenpidate":"","jiaozuobuwei":"老进右洞K15+425-437二衬"}
-     * data : [{"peibi":"870.00","name":"砂1","shiji":"843.00","wuchazhi":"-27.00"},{"peibi":"588.00","name":"碎石","shiji":"571.00","wuchazhi":"-17.00"},{"peibi":"294.00","name":"碎石1","shiji":"294.00","wuchazhi":"0.00"},{"peibi":"98.00","name":"碎石2","shiji":"99.00","wuchazhi":"1.00"},{"peibi":"302.00","name":"水泥1","shiji":"301.10","wuchazhi":"-0.90"},{"peibi":"0.00","name":"水泥2","shiji":"0.00","wuchazhi":"0.00"},{"peibi":"0.00","name":"矿粉","shiji":"0.00","wuchazhi":"0.00"},{"peibi":"0.00","name":"煤灰","shiji":"0.00","wuchazhi":"0.00"},{"peibi":"168.00","name":"水","shiji":"166.50","wuchazhi":"-1.50"},{"peibi":"4.15","name":"减水剂2","shiji":"4.04","wuchazhi":"-0.11"}]
+     * headMsg : {"jianlishenpi":"","confirmdate":"","chuliren":"","chuli":"","shenpiren":"","id":"","chulifangshi":"","gongdanhao":"20150320-001","jianliresult":"","chulijieguo":"","jiaobanshijian":"50","wentiyuanyin":"","chuliaoshijian":"2016-07-15 17:02:37","peifanghao":"1","xinxibianhao":"","chulishijian":"","qiangdudengji":"C20","shenhe":"","gongchengmingcheng":"蒙文砚高速公路项目经理部四分部","chaozuozhe":"邢云华","gujifangshu":"1.422","waijiajipingzhong":"1.42","sigongdidian":"项目部","shuinipingzhong":"14287|5","banhezhanminchen":"三公局三公司3分部2号站1号机","shenpidate":"","jiaozuobuwei":"基础"}
+     * data : [{"peibi":"313.00","name":"砂1","shiji":"315.00","wuchazhi":"2.00","wuchalv":"0.63"},{"peibi":"1006.00","name":"砂2","shiji":"1020.00","wuchazhi":"14.00","wuchalv":"1.37"},{"peibi":"470.00","name":"碎石1","shiji":"451.00","wuchazhi":"-19.00","wuchalv":"-4.21"},{"peibi":"708.00","name":"碎石2","shiji":"712.00","wuchazhi":"4.00","wuchalv":"0.56"},{"peibi":"0.00","name":"水泥1","shiji":"0.00","wuchazhi":"0.00","wuchalv":"0.00"},{"peibi":"283.00","name":"水泥2","shiji":"289.50","wuchazhi":"6.50","wuchalv":"2.25"},{"peibi":"0.00","name":"矿粉","shiji":"0.00","wuchazhi":"0.00","wuchalv":"0.00"},{"peibi":"0.00","name":"粉煤灰","shiji":"0.00","wuchazhi":"0.00","wuchalv":"0.00"},{"peibi":"283.00","name":"水","shiji":"284.00","wuchazhi":"1.00","wuchalv":"0.35"},{"peibi":"0.00","name":"减水剂1","shiji":"0.00","wuchazhi":"0.00","wuchalv":"0.00"}]
      * success : true
      */
 
     private boolean success;
     /**
-     * peibi : 870.00
+     * peibi : 313.00
      * name : 砂1
-     * shiji : 843.00
-     * wuchazhi : -27.00
+     * shiji : 315.00
+     * wuchazhi : 2.00
+     * wuchalv : 0.63
      */
 
     private List<DataBean> data;
@@ -91,6 +94,7 @@ public class OverproofDetailActivityData {
         private String wentiyuanyin;
         private String chuliaoshijian;
         private String peifanghao;
+        private String xinxibianhao;
         private String chulishijian;
         private String qiangdudengji;
         private String shenhe;
@@ -99,8 +103,8 @@ public class OverproofDetailActivityData {
         private String gujifangshu;
         private String waijiajipingzhong;
         private String sigongdidian;
-        private String banhezhanminchen;
         private String shuinipingzhong;
+        private String banhezhanminchen;
         private String shenpidate;
         private String jiaozuobuwei;
 
@@ -216,6 +220,14 @@ public class OverproofDetailActivityData {
             this.peifanghao = peifanghao;
         }
 
+        public String getXinxibianhao() {
+            return xinxibianhao;
+        }
+
+        public void setXinxibianhao(String xinxibianhao) {
+            this.xinxibianhao = xinxibianhao;
+        }
+
         public String getChulishijian() {
             return chulishijian;
         }
@@ -280,20 +292,20 @@ public class OverproofDetailActivityData {
             this.sigongdidian = sigongdidian;
         }
 
-        public String getBanhezhanminchen() {
-            return banhezhanminchen;
-        }
-
-        public void setBanhezhanminchen(String banhezhanminchen) {
-            this.banhezhanminchen = banhezhanminchen;
-        }
-
         public String getShuinipingzhong() {
             return shuinipingzhong;
         }
 
         public void setShuinipingzhong(String shuinipingzhong) {
             this.shuinipingzhong = shuinipingzhong;
+        }
+
+        public String getBanhezhanminchen() {
+            return banhezhanminchen;
+        }
+
+        public void setBanhezhanminchen(String banhezhanminchen) {
+            this.banhezhanminchen = banhezhanminchen;
         }
 
         public String getShenpidate() {
@@ -318,6 +330,7 @@ public class OverproofDetailActivityData {
         private String name;
         private String shiji;
         private String wuchazhi;
+        private String wuchalv;
 
         public String getPeibi() {
             return peibi;
@@ -349,6 +362,14 @@ public class OverproofDetailActivityData {
 
         public void setWuchazhi(String wuchazhi) {
             this.wuchazhi = wuchazhi;
+        }
+
+        public String getWuchalv() {
+            return wuchalv;
+        }
+
+        public void setWuchalv(String wuchalv) {
+            this.wuchalv = wuchalv;
         }
     }
 }

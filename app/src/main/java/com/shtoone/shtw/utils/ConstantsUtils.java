@@ -18,6 +18,7 @@ public class ConstantsUtils {
     public static final String LOGINCHECK = "logincheck";
     public static final String FROMTO = "fromto";
     public static final String PARAMETERS = "parameters";
+    public static final String USERGROUPID = "usergroupid";
 
     public static final int LABORATORYFRAGMENT = 0;
     public static final int YALIJIFRAGMENT = 1;
@@ -29,4 +30,5 @@ public class ConstantsUtils {
 
     public static final int CAMERA = 1;
     public static final int ALBUM = 2;
+    public static final int REFRESH = 11;
 }

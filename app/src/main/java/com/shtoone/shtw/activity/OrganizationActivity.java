@@ -1,7 +1,6 @@
 package com.shtoone.shtw.activity;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -63,7 +62,7 @@ public class OrganizationActivity extends BaseActivity {
 
     private void initData() {
         type = getIntent().getStringExtra("type");
-        mParametersData = BaseApplication.backupParametersData;
+        mParametersData = BaseApplication.parametersData;
         StringBuffer sb = new StringBuffer(BaseApplication.mUserInfoData.getDepartName() + " > ");
         sb.append(getString(R.string.organization)).trimToSize();
         mToolbar.setTitle(sb.toString());
@@ -154,8 +153,8 @@ public class OrganizationActivity extends BaseActivity {
         mAdapter.setOnTreeNodeClickListener(new TreeListViewAdapter.OnTreeNodeClickListener() {
             @Override
             public void onClick(Node node, int position) {
-                BaseApplication.parametersData.userGroupID = node.getId();
-                BaseApplication.mUserInfoData.setDepartName(node.getName());
+                BaseApplication.mDepartmentData.departmentID = node.getId();
+                BaseApplication.mDepartmentData.departmentName = node.getName();
                 BaseApplication.bus.post(node);
                 onBackPressed();
             }
@@ -174,30 +173,30 @@ public class OrganizationActivity extends BaseActivity {
         }
     }
 
-    private void hideView() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            int cx = ll_container.getRight();
-            int cy = ll_container.getTop();
-            int radius = Math.max(ll_container.getWidth(), ll_container.getHeight());
-            Animator mAnimator = ViewAnimationUtils.createCircularReveal(mPageStateLayout, cx, cy, radius, 0);
-            mAnimator.setDuration(500);
-            mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-            mAnimator.addListener(new AnimatorListenerAdapter() {
-
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    super.onAnimationStart(animation);
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    finish();
-                }
-            });
-            mAnimator.start();
-        }
-    }
+//    private void hideView() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            int cx = ll_container.getRight();
+//            int cy = ll_container.getTop();
+//            int radius = Math.max(ll_container.getWidth(), ll_container.getHeight());
+//            Animator mAnimator = ViewAnimationUtils.createCircularReveal(mPageStateLayout, cx, cy, radius, 0);
+//            mAnimator.setDuration(500);
+//            mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+//            mAnimator.addListener(new AnimatorListenerAdapter() {
+//
+//                @Override
+//                public void onAnimationStart(Animator animation) {
+//                    super.onAnimationStart(animation);
+//                }
+//
+//                @Override
+//                public void onAnimationEnd(Animator animation) {
+//                    super.onAnimationEnd(animation);
+//                    finish();
+//                }
+//            });
+//            mAnimator.start();
+//        }
+//    }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

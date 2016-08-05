@@ -11,8 +11,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.CardView;
@@ -43,11 +46,13 @@ import com.shtoone.shtw.BaseApplication;
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.base.BaseActivity;
 import com.shtoone.shtw.adapter.OverproofDetailActivityRecyclerViewAdapter;
+import com.shtoone.shtw.bean.EventData;
 import com.shtoone.shtw.bean.OverproofDetailActivityData;
 import com.shtoone.shtw.bean.OverproofFragmentViewPagerFragmentListData;
 import com.shtoone.shtw.bean.UserInfoData;
 import com.shtoone.shtw.ui.PageStateLayout;
 import com.shtoone.shtw.utils.ConstantsUtils;
+import com.shtoone.shtw.utils.DateUtils;
 import com.shtoone.shtw.utils.DisplayUtils;
 import com.shtoone.shtw.utils.HttpUtils;
 import com.shtoone.shtw.utils.KeyBoardUtils;
@@ -59,11 +64,25 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
@@ -72,7 +91,6 @@ import in.srain.cube.views.ptr.header.StoreHouseHeader;
 import in.srain.cube.views.ptr.indicator.PtrIndicator;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.SlideInLeftAnimationAdapter;
-
 
 public class OverproofDetailActivity extends BaseActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     private static final String TAG = OverproofDetailActivity.class.getSimpleName();
@@ -96,7 +114,6 @@ public class OverproofDetailActivity extends BaseActivity implements TimePickerD
     private TextView tv11;
     private TextView tv12;
     private RecyclerView mRecyclerView;
-    private String detaiID;
     private ImageView iv_photo_select;
     private ImageView iv_camera_select;
     private ImageView iv_album_select;
@@ -126,6 +143,14 @@ public class OverproofDetailActivity extends BaseActivity implements TimePickerD
     private Bitmap bitmap;
     private OverproofDetailActivityRecyclerViewAdapter mAdapter;
     private OverproofFragmentViewPagerFragmentListData.DataBean mDataBean;
+    private String examinePerson;
+    private String examineResult;
+    private String examineApprove;
+    private String confirmTime;
+    private String approveTime;
+    private boolean isHandleDateTime;
+    private boolean isConfirmDateTime;
+    private boolean isApproveDateTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,7 +214,9 @@ public class OverproofDetailActivity extends BaseActivity implements TimePickerD
         et_approve_date = (TextInputLayout) findViewById(R.id.et_approve_time_overproof_detail_activity);
         bt_examine_submit = (Button) findViewById(R.id.bt_examine_submit_overproof_detail_activity);
         bt_examine_reset = (Button) findViewById(R.id.bt_examine_reset_overproof_detail_activity);
-
+        et_examine_person.getEditText().setInputType(InputType.TYPE_NULL);
+        et_confirm_date.getEditText().setInputType(InputType.TYPE_NULL);
+        et_approve_date.getEditText().setInputType(InputType.TYPE_NULL);
 
     }
 
@@ -211,6 +238,41 @@ public class OverproofDetailActivity extends BaseActivity implements TimePickerD
 
                 switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        isHandleDateTime = true;
+                        isConfirmDateTime = false;
+                        isApproveDateTime = false;
+                        showDatePicker();
+                        break;
+                }
+                return true;
+            }
+        });
+
+        et_confirm_date.getEditText().setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        isHandleDateTime = false;
+                        isConfirmDateTime = true;
+                        isApproveDateTime = false;
+                        showDatePicker();
+                        break;
+                }
+                return true;
+            }
+        });
+
+        et_approve_date.getEditText().setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        isHandleDateTime = false;
+                        isConfirmDateTime = false;
+                        isApproveDateTime = true;
                         showDatePicker();
                         break;
                 }
@@ -417,14 +479,14 @@ public class OverproofDetailActivity extends BaseActivity implements TimePickerD
                                     //提交到服务器
                                     ToastUtils.showToast(OverproofDetailActivity.this, "提交");
 
-                                    new MaterialDialog.Builder(OverproofDetailActivity.this)
+                                    MaterialDialog progressDialog = new MaterialDialog.Builder(OverproofDetailActivity.this)
                                             .title("提交")
                                             .content("正在提交中，请稍等……")
                                             .progress(true, 0)
                                             .progressIndeterminateStyle(true)
                                             .cancelable(false)
                                             .show();
-//                                    submit();
+                                    handleSubmit(progressDialog);
                                 }
                             })
                             .negativeText("放弃")
@@ -459,12 +521,12 @@ public class OverproofDetailActivity extends BaseActivity implements TimePickerD
                                 //提交到服务器
                                 ToastUtils.showToast(OverproofDetailActivity.this, "重置");
                                 et_handle_reason.getEditText().setText("");
-                                handleReason = "";
                                 et_handle_reason.setFocusable(false);
                                 et_handle_way.getEditText().setText("");
-                                handleWay = "";
                                 et_handle_result.getEditText().setText("");
                                 handleResult = "";
+                                handleReason = "";
+                                handleWay = "";
                                 bitmap = null;
                                 iv_photo_select.setImageResource(R.drawable.ic_camera_album);
                             }
@@ -473,54 +535,183 @@ public class OverproofDetailActivity extends BaseActivity implements TimePickerD
                         .show();
             }
         });
+
+        bt_examine_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                KeyBoardUtils.hideKeybord(view, OverproofDetailActivity.this);
+                examinePerson = et_examine_person.getEditText().getText().toString().trim();
+                examineResult = et_examine_result.getEditText().getText().toString().trim();
+                examineApprove = et_examine_approve.getEditText().getText().toString().trim();
+                confirmTime = et_confirm_date.getEditText().getText().toString().trim();
+                approveTime = et_approve_date.getEditText().getText().toString().trim();
+
+                if (!TextUtils.isEmpty(examinePerson) && !TextUtils.isEmpty(examineResult) && !TextUtils.isEmpty(examineApprove) && !TextUtils.isEmpty(confirmTime) && !TextUtils.isEmpty(approveTime)) {
+                    //弹出对话框，确定提交
+                    new MaterialDialog.Builder(OverproofDetailActivity.this)
+                            .title("确认")
+                            .content("请问您确定填写无误并提交吗？")
+                            .positiveText("确定")
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    //提交到服务器
+                                    ToastUtils.showToast(OverproofDetailActivity.this, "提交");
+
+                                    MaterialDialog progressDialog = new MaterialDialog.Builder(OverproofDetailActivity.this)
+                                            .title("提交")
+                                            .content("正在提交中，请稍等……")
+                                            .progress(true, 0)
+                                            .progressIndeterminateStyle(true)
+                                            .cancelable(false)
+                                            .show();
+                                    examineSubmit(progressDialog);
+                                }
+                            })
+                            .negativeText("放弃")
+                            .show();
+                } else {
+                    if (TextUtils.isEmpty(examinePerson)) {
+                        et_examine_person.getEditText().setError("审批人不能为空");
+                    } else if (TextUtils.isEmpty(examineResult)) {
+                        et_examine_result.getEditText().setError("监理结果不能为空");
+                    } else if (TextUtils.isEmpty(examineApprove)) {
+                        et_examine_approve.getEditText().setError("监理审批不能为空");
+                    } else if (TextUtils.isEmpty(confirmTime)) {
+                        et_confirm_date.getEditText().setError("确认时间不能为空");
+                    } else if (TextUtils.isEmpty(approveTime)) {
+                        et_approve_date.getEditText().setError("审批时间不能为空");
+                    }
+                }
+            }
+        });
+
+        bt_examine_reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //弹出对话框,确定重置
+                new MaterialDialog.Builder(OverproofDetailActivity.this)
+                        .title("确认")
+                        .content("请问您确定要重置吗？那样您就要重新填写哟……")
+                        .positiveText("确定")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                et_examine_result.getEditText().setText("");
+                                et_examine_approve.getEditText().setText("");
+                                examineResult = "";
+                                examineApprove = "";
+                            }
+                        })
+                        .negativeText("放弃")
+                        .show();
+            }
+        });
     }
 
-//    private void submit() {
-//        String person = null, time = null, reason = null, way = null, result = null;
-//        try {
-//            person = URLEncoder.encode(handlePerson, "utf-8");
-//            time = URLEncoder.encode(handleTime, "utf-8");
-//            reason = URLEncoder.encode(handleReason, "utf-8");
-//            way = URLEncoder.encode(handleWay, "utf-8");
-//            result = URLEncoder.encode(handleResult, "utf-8");
-//        } catch (UnsupportedEncodingException e1) {
-//            e1.printStackTrace();
-//        }
-//
-////        final String url = APIUtil.get("SC_DAICHUZHIBAOJING_POST").replace("%1", xxid + "")
-////                .replace("%2", reason).replace("%3", type).replace("%4", result)
-////                .replace("%5", person).replace("%6", time);
-//
-//        final Handler handler = new Handler() {
-//            @Override
-//            public void handleMessage(Message msg) {
-//                super.handleMessage(msg);
-//                if (msg.what == 1) {
-//                    Toast.makeText(SC_chaobiaochaxunXqActivity.this, "上传成功！", Toast.LENGTH_LONG).show();
-//                    setResult(1);
-//                    finish();
-//                } else {
-//                    Toast.makeText(SC_chaobiaochaxunXqActivity.this, "上传失败！", Toast.LENGTH_LONG).show();
-//                }
-//            }
-//        };
-//        new Thread(new Runnable() {
-//            public void run() {
-//                boolean flag = uploadPic(url); //返回为 true 表示上传成功 ； false 上传失败
-//                try {
-//                    Thread.sleep(500);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                if (flag) {
-//                    handler.sendEmptyMessage(1);  // 上传成功 发送消息到 handler 关闭详情页并提示上传成功
-//                } else {
-//                    handler.sendEmptyMessage(2);  // 上传失败 则什么都不做 停留在此页面
-//                }
-//            }
-//        }).start();
-//    }
+    private void handleSubmit(final MaterialDialog progressDialog) {
+        String person = null, time = null, reason = null, way = null, result = null;
+        try {
+            person = URLEncoder.encode(handlePerson, "UTF-8");
+            time = handleTime;
+            reason = URLEncoder.encode(handleReason, "UTF-8");
+            way = URLEncoder.encode(handleWay, "UTF-8");
+            result = URLEncoder.encode(handleResult, "UTF-8");
+        } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+        }
 
+        final String url = URL.BHZ_CHAOBIAO_DO_URL.replace("%1", data.getHeadMsg().getId()).replace("%2", reason).replace("%3", way).replace("%4", result).replace("%5", person).replace("%6", DateUtils.ChangeTimeToLong(time));
+
+        final Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if (msg.what == 1) {
+                    progressDialog.dismiss();
+                    Toast.makeText(OverproofDetailActivity.this, "上传成功！", Toast.LENGTH_LONG).show();
+                    BaseApplication.bus.post(new EventData(ConstantsUtils.REFRESH));
+                } else {
+                    progressDialog.dismiss();
+                    Toast.makeText(OverproofDetailActivity.this, "上传失败！", Toast.LENGTH_LONG).show();
+
+                }
+            }
+        };
+        new Thread(new Runnable() {
+            public void run() {
+                boolean flag = uploadPic(url); //返回为 true 表示上传成功 ； false 上传失败
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (flag) {
+                    handler.sendEmptyMessage(1);  // 上传成功 发送消息到 handler 关闭详情页并提示上传成功
+                } else {
+                    handler.sendEmptyMessage(2);  // 上传失败 则什么都不做 停留在此页面
+                }
+            }
+        }).start();
+    }
+
+    private void examineSubmit(final MaterialDialog progressDialog) {
+        Map<String, String> paramsMap = new HashMap<String, String>();
+        paramsMap.put("jieguobianhao", data.getHeadMsg().getId());
+        paramsMap.put("jianliresult", examineResult);
+        paramsMap.put("jianlishenpi", examineApprove);
+        paramsMap.put("confirmdate", DateUtils.ChangeTimeToLong(confirmTime));
+        paramsMap.put("shenpiren", examinePerson);
+        paramsMap.put("shenpidate", DateUtils.ChangeTimeToLong(approveTime));
+
+        HttpUtils.postRequest(URL.BHZ_CHAOBIAO_SP, paramsMap, new HttpUtils.HttpListener() {
+            @Override
+            public void onSuccess(String response) {
+                progressDialog.dismiss();
+                KLog.json(response);
+                if (!TextUtils.isEmpty(response)) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(response);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        ToastUtils.showToast(OverproofDetailActivity.this, "解析异常");
+                    }
+
+                    if (jsonObject.optBoolean("success")) {
+
+                        ToastUtils.showToast(OverproofDetailActivity.this, "上传成功");
+                    } else {
+                        ToastUtils.showToast(OverproofDetailActivity.this, "上传失败");
+                    }
+
+                } else {
+                    ToastUtils.showToast(OverproofDetailActivity.this, "上传异常");
+                }
+            }
+
+            @Override
+            public void onFailed(VolleyError error) {
+                progressDialog.dismiss();
+                if (!NetworkUtils.isConnected(OverproofDetailActivity.this)) {
+                    //提示网络异常,让用户点击设置网络，
+                    View view = OverproofDetailActivity.this.getWindow().getDecorView();
+                    Snackbar.make(view, "当前网络已断开！", Snackbar.LENGTH_LONG)
+                            .setAction("设置网络", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // 跳转到系统的网络设置界面
+                                    NetworkUtils.openSetting(OverproofDetailActivity.this);
+                                }
+                            }).show();
+                } else {
+                    //服务器异常，展示错误页面，点击刷新
+                    ToastUtils.showToast(OverproofDetailActivity.this, "服务器异常");
+                }
+            }
+        });
+
+    }
 
     private void getDataFromNetwork() {
         //联网获取数据
@@ -597,55 +788,68 @@ public class OverproofDetailActivity extends BaseActivity implements TimePickerD
 
         //设置处置部分是否显示
         if (mUserInfoData.getQuanxian().isSyschaobiaoReal()) {
-            cv_handle.setVisibility(View.VISIBLE);
+            bt_handle_submit.setEnabled(true);
+            bt_handle_reset.setEnabled(true);
 
             if (TextUtils.isEmpty(data.getHeadMsg().getChuliren())) {
                 et_handle_person.getEditText().setText(handlePerson = mUserInfoData.getUserFullName());
+            } else {
+                et_handle_person.getEditText().setText(data.getHeadMsg().getChuliren());
             }
             if (TextUtils.isEmpty(data.getHeadMsg().getChulishijian())) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
                 et_handle_time.getEditText().setText(sdf.format(Calendar.getInstance().getTime()));
+            } else {
+                et_handle_time.getEditText().setText(data.getHeadMsg().getChulishijian());
             }
 
-            if (TextUtils.isEmpty(data.getHeadMsg().getWentiyuanyin())) {
-                et_handle_reason.getEditText().setText("");
+            if (!TextUtils.isEmpty(data.getHeadMsg().getWentiyuanyin())) {
+                et_handle_reason.getEditText().setText(data.getHeadMsg().getWentiyuanyin());
             }
 
-            if (TextUtils.isEmpty(data.getHeadMsg().getChulifangshi())) {
-                et_handle_way.getEditText().setText("");
+            if (!TextUtils.isEmpty(data.getHeadMsg().getChulifangshi())) {
+                et_handle_way.getEditText().setText(data.getHeadMsg().getChulifangshi());
 
             }
 
-            if (TextUtils.isEmpty(data.getHeadMsg().getChulijieguo())) {
-                et_handle_result.getEditText().setText("");
+            if (!TextUtils.isEmpty(data.getHeadMsg().getChulijieguo())) {
+                et_handle_result.getEditText().setText(data.getHeadMsg().getChulijieguo());
             }
         }
 
         //设置审批部分是否显示
         if (mUserInfoData.getQuanxian().isHntchaobiaoSp()) {
-            cv_examine.setVisibility(View.VISIBLE);
+            bt_examine_submit.setEnabled(true);
+            bt_examine_reset.setEnabled(true);
 
             if (TextUtils.isEmpty(data.getHeadMsg().getShenpiren())) {
-                et_examine_person.getEditText().setText("");
+                et_examine_person.getEditText().setText(examinePerson = mUserInfoData.getUserFullName());
+            } else {
+                et_examine_person.getEditText().setText(data.getHeadMsg().getShenpiren());
             }
 
-            if (TextUtils.isEmpty(data.getHeadMsg().getJianliresult())) {
-                et_examine_result.getEditText().setText("");
+            if (!TextUtils.isEmpty(data.getHeadMsg().getJianliresult())) {
+                et_examine_result.getEditText().setText(data.getHeadMsg().getJianliresult());
             }
 
-            if (TextUtils.isEmpty(data.getHeadMsg().getJianlishenpi())) {
-                et_examine_approve.getEditText().setText("");
+            if (!TextUtils.isEmpty(data.getHeadMsg().getJianlishenpi())) {
+                et_examine_approve.getEditText().setText(data.getHeadMsg().getJianlishenpi());
             }
 
             if (TextUtils.isEmpty(data.getHeadMsg().getConfirmdate())) {
-                et_confirm_date.getEditText().setText("");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+                et_confirm_date.getEditText().setText(sdf.format(Calendar.getInstance().getTime()));
+            } else {
+                et_confirm_date.getEditText().setText(data.getHeadMsg().getJianliresult());
             }
 
             if (TextUtils.isEmpty(data.getHeadMsg().getShenpidate())) {
-                et_approve_date.getEditText().setText("");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+                et_approve_date.getEditText().setText(sdf.format(Calendar.getInstance().getTime()));
+            } else {
+                et_approve_date.getEditText().setText(data.getHeadMsg().getJianliresult());
             }
         }
-
     }
 
     private void showDatePicker() {
@@ -682,8 +886,16 @@ public class OverproofDetailActivity extends BaseActivity implements TimePickerD
         String minuteString = minute < 10 ? "0" + minute : "" + minute;
         String secondString = second < 10 ? "0" + second : "" + second;
         String timeString = hourString + ":" + minuteString + ":" + secondString;
-        handleTime = handleTime + timeString;
-        et_handle_time.getEditText().setText(handleTime);
+        if (isHandleDateTime) {
+            handleTime = handleTime + timeString;
+            et_handle_time.getEditText().setText(handleTime);
+        } else if (isConfirmDateTime) {
+            confirmTime = confirmTime + timeString;
+            et_confirm_date.getEditText().setText(confirmTime);
+        } else if (isApproveDateTime) {
+            approveTime = approveTime + timeString;
+            et_approve_date.getEditText().setText(approveTime);
+        }
     }
 
     @Override
@@ -691,7 +903,15 @@ public class OverproofDetailActivity extends BaseActivity implements TimePickerD
         String monthString = (++monthOfYear) < 10 ? "0" + (monthOfYear) : "" + (monthOfYear);
         String dayString = dayOfMonth < 10 ? "0" + dayOfMonth : "" + dayOfMonth;
         String dateString = year + "-" + monthString + "-" + dayString + " ";
-        handleTime = dateString;
+
+        if (isHandleDateTime) {
+            handleTime = dateString;
+        } else if (isConfirmDateTime) {
+            confirmTime = dateString;
+        } else if (isApproveDateTime) {
+            approveTime = dateString;
+        }
+
         showTimePicker();
     }
 
@@ -717,9 +937,9 @@ public class OverproofDetailActivity extends BaseActivity implements TimePickerD
             bitmap = (Bitmap) bundle.get("data");
 
             FileOutputStream b = null;
-            File file = new File("/sdcard/myImage/");
+            File file = new File("/sdcard/shtw/");
             file.mkdirs();
-            String fileName = "/sdcard/myImage/" + photoName;
+            String fileName = "/sdcard/shtw/" + photoName;
 
             try {
                 b = new FileOutputStream(fileName);
@@ -749,4 +969,68 @@ public class OverproofDetailActivity extends BaseActivity implements TimePickerD
             iv_photo_select.setImageBitmap(bitmap);
         }
     }
+
+    /**
+     * 上传图片的方法
+     *
+     * @param path
+     * @return
+     */
+    private boolean uploadPic(String path) {
+        try {
+            java.net.URL url = new java.net.URL(path);
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            // 设置每次传输的流大小，可以有效防止手机因为内存不足崩溃
+            // 此方法用于在预先不知道内容长度时启用没有进行内部缓冲的 HTTP 请求正文的流。
+            httpURLConnection.setChunkedStreamingMode(128 * 1024);// 128K
+            // 允许输入输出流
+            httpURLConnection.setDoInput(true);
+            httpURLConnection.setDoOutput(true);
+            httpURLConnection.setUseCaches(false);
+            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setRequestProperty("charset", "UTF-8");
+            httpURLConnection.setRequestProperty("Content-Type", "text/html");
+
+            DataOutputStream dos = new DataOutputStream(httpURLConnection.getOutputStream());
+
+            // 将要上传的内容写入流中
+            //			Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            if (bitmap != null) {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 30, baos);
+            }
+            InputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+
+            byte[] buffer = new byte[8192]; // 8k
+            int length = 0;
+            // 读取流 并写入到 上传流中
+            while ((length = inputStream.read(buffer)) != -1) {
+                dos.write(buffer, 0, length);
+            }
+            inputStream.close();
+            dos.flush();
+
+            InputStream is = httpURLConnection.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+            BufferedReader br = new BufferedReader(isr);
+            String sl;
+            String result = "";
+            while ((sl = br.readLine()) != null)
+                result = result + sl;
+            JSONObject jo = new JSONObject(result);
+            KLog.e(jo.toString());
+            br.close();
+            is.close();
+            if (jo.getBoolean("success")) { //服务器返回json success 为 true 表示上传成功
+                return true;
+            } else {
+                return false;
+            }
+            // dos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

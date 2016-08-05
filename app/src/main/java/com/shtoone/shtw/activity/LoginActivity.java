@@ -247,14 +247,9 @@ public class LoginActivity extends BaseActivity {
 
     private void initParametersData() {
         BaseApplication.parametersData.userGroupID = userInfoData.getDepartId();
+        BaseApplication.mDepartmentData.departmentID = userInfoData.getDepartId();
+        BaseApplication.mDepartmentData.departmentName = userInfoData.getDepartName();
     }
-
-//    @Override
-//    public boolean dispatchTouchEvent(MotionEvent ev) {
-//        View v = this.getCurrentFocus();
-//        KeyBoardUtils.hideKeybord(v, this);
-//        return super.dispatchTouchEvent(ev);
-//    }
 
     @Override
     public boolean swipeBackPriority() {

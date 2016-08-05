@@ -369,14 +369,14 @@
         </in.srain.cube.views.ptr.PtrFrameLayout>
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_produce_query_detail_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_info"
-        android:visibility="gone"
-        app:layout_anchor="@id/cv_produce_query_detail_activity"
-        app:layout_anchorGravity="bottom|end" />
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/fab_produce_query_detail_activity"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="@dimen/fab_margin"-->
+        <!--android:src="@android:drawable/ic_dialog_info"-->
+        <!--android:visibility="gone"-->
+        <!--app:layout_anchor="@id/cv_produce_query_detail_activity"-->
+        <!--app:layout_anchorGravity="bottom|end" />-->
 
 </android.support.design.widget.CoordinatorLayout>

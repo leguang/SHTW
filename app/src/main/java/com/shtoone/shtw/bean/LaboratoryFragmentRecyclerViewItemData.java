@@ -7,23 +7,24 @@ import java.util.List;
  */
 public class LaboratoryFragmentRecyclerViewItemData {
 
+
     /**
-     * data : [[{"realCount":"0","departName":"监理公司","testName":"砼抗压强度","testtype":"100014","syjCount":"4","realPer":"0.00","testCount":"8","notQualifiedCount":"0","sysCount":"2","userGroupId":"f89aff075317222c01531b866ec50010"},{"realCount":"0","departName":"监理公司","testName":"钢筋拉力","testtype":"100047","syjCount":"4","realPer":"0.00","testCount":"21","notQualifiedCount":"3","sysCount":"2","userGroupId":"f89aff075317222c01531b866ec50010"},{"realCount":"0","departName":"监理公司","testName":"钢筋机械连接接头","testtype":"100049","syjCount":"4","realPer":"0.00","testCount":"5","notQualifiedCount":"1","sysCount":"2","userGroupId":"f89aff075317222c01531b866ec50010"}]]
+     * data : [[{"realCount":"0","departName":"中交三公局","testName":"混凝土试件抗压强度试验","testtype":"100014","syjCount":"4","realPer":"0.00","testCount":"3","notQualifiedCount":"3","sysCount":"4","userGroupId":"f89aff0750caf1a80150cb03b6910008"}]]
      * success : true
      */
 
     private boolean success;
     /**
      * realCount : 0
-     * departName : 监理公司
-     * testName : 砼抗压强度
+     * departName : 中交三公局
+     * testName : 混凝土试件抗压强度试验
      * testtype : 100014
      * syjCount : 4
      * realPer : 0.00
-     * testCount : 8
-     * notQualifiedCount : 0
-     * sysCount : 2
-     * userGroupId : f89aff075317222c01531b866ec50010
+     * testCount : 3
+     * notQualifiedCount : 3
+     * sysCount : 4
+     * userGroupId : f89aff0750caf1a80150cb03b6910008
      */
 
     private List<List<DataBean>> data;

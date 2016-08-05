@@ -84,20 +84,26 @@
 
                                 <TextView
                                     android:id="@+id/tv_date_wannengji_detail_activity"
+                                    style="@style/YalijiDetailTextTheme"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignBottom="@id/tv_title_wannengji_detail_activity"
-                                    android:layout_alignParentRight="true"
-                                    android:text="2016-06-01"
-                                    android:textColor="@color/orange"
-                                    android:textSize="16sp" />
+                                    android:layout_below="@+id/tv_title_wannengji_detail_activity"
+                                    android:text="日        期：" />
+
+                                <TextView
+                                    android:id="@+id/tv_datetime_wannengji_detail_activity"
+                                    style="@style/YalijiDetailTextTheme"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBottom="@id/tv_date_wannengji_detail_activity"
+                                    android:layout_toRightOf="@+id/tv_date_wannengji_detail_activity" />
 
                                 <TextView
                                     android:id="@+id/textview0"
                                     style="@style/YalijiDetailTextTheme"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_below="@+id/tv_title_wannengji_detail_activity"
+                                    android:layout_below="@+id/tv_date_wannengji_detail_activity"
                                     android:text="设        备：" />
 
                                 <TextView
@@ -260,130 +266,20 @@
                                 android:layout_marginTop="30dp"
                                 android:orientation="vertical">
 
-                                <LinearLayout
+                                <android.support.design.widget.TextInputLayout
+                                    android:id="@+id/et_handle_reason_wannengji_detail_activity"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
+                                    app:errorTextAppearance="@style/MaterialLoginTheme.TextAppearanceLoginError"
+                                    app:theme="@style/MaterialLoginTheme.TextAppearanceLogin">
 
-                                    <FrameLayout
-                                        android:layout_width="145dp"
-                                        android:layout_height="match_parent">
-
-                                        <ImageView
-                                            android:id="@+id/iv_photo_select_wannengji_detail_activity"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center"
-                                            android:layout_marginRight="5dp"
-                                            android:src="@drawable/ic_camera_album" />
-
-                                        <LinearLayout
-                                            android:id="@+id/ll_camera_album_wannengji_detail_activity"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="match_parent"
-                                            android:layout_gravity="center"
-                                            android:orientation="vertical"
-                                            android:visibility="gone">
-
-                                            <ImageView
-                                                android:id="@+id/iv_camera_select_wannengji_detail_activity"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="match_parent"
-                                                android:layout_weight="1"
-                                                android:background="@color/gray" />
-
-                                            <ImageView
-                                                android:id="@+id/iv_album_select_wannengji_detail_activity"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="match_parent"
-                                                android:layout_weight="1"
-                                                android:background="@color/green" />
-
-                                        </LinearLayout>
-                                    </FrameLayout>
-
-
-                                    <LinearLayout
+                                    <EditText
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:orientation="vertical">
-
-                                        <android.support.design.widget.TextInputLayout
-                                            android:id="@+id/et_handle_person_wannengji_detail_activity"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            app:errorTextAppearance="@style/MaterialLoginTheme.TextAppearanceLoginError"
-                                            app:theme="@style/MaterialLoginTheme.TextAppearanceLogin">
-
-                                            <EditText
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:hint="@string/handle_person"
-                                                android:singleLine="true"
-                                                android:textSize="@dimen/login_register_editview_text_size" />
-                                        </android.support.design.widget.TextInputLayout>
-
-                                        <android.support.design.widget.TextInputLayout
-                                            android:id="@+id/et_handle_time_wannengji_detail_activity"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            app:errorTextAppearance="@style/MaterialLoginTheme.TextAppearanceLoginError"
-                                            app:theme="@style/MaterialLoginTheme.TextAppearanceLogin">
-
-                                            <EditText
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:hint="@string/handle_time"
-                                                android:singleLine="true"
-                                                android:textSize="@dimen/login_register_editview_text_size" />
-                                        </android.support.design.widget.TextInputLayout>
-
-                                        <android.support.design.widget.TextInputLayout
-                                            android:id="@+id/et_handle_reason_wannengji_detail_activity"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            app:errorTextAppearance="@style/MaterialLoginTheme.TextAppearanceLoginError"
-                                            app:theme="@style/MaterialLoginTheme.TextAppearanceLogin">
-
-                                            <EditText
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:hint="@string/handle_reason"
-                                                android:singleLine="true"
-                                                android:textSize="@dimen/login_register_editview_text_size" />
-                                        </android.support.design.widget.TextInputLayout>
-
-                                        <android.support.design.widget.TextInputLayout
-                                            android:id="@+id/et_handle_way_wannengji_detail_activity"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            app:errorTextAppearance="@style/MaterialLoginTheme.TextAppearanceLoginError"
-                                            app:theme="@style/MaterialLoginTheme.TextAppearanceLogin">
-
-                                            <EditText
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:hint="@string/handle_way"
-                                                android:singleLine="true"
-                                                android:textSize="@dimen/login_register_editview_text_size" />
-                                        </android.support.design.widget.TextInputLayout>
-
-                                        <android.support.design.widget.TextInputLayout
-                                            android:id="@+id/et_handle_result_wannengji_detail_activity"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            app:errorTextAppearance="@style/MaterialLoginTheme.TextAppearanceLoginError"
-                                            app:theme="@style/MaterialLoginTheme.TextAppearanceLogin">
-
-                                            <EditText
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:hint="@string/handle_result"
-                                                android:singleLine="true"
-                                                android:textSize="@dimen/login_register_editview_text_size" />
-                                        </android.support.design.widget.TextInputLayout>
-                                    </LinearLayout>
-                                </LinearLayout>
+                                        android:hint="@string/handle_reason"
+                                        android:singleLine="true"
+                                        android:textSize="@dimen/login_register_editview_text_size" />
+                                </android.support.design.widget.TextInputLayout>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -414,15 +310,5 @@
             </com.shtoone.shtw.ui.PageStateLayout>
         </in.srain.cube.views.ptr.PtrFrameLayout>
     </LinearLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_wannengji_detail_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_info"
-        android:visibility="gone"
-        app:layout_anchor="@id/cv_wannengji_detail_activity"
-        app:layout_anchorGravity="bottom|end" />
 
 </android.support.design.widget.CoordinatorLayout>

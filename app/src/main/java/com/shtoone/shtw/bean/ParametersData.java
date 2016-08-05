@@ -40,6 +40,7 @@ public class ParametersData implements Cloneable, Serializable {
         startDateTime = sdf.format(rld.getTime());
     }
 
+    //克隆
     public Object clone() {
         try {
             return super.clone();

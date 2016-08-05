@@ -371,7 +371,6 @@
                             android:layout_marginBottom="20dp"
                             android:layout_marginLeft="4dp"
                             android:layout_marginRight="4dp"
-                            android:visibility="gone"
                             card_view:cardCornerRadius="@dimen/card_Corner_Radius"
                             card_view:contentPadding="3dp">
 
@@ -418,14 +417,14 @@
                                                 android:layout_width="match_parent"
                                                 android:layout_height="match_parent"
                                                 android:layout_weight="1"
-                                                android:background="@color/gray" />
+                                                android:src="@drawable/ic_camera" />
 
                                             <ImageView
                                                 android:id="@+id/iv_album_select_overproof_detail_activity"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="match_parent"
                                                 android:layout_weight="1"
-                                                android:background="@color/green" />
+                                                android:src="@drawable/ic_album" />
 
                                         </LinearLayout>
                                     </FrameLayout>
@@ -525,6 +524,7 @@
                                         android:layout_width="120dp"
                                         android:layout_height="wrap_content"
                                         android:layout_marginRight="40dp"
+                                        android:enabled="false"
                                         android:gravity="center"
                                         android:text="@string/submit" />
 
@@ -532,6 +532,7 @@
                                         android:id="@+id/bt_handle_reset_overproof_detail_activity"
                                         android:layout_width="120dp"
                                         android:layout_height="wrap_content"
+                                        android:enabled="false"
                                         android:gravity="center"
                                         android:text="@string/reset" />
                                 </LinearLayout>
@@ -546,7 +547,6 @@
                             android:layout_marginBottom="20dp"
                             android:layout_marginLeft="4dp"
                             android:layout_marginRight="4dp"
-                            android:visibility="gone"
                             card_view:cardCornerRadius="@dimen/card_Corner_Radius"
                             card_view:contentPadding="3dp">
 
@@ -650,6 +650,7 @@
                                         android:layout_width="120dp"
                                         android:layout_height="wrap_content"
                                         android:layout_marginRight="40dp"
+                                        android:enabled="false"
                                         android:gravity="center"
                                         android:text="@string/submit" />
 
@@ -657,6 +658,7 @@
                                         android:id="@+id/bt_examine_reset_overproof_detail_activity"
                                         android:layout_width="120dp"
                                         android:layout_height="wrap_content"
+                                        android:enabled="false"
                                         android:gravity="center"
                                         android:text="@string/reset" />
                                 </LinearLayout>

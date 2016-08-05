@@ -15,7 +15,6 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -103,7 +102,6 @@ public class ProduceQueryDetailActivity extends BaseActivity {
 
     private void initView() {
         mDataBean = (ProduceQueryFragmentListData.DataBean) getIntent().getSerializableExtra("producequerydetail");
-        fab = (FloatingActionButton) findViewById(R.id.fab_produce_query_detail_activity);
         mToolbar = (Toolbar) findViewById(R.id.toolbar_produce_query_detail_activity);
         mNestedScrollView = (NestedScrollView) findViewById(R.id.nsv_produce_query_detail_activity);
         ptrframe = (PtrFrameLayout) findViewById(R.id.ptr_produce_query_detail_activity);
@@ -128,23 +126,9 @@ public class ProduceQueryDetailActivity extends BaseActivity {
     }
 
     private void initDate() {
-        mUserInfoData = BaseApplication.mUserInfoData;
-        if (null != mUserInfoData) {
-            StringBuffer sb = new StringBuffer(mUserInfoData.getDepartName() + " > ");
-            sb.append(getString(R.string.banhezhan) + " > ");
-            sb.append(getString(R.string.produce_query) + " > ");
-            sb.append(getString(R.string.detail)).trimToSize();
-            mToolbar.setTitle(sb.toString());
-        }
+        setToolbarTitle();
         initToolbarBackNavigation(mToolbar);
         setSupportActionBar(mToolbar);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mNestedScrollView.fullScroll(ScrollView.FOCUS_DOWN);
-            }
-        });
 
         pageStateLayout.setOnRetryClickListener(new View.OnClickListener() {
             @Override
@@ -158,7 +142,6 @@ public class ProduceQueryDetailActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 pageStateLayout.showEmpty();
-                fab.hide();
                 NetworkUtils.openSetting(ProduceQueryDetailActivity.this);
             }
         });
@@ -466,11 +449,9 @@ public class ProduceQueryDetailActivity extends BaseActivity {
                 if (!NetworkUtils.isConnected(ProduceQueryDetailActivity.this)) {
                     //提示网络异常,让用户点击设置网络
                     pageStateLayout.showNetError();
-                    fab.hide();
                 } else {
                     //服务器异常，展示错误页面，点击刷新
                     pageStateLayout.showError();
-                    fab.hide();
                 }
             }
         });
@@ -482,22 +463,18 @@ public class ProduceQueryDetailActivity extends BaseActivity {
             if (null != data) {
                 if (data.isSuccess()) {
                     pageStateLayout.showContent();
-                    fab.show();
                     setAdapter();
                 } else {
                     //提示数据为空，展示空状态
                     pageStateLayout.showEmpty();
-                    fab.hide();
                 }
             } else {
                 //提示数据解析异常，展示错误页面
                 pageStateLayout.showError();
-                fab.hide();
             }
         } else {
             //提示返回数据异常，展示错误页面
             pageStateLayout.showError();
-            fab.hide();
         }
 
     }
@@ -636,4 +613,14 @@ public class ProduceQueryDetailActivity extends BaseActivity {
 //            iv_photo_select.setImageBitmap(bitmap);
 //        }
 //    }
+
+    private void setToolbarTitle() {
+        if (null != mToolbar && null != BaseApplication.mDepartmentData && !TextUtils.isEmpty(BaseApplication.mDepartmentData.departmentName)) {
+            StringBuffer sb = new StringBuffer(BaseApplication.mDepartmentData.departmentName + " > ");
+            sb.append(getString(R.string.banhezhan) + " > ");
+            sb.append(getString(R.string.produce_query) + " > ");
+            sb.append(getString(R.string.detail)).trimToSize();
+            mToolbar.setTitle(sb.toString());
+        }
+    }
 }

@@ -44,8 +44,9 @@
                 <TextView
                     android:id="@+id/tv_start_date_laboratory_statistic_fragment"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@color/material_red_50"
                     android:gravity="center"
                     android:text="2016-03-01" />
 
@@ -59,8 +60,9 @@
                 <TextView
                     android:id="@+id/tv_end_date_laboratory_statistic_fragment"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@color/material_blue_50"
                     android:gravity="center"
                     android:text="2016-06-01" />
 

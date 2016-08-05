@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,16 +113,14 @@ public class ProduceQueryFragment extends BaseLazyFragment {
 
     private void initData() {
         mParametersData = (ParametersData) BaseApplication.parametersData.clone();
+        mParametersData.userGroupID = BaseApplication.mDepartmentData.departmentID;
         mParametersData.fromTo = ConstantsUtils.PRODUCEQUERYFRAGMENT;
         mGson = new Gson();
         listData = new ArrayList<>();
         mLinearLayoutManager = new LinearLayoutManager(_mActivity);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        StringBuffer sb = new StringBuffer(BaseApplication.mUserInfoData.getDepartName() + " > ");
-        sb.append(getString(R.string.concrete) + " > ");
-        sb.append(getString(R.string.produce_query)).trimToSize();
-        mToolbar.setTitle(sb.toString());
+        setToolbarTitle();
         initToolbarBackNavigation(mToolbar);
 //        initToolbarMenu(mToolbar);
 
@@ -429,5 +428,14 @@ public class ProduceQueryFragment extends BaseLazyFragment {
     public void onDestroy() {
         super.onDestroy();
         BaseApplication.bus.unregister(this);
+    }
+
+    private void setToolbarTitle() {
+        if (null != mToolbar && null != BaseApplication.mDepartmentData && !TextUtils.isEmpty(BaseApplication.mDepartmentData.departmentName)) {
+            StringBuffer sb = new StringBuffer(BaseApplication.mDepartmentData.departmentName + " > ");
+            sb.append(getString(R.string.concrete) + " > ");
+            sb.append(getString(R.string.produce_query)).trimToSize();
+            mToolbar.setTitle(sb.toString());
+        }
     }
 }

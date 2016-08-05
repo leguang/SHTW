@@ -26,7 +26,7 @@ public class URL {
      */
 //    public static final String BaseURL = "http://120.27.146.66:8083/nxsy/";
 //    public static final String BaseURL = "http://192.168.11.102:8080/qms/";
-    public static final String BaseURL = "http://192.168.10.87:8080/zgjjqms/";
+    public static final String BaseURL = "http://192.168.1.116:8080/zgjjqms/";
 
 
     /**
@@ -417,8 +417,8 @@ public class URL {
     /**
      * 拌合站超标审批
      */
-    public static final String BHZ_CHAOBIAO_SP = BaseURL + "app.do?AppHntChaobiaoShenpi&jieguobianhao=%1&jianliresult=%2&jianlishenpi=%3&confirmdate=%4&shenpiren=%5&shenpidate=%6";
-
+//    public static final String BHZ_CHAOBIAO_SP = BaseURL + "app.do?AppHntChaobiaoShenpi&jieguobianhao=%1&jianliresult=%2&jianlishenpi=%3&confirmdate=%4&shenpiren=%5&shenpidate=%6";
+    public static final String BHZ_CHAOBIAO_SP = BaseURL + "app.do?AppHntChaobiaoShenpi";
     /**
      * 试验室设备列表
      */
@@ -526,4 +526,31 @@ public class URL {
         return url;
     }
 
+    /**
+     * 试验室施工用户主页数据
+     */
+    public static final String SG_SYS_MAIN = BaseURL + "sysController.do?hntSysMainLogo&userGroupId=%1";
+
+    public static String getLibSGMain(String userGroupID) {
+        String url = SG_SYS_MAIN.replace("%1", userGroupID);
+        KLog.e(TAG, "试验室施工用户主页数据:" + url);
+        if (TextUtils.isEmpty(url)) {
+            return null;
+        }
+        return url;
+    }
+
+    /**
+     * 拌和站施工用户主页数据
+     */
+    public static final String SG_BHZ_MAIN = BaseURL + "app.do?hntBhzMainLogo&userGroupId=%1";
+
+    public static String getBHZSGMain(String userGroupID) {
+        String url = SG_BHZ_MAIN.replace("%1", userGroupID);
+        KLog.e(TAG, "拌和站施工用户主页数据:" + url);
+        if (TextUtils.isEmpty(url)) {
+            return null;
+        }
+        return url;
+    }
 }

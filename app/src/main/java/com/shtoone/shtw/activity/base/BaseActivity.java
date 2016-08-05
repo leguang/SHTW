@@ -18,6 +18,7 @@ import com.shtoone.shtw.utils.HttpUtils;
 import com.shtoone.shtw.utils.NetworkUtils;
 import com.shtoone.shtw.utils.ToastUtils;
 import com.socks.library.KLog;
+import com.umeng.analytics.MobclickAgent;
 
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
@@ -64,6 +65,8 @@ public abstract class BaseActivity extends SwipeBackActivity {
                 onBackPressed();
             }
         });
+
+
     }
 
     protected void initToolbarMenu(Toolbar toolbar) {
@@ -99,7 +102,7 @@ public abstract class BaseActivity extends SwipeBackActivity {
         return new FragmentAnimator(android.R.anim.fade_in, android.R.anim.fade_out, 0, 0);
     }
 
-    public void setPageStateLayout(final PageStateLayout mPageStateLayout) {
+    public void initPageStateLayout(final PageStateLayout mPageStateLayout) {
         if (null == mPageStateLayout) return;
 
         mPageStateLayout.setOnRetryClickListener(new View.OnClickListener() {
@@ -119,7 +122,7 @@ public abstract class BaseActivity extends SwipeBackActivity {
         });
     }
 
-    public void setPtrFrameLayout(final PtrFrameLayout mPtrFrameLayout) {
+    public void initPtrFrameLayout(final PtrFrameLayout mPtrFrameLayout) {
         if (null == mPtrFrameLayout) return;
 
         // 下拉刷新头部
@@ -190,21 +193,21 @@ public abstract class BaseActivity extends SwipeBackActivity {
             @Override
             public void onSuccess(String response) {
                 KLog.json(response);
-                refreshSuccess(response);
+                onRefreshSuccess(response);
             }
 
             @Override
             public void onFailed(VolleyError error) {
                 KLog.d(error);
-                refreshFailed(error);
+                onRefreshFailed(error);
             }
         });
     }
 
-    public void refreshSuccess(String response) {
+    public void onRefreshSuccess(String response) {
     }
 
-    public void refreshFailed(VolleyError error) {
+    public void onRefreshFailed(VolleyError error) {
     }
 
     public void loadMore() {
@@ -259,4 +262,17 @@ public abstract class BaseActivity extends SwipeBackActivity {
     public String createLoadMoreULR() {
         return null;
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 }

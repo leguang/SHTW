@@ -53,7 +53,7 @@
                     android:id="@+id/rv_concrete_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="40dp" />
+                    android:layout_marginBottom="50dp" />
             </com.shtoone.shtw.ui.PageStateLayout>
         </in.srain.cube.views.ptr.PtrFrameLayout>
 

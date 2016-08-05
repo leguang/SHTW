@@ -25,7 +25,6 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.shtoone.shtw.BaseApplication;
 import com.shtoone.shtw.R;
 import com.shtoone.shtw.activity.base.BaseActivity;
-import com.shtoone.shtw.bean.ParametersData;
 import com.shtoone.shtw.fragment.mainactivity.ConcreteFragment;
 import com.shtoone.shtw.fragment.mainactivity.LaboratoryFragment;
 import com.shtoone.shtw.utils.ConstantsUtils;
@@ -104,7 +103,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void initData() {
-        BaseApplication.backupParametersData = (ParametersData) BaseApplication.parametersData.clone();
+//        BaseApplication.backupParametersData = (ParametersData) BaseApplication.parametersData.clone();
         if (null != BaseApplication.mUserInfoData) {
             if (!TextUtils.isEmpty(BaseApplication.mUserInfoData.getUserFullName())) {
                 tv_username.setText("用户：" + BaseApplication.mUserInfoData.getUserFullName());
