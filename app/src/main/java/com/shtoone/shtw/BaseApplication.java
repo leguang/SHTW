@@ -35,6 +35,7 @@ public class BaseApplication extends Application {
         context = getApplicationContext();
         // 添加功能：程序异常关闭1s之后重新启动
 
+
         requestQueue = Volley.newRequestQueue(getApplicationContext());
     }
 
